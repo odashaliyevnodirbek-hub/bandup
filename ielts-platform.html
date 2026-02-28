@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BandUp — IELTS Practice Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #161920;
+    --surface2: #1e2330;
+    --border: #2a2f3d;
+    --gold: #d4a843;
+    --gold-light: #f0c967;
+    --text: #e8eaf0;
+    --muted: #6b7280;
+    --green: #34d399;
+    --red: #f87171;
+    --blue: #60a5fa;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 2.5rem;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: rgba(13,15,20,0.95);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--gold);
+    letter-spacing: -0.02em;
+  }
+  .logo span { color: var(--text); }
+
+  .nav-links { display: flex; gap: 2rem; align-items: center; }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  .btn-premium {
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: #0d0f14;
+    border: none;
+    padding: 0.55rem 1.3rem;
+    border-radius: 6px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+  }
+  .btn-premium:hover { opacity: 0.9; transform: translateY(-1px); }
+
+  /* HERO */
+  .hero {
+    text-align: center;
+    padding: 5rem 2rem 3rem;
+    position: relative;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 300px;
+    background: radial-gradient(ellipse, rgba(212,168,67,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .badge {
+    display: inline-block;
+    background: rgba(212,168,67,0.12);
+    color: var(--gold);
+    border: 1px solid rgba(212,168,67,0.3);
+    padding: 0.3rem 0.9rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    color: var(--text);
+  }
+  .hero h1 em { color: var(--gold); font-style: italic; }
+
+  .hero p {
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 520px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.7;
+  }
+
+  /* SECTION TABS */
+  .section-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+    padding: 0 1rem;
+  }
+
+  .tab {
+    padding: 0.6rem 1.4rem;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    border-radius: 30px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+  .tab:hover { border-color: var(--gold); color: var(--gold); }
+  .tab.active {
+    background: var(--gold);
+    color: #0d0f14;
+    border-color: var(--gold);
+    font-weight: 600;
+  }
+
+  /* MAIN LAYOUT */
+  .main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1.5rem 4rem;
+  }
+
+  /* TEST CONTAINER */
+  .test-container {
+    display: none;
+  }
+  .test-container.active { display: block; }
+
+  /* TIMER BAR */
+  .test-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .timer-wrap { display: flex; align-items: center; gap: 0.6rem; }
+  .timer-icon { color: var(--gold); font-size: 1.1rem; }
+  .timer {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+  }
+  .timer.warning { color: var(--red); animation: pulse 1s infinite; }
+
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
+
+  .test-meta { color: var(--muted); font-size: 0.85rem; }
+  .test-meta strong { color: var(--text); }
+
+  .progress-bar {
+    width: 150px;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+
+  /* READING LAYOUT */
+  .reading-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .reading-layout { grid-template-columns: 1fr; }
+  }
+
+  .passage-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    max-height: 520px;
+    overflow-y: auto;
+  }
+
+  .passage-panel::-webkit-scrollbar { width: 5px; }
+  .passage-panel::-webkit-scrollbar-track { background: var(--border); }
+  .passage-panel::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+  .passage-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.8rem;
+  }
+  .passage-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .passage-text {
+    font-size: 0.88rem;
+    line-height: 1.8;
+    color: #b0b8c8;
+  }
+  .passage-text p { margin-bottom: 0.9rem; }
+
+  /* QUESTIONS PANEL */
+  .questions-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    max-height: 520px;
+    overflow-y: auto;
+  }
+
+  .questions-panel::-webkit-scrollbar { width: 5px; }
+  .questions-panel::-webkit-scrollbar-track { background: var(--border); }
+  .questions-panel::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+  .q-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 1rem;
+  }
+
+  .question-block {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .question-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+  .q-num {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 0.4rem;
+    font-weight: 500;
+  }
+  .q-text {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 0.8rem;
+    color: var(--text);
+  }
+
+  .options { display: flex; flex-direction: column; gap: 0.4rem; }
+
+  .option {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.55rem 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .option:hover { border-color: var(--gold); color: var(--text); background: rgba(212,168,67,0.05); }
+  .option.selected { border-color: var(--gold); color: var(--gold); background: rgba(212,168,67,0.1); }
+  .option.correct { border-color: var(--green); color: var(--green); background: rgba(52,211,153,0.08); }
+  .option.wrong { border-color: var(--red); color: var(--red); background: rgba(248,113,113,0.08); }
+
+  .option-letter {
+    width: 22px; height: 22px;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  /* SUBMIT */
+  .submit-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+    flex-wrap: gap;
+    gap: 1rem;
+  }
+
+  .btn-submit {
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: #0d0f14;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212,168,67,0.3); }
+  .btn-submit:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  /* RESULT CARD */
+  .result-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2.5rem;
+    text-align: center;
+    margin-top: 1.5rem;
+    display: none;
+    animation: fadeIn 0.5s ease;
+  }
+  .result-card.show { display: block; }
+
+  @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+  .band-score {
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+  .band-label { color: var(--muted); font-size: 0.85rem; margin-bottom: 1.5rem; }
+
+  .score-breakdown {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+  .score-item { text-align: center; }
+  .score-item .val { font-size: 1.5rem; font-weight: 700; color: var(--text); }
+  .score-item .lbl { font-size: 0.75rem; color: var(--muted); }
+
+  /* PREMIUM LOCK */
+  .premium-lock {
+    background: var(--surface);
+    border: 1px solid rgba(212,168,67,0.3);
+    border-radius: 12px;
+    padding: 3rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .premium-lock::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(212,168,67,0.06) 0%, transparent 70%);
+  }
+  .lock-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+  .premium-lock h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+  .premium-lock p { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem; max-width: 360px; margin-left: auto; margin-right: auto; }
+
+  .features-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-bottom: 1.8rem;
+  }
+  .feature-tag {
+    background: rgba(212,168,67,0.1);
+    color: var(--gold);
+    border: 1px solid rgba(212,168,67,0.2);
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 500;
+  }
+
+  /* WRITING SECTION */
+  .writing-prompt {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .writing-prompt h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--gold);
+    margin-bottom: 0.8rem;
+  }
+  .writing-prompt p { font-size: 0.9rem; line-height: 1.7; color: #b0b8c8; }
+
+  textarea {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.2rem;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    resize: vertical;
+    min-height: 200px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  textarea:focus { border-color: var(--gold); }
+  textarea::placeholder { color: var(--muted); }
+
+  .word-count { text-align: right; color: var(--muted); font-size: 0.78rem; margin-top: 0.4rem; }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--muted);
+    font-size: 0.8rem;
+    border-top: 1px solid var(--border);
+  }
+
+  /* NOTIFICATIONS */
+  .toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.3rem;
+    font-size: 0.85rem;
+    color: var(--text);
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 999;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Band<span>Up</span></div>
+  <div class="nav-links">
+    <a href="#">Practice</a>
+    <a href="#">Lessons</a>
+    <a href="#">Progress</a>
+    <button class="btn-premium" onclick="showPremium()">⭐ Go Premium</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="badge">🎯 IELTS Preparation Platform</div>
+  <h1>Score Higher.<br><em>Practice Smarter.</em></h1>
+  <p>Real exam-style practice for all four IELTS sections — Reading, Writing, Listening & Speaking.</p>
+  <div class="section-tabs">
+    <button class="tab active" onclick="switchSection('reading', this)">📖 Reading</button>
+    <button class="tab" onclick="switchSection('writing', this)">✍️ Writing</button>
+    <button class="tab" onclick="switchSection('listening', this)">🎧 Listening</button>
+    <button class="tab" onclick="switchSection('speaking', this)">🎤 Speaking</button>
+  </div>
+</section>
+
+<main class="main">
+
+  <!-- READING -->
+  <div class="test-container active" id="reading">
+    <div class="test-header">
+      <div class="timer-wrap">
+        <span class="timer-icon">⏱</span>
+        <span class="timer" id="timer">20:00</span>
+      </div>
+      <div class="test-meta">
+        Section 1 · <strong>Reading Comprehension</strong>
+      </div>
+      <div>
+        <div style="font-size:0.75rem;color:var(--muted);margin-bottom:4px">Progress</div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <div class="reading-layout">
+      <div class="passage-panel">
+        <div class="passage-label">Passage 1</div>
+        <div class="passage-title">The Rise of Urban Vertical Farming</div>
+        <div class="passage-text">
+          <p>Vertical farming — the practice of growing crops in stacked layers within controlled indoor environments — has emerged as one of the most talked-about solutions to the mounting pressures on global food supply. By 2050, it is estimated that approximately 80% of the world's population will live in urban areas, creating unprecedented demand for locally sourced food that traditional agriculture may struggle to meet.</p>
+          <p>Unlike conventional farming, vertical farms require no soil and use up to 95% less water through hydroponic and aeroponic systems, where plant roots are exposed to misted nutrient solutions. These facilities can operate year-round, independent of weather conditions or seasonal changes, producing consistent yields with remarkable efficiency.</p>
+          <p>Proponents argue that vertical farming dramatically reduces transport distances — a key contributor to food carbon footprints — by situating production directly within cities. Companies in Tokyo, Singapore, and Dubai have demonstrated that leafy greens and herbs can be grown profitably just floors above the restaurants that serve them.</p>
+          <p>Critics, however, point to significant drawbacks. The energy consumption required to power artificial lighting — often LED arrays running 16 to 20 hours a day — remains a substantial cost, both financial and environmental. Studies suggest that lettuce grown in vertical farms can have a carbon footprint ten times higher than field-grown equivalents when powered by non-renewable electricity.</p>
+          <p>Furthermore, the technology remains largely limited to fast-growing, lightweight crops such as microgreens, herbs, and lettuce. Staple calorie crops like wheat, rice, or potatoes are not yet economically viable to grow vertically. For vertical farming to make a meaningful contribution to global food security, these barriers must be overcome.</p>
+        </div>
+      </div>
+
+      <div class="questions-panel">
+        <div class="q-label">Questions 1–5 · Multiple Choice</div>
+
+        <div class="question-block">
+          <div class="q-num">Question 1</div>
+          <div class="q-text">What percentage of the global population is expected to live in urban areas by 2050?</div>
+          <div class="options">
+            <div class="option" onclick="selectOption(this, 1, false)"><span class="option-letter">A</span> 60%</div>
+            <div class="option" onclick="selectOption(this, 1, false)"><span class="option-letter">B</span> 70%</div>
+            <div class="option" onclick="selectOption(this, 1, true)"><span class="option-letter">C</span> 80%</div>
+            <div class="option" onclick="selectOption(this, 1, false)"><span class="option-letter">D</span> 90%</div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="q-num">Question 2</div>
+          <div class="q-text">How much less water do vertical farms use compared to conventional farming?</div>
+          <div class="options">
+            <div class="option" onclick="selectOption(this, 2, false)"><span class="option-letter">A</span> Up to 50%</div>
+            <div class="option" onclick="selectOption(this, 2, false)"><span class="option-letter">B</span> Up to 75%</div>
+            <div class="option" onclick="selectOption(this, 2, true)"><span class="option-letter">C</span> Up to 95%</div>
+            <div class="option" onclick="selectOption(this, 2, false)"><span class="option-letter">D</span> Up to 99%</div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="q-num">Question 3</div>
+          <div class="q-text">According to critics, vertical farm lettuce can have a carbon footprint how many times higher than field-grown lettuce?</div>
+          <div class="options">
+            <div class="option" onclick="selectOption(this, 3, false)"><span class="option-letter">A</span> Three times</div>
+            <div class="option" onclick="selectOption(this, 3, false)"><span class="option-letter">B</span> Five times</div>
+            <div class="option" onclick="selectOption(this, 3, true)"><span class="option-letter">C</span> Ten times</div>
+            <div class="option" onclick="selectOption(this, 3, false)"><span class="option-letter">D</span> Twenty times</div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="q-num">Question 4</div>
+          <div class="q-text">Which of the following is listed as a crop that is NOT currently viable in vertical farming?</div>
+          <div class="options">
+            <div class="option" onclick="selectOption(this, 4, false)"><span class="option-letter">A</span> Microgreens</div>
+            <div class="option" onclick="selectOption(this, 4, false)"><span class="option-letter">B</span> Herbs</div>
+            <div class="option" onclick="selectOption(this, 4, false)"><span class="option-letter">C</span> Lettuce</div>
+            <div class="option" onclick="selectOption(this, 4, true)"><span class="option-letter">D</span> Wheat</div>
+          </div>
+        </div>
+
+        <div class="question-block">
+          <div class="q-num">Question 5</div>
+          <div class="q-text">In which cities have vertical farming operations been cited as successful examples in the passage?</div>
+          <div class="options">
+            <div class="option" onclick="selectOption(this, 5, false)"><span class="option-letter">A</span> London, New York, Berlin</div>
+            <div class="option" onclick="selectOption(this, 5, true)"><span class="option-letter">B</span> Tokyo, Singapore, Dubai</div>
+            <div class="option" onclick="selectOption(this, 5, false)"><span class="option-letter">C</span> Shanghai, Seoul, Sydney</div>
+            <div class="option" onclick="selectOption(this, 5, false)"><span class="option-letter">D</span> Mumbai, Cairo, Lagos</div>
+          </div>
+        </div>
+
+        <div class="submit-row">
+          <span style="font-size:0.8rem;color:var(--muted)" id="answeredCount">0 of 5 answered</span>
+          <button class="btn-submit" id="submitBtn" onclick="submitTest()" disabled>Submit Answers</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="result-card" id="resultCard">
+      <div class="band-score" id="bandScore">7.5</div>
+      <div class="band-label">Estimated Band Score · Reading Section</div>
+      <div class="score-breakdown">
+        <div class="score-item"><div class="val" id="correctCount">0</div><div class="lbl">Correct</div></div>
+        <div class="score-item"><div class="val" id="wrongCount">0</div><div class="lbl">Wrong</div></div>
+        <div class="score-item"><div class="val">5</div><div class="lbl">Total</div></div>
+      </div>
+      <p style="color:var(--muted);font-size:0.85rem;margin-bottom:1.5rem">Great start! Upgrade to Premium for detailed explanations, AI feedback, and full-length mock exams.</p>
+      <button class="btn-premium" style="font-size:0.95rem;padding:0.75rem 2rem" onclick="showPremium()">⭐ Unlock Full Feedback</button>
+    </div>
+  </div>
+
+  <!-- WRITING -->
+  <div class="test-container" id="writing">
+    <div class="test-header">
+      <div class="timer-wrap">
+        <span class="timer-icon">⏱</span>
+        <span class="timer">40:00</span>
+      </div>
+      <div class="test-meta">Task 2 · <strong>Academic Writing</strong></div>
+      <div style="font-size:0.8rem;color:var(--muted)">Min. 250 words</div>
+    </div>
+
+    <div class="writing-prompt">
+      <h3>Task 2 — Essay Prompt</h3>
+      <p>In many countries, young people are leaving rural areas to move to cities. What are the reasons for this? Is this a positive or negative development? Give reasons for your answer and include relevant examples from your knowledge or experience.</p>
+    </div>
+
+    <textarea id="essayInput" placeholder="Start writing your essay here..." oninput="updateWordCount()"></textarea>
+    <div class="word-count"><span id="wordCount">0</span> words</div>
+
+    <!-- AI CHECK COUNTER -->
+    <div id="aiCheckBar" style="margin-top:1rem;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem 1.2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.8rem">
+      <div>
+        <div style="font-size:0.85rem;font-weight:600;margin-bottom:0.2rem">AI Writing Checks</div>
+        <div style="font-size:0.78rem;color:var(--muted2)">You have <span id="checksLeft" style="color:var(--gold);font-weight:700">3</span> free checks remaining</div>
+      </div>
+      <div style="display:flex;gap:6px" id="checkDots">
+        <div style="width:12px;height:12px;border-radius:50%;background:var(--green)" title="Check available"></div>
+        <div style="width:12px;height:12px;border-radius:50%;background:var(--green)" title="Check available"></div>
+        <div style="width:12px;height:12px;border-radius:50%;background:var(--green)" title="Check available"></div>
+      </div>
+      <button id="aiCheckBtn" style="background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#0d0f14;border:none;padding:0.55rem 1.3rem;border-radius:7px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;transition:all 0.2s" onclick="useAiCheck()">✨ Check with AI</button>
+    </div>
+
+    <!-- AI FEEDBACK RESULT (hidden by default) -->
+    <div id="aiFeedback" style="display:none;margin-top:1rem;background:var(--surface);border:1px solid rgba(212,168,67,0.3);border-radius:12px;padding:1.3rem">
+      <div style="font-size:0.75rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--gold);margin-bottom:0.8rem">✨ AI Feedback</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.8rem;margin-bottom:1rem">
+        <div style="text-align:center;background:var(--surface2);border-radius:8px;padding:0.7rem">
+          <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:var(--gold)">6.5</div>
+          <div style="font-size:0.68rem;color:var(--muted2)">Task Achievement</div>
+        </div>
+        <div style="text-align:center;background:var(--surface2);border-radius:8px;padding:0.7rem">
+          <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:var(--gold)">6.0</div>
+          <div style="font-size:0.68rem;color:var(--muted2)">Coherence</div>
+        </div>
+        <div style="text-align:center;background:var(--surface2);border-radius:8px;padding:0.7rem">
+          <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:var(--gold)">6.5</div>
+          <div style="font-size:0.68rem;color:var(--muted2)">Vocabulary</div>
+        </div>
+        <div style="text-align:center;background:var(--surface2);border-radius:8px;padding:0.7rem">
+          <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:var(--gold)">6.0</div>
+          <div style="font-size:0.68rem;color:var(--muted2)">Grammar</div>
+        </div>
+      </div>
+      <div style="font-size:0.83rem;color:var(--muted2);line-height:1.7">
+        <strong style="color:var(--text)">What to improve:</strong> Your essay addresses the topic but needs stronger examples. Try to vary your sentence structure more and avoid repeating the same vocabulary. Your conclusion could be more developed.
+      </div>
+    </div>
+
+    <!-- UPGRADE PAYWALL (shown after 3 checks used) -->
+    <div id="writingPaywall" style="display:none;margin-top:1rem">
+      <div class="premium-lock">
+        <div class="lock-icon">✍️</div>
+        <h3>You've used all 3 free AI checks</h3>
+        <p>Upgrade to Premium for unlimited AI writing feedback — get detailed scores on every essay you write.</p>
+        <div class="features-list">
+          <span class="feature-tag">Unlimited AI Checks</span>
+          <span class="feature-tag">Band Score Prediction</span>
+          <span class="feature-tag">Grammar Corrections</span>
+          <span class="feature-tag">Vocabulary Tips</span>
+          <span class="feature-tag">Band 9 Sample Essays</span>
+        </div>
+        <button class="btn-premium" onclick="showPremium()">Upgrade for $4/month</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LISTENING -->
+  <div class="test-container" id="listening">
+    <div class="premium-lock" style="max-width:600px;margin:0 auto">
+      <div class="lock-icon">🎧</div>
+      <h3>Listening Practice</h3>
+      <p>Access 200+ authentic IELTS-style audio tracks with transcripts and answer keys. Train your ear for all four sections of the IELTS Listening test.</p>
+      <div class="features-list">
+        <span class="feature-tag">Section 1–4 Audio</span>
+        <span class="feature-tag">Multiple Accents</span>
+        <span class="feature-tag">Speed Control</span>
+        <span class="feature-tag">Transcripts</span>
+        <span class="feature-tag">Timed Practice</span>
+      </div>
+      <button class="btn-premium" onclick="showPremium()">Unlock Listening — Premium</button>
+    </div>
+  </div>
+
+  <!-- SPEAKING -->
+  <div class="test-container" id="speaking">
+    <div class="premium-lock" style="max-width:600px;margin:0 auto">
+      <div class="lock-icon">🎤</div>
+      <h3>Speaking Practice with AI</h3>
+      <p>Practice all three parts of the IELTS Speaking test with our AI examiner. Record your responses and get instant feedback on fluency, vocabulary, and pronunciation.</p>
+      <div class="features-list">
+        <span class="feature-tag">AI Examiner</span>
+        <span class="feature-tag">Part 1, 2 & 3</span>
+        <span class="feature-tag">Pronunciation Score</span>
+        <span class="feature-tag">Fluency Analysis</span>
+        <span class="feature-tag">Model Answers</span>
+        <span class="feature-tag">Progress Tracking</span>
+      </div>
+      <button class="btn-premium" onclick="showPremium()">Unlock Speaking — Premium</button>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  © 2025 BandUp · IELTS Practice Platform · <a href="#" style="color:var(--gold)">Privacy</a> · <a href="#" style="color:var(--gold)">Terms</a>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // TIMER
+  let timeLeft = 20 * 60;
+  let timerInterval = null;
+
+  function startTimer() {
+    timerInterval = setInterval(() => {
+      timeLeft--;
+      const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+      const s = (timeLeft % 60).toString().padStart(2, '0');
+      const el = document.getElementById('timer');
+      if(el) {
+        el.textContent = `${m}:${s}`;
+        if(timeLeft <= 120) el.classList.add('warning');
+      }
+      if(timeLeft <= 0) {
+        clearInterval(timerInterval);
+        submitTest();
+      }
+    }, 1000);
+  }
+
+  startTimer();
+
+  // SECTION SWITCH
+  function switchSection(id, btn) {
+    document.querySelectorAll('.test-container').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  // ANSWER TRACKING
+  const answers = {};
+  const correct = {};
+
+  function selectOption(el, qNum, isCorrect) {
+    const parent = el.parentElement;
+    parent.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    answers[qNum] = { el, isCorrect };
+    correct[qNum] = isCorrect;
+
+    const count = Object.keys(answers).length;
+    document.getElementById('answeredCount').textContent = `${count} of 5 answered`;
+    document.getElementById('progressFill').style.width = `${(count/5)*100}%`;
+    document.getElementById('submitBtn').disabled = count < 5;
+  }
+
+  function submitTest() {
+    clearInterval(timerInterval);
+
+    let c = 0, w = 0;
+    for(const q in answers) {
+      const { el, isCorrect } = answers[q];
+      const parent = el.parentElement;
+      parent.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+
+      if(isCorrect) {
+        el.classList.add('correct');
+        c++;
+      } else {
+        el.classList.add('wrong');
+        w++;
+        // Show correct answer
+        parent.querySelectorAll('.option').forEach(o => {
+          const data = o.getAttribute('onclick');
+          if(data && data.includes('true')) o.classList.add('correct');
+        });
+      }
+    }
+
+    const bandMap = {5: 9, 4: 8, 3: 7, 2: 6, 1: 5, 0: 4};
+    const band = bandMap[c] || 4;
+
+    document.getElementById('correctCount').textContent = c;
+    document.getElementById('wrongCount').textContent = w;
+    document.getElementById('bandScore').textContent = band % 1 === 0 ? band + '.0' : band;
+
+    const rc = document.getElementById('resultCard');
+    rc.classList.add('show');
+    rc.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // WORD COUNT
+  function updateWordCount() {
+    const text = document.getElementById('essayInput').value.trim();
+    const words = text ? text.split(/\s+/).length : 0;
+    document.getElementById('wordCount').textContent = words;
+  }
+
+  // PREMIUM MODAL
+  // AI WRITING CHECKS
+  let aiChecksLeft = 3;
+
+  function useAiCheck() {
+    const text = document.getElementById('essayInput').value.trim();
+    const words = text ? text.split(/\s+/).length : 0;
+    if(words < 50) { showToast('Write at least 50 words before checking.'); return; }
+    if(aiChecksLeft <= 0) return;
+
+    aiChecksLeft--;
+    document.getElementById('checksLeft').textContent = aiChecksLeft;
+
+    // Update dots
+    const dots = document.getElementById('checkDots').children;
+    for(let i = 0; i < dots.length; i++) {
+      dots[i].style.background = i < aiChecksLeft ? 'var(--green)' : 'var(--border)';
+    }
+
+    // Show feedback
+    document.getElementById('aiFeedback').style.display = 'block';
+    document.getElementById('aiFeedback').scrollIntoView({ behavior:'smooth', block:'nearest' });
+
+    if(aiChecksLeft === 0) {
+      document.getElementById('aiCheckBar').style.display = 'none';
+      document.getElementById('writingPaywall').style.display = 'block';
+    } else {
+      showToast(`✅ AI check done! ${aiChecksLeft} free check${aiChecksLeft>1?'s':''} remaining.`);
+    }
+  }
+
+  // FREE READING LIMIT
+  let freeReadingTests = 5;
+  let readingTestsUsed = 0;
+
+  function checkReadingLimit() {
+    if(readingTestsUsed >= freeReadingTests) {
+      document.getElementById('reading').innerHTML = `
+        <div class="premium-lock" style="max-width:600px;margin:0 auto">
+          <div class="lock-icon">📖</div>
+          <h3>You've used all 5 free Reading practices</h3>
+          <p>Upgrade to Premium for unlimited Reading and Listening tests, plus AI Writing feedback.</p>
+          <div class="features-list">
+            <span class="feature-tag">Unlimited Reading</span>
+            <span class="feature-tag">Unlimited Listening</span>
+            <span class="feature-tag">Unlimited AI Writing Checks</span>
+            <span class="feature-tag">Speaking Q&A</span>
+          </div>
+          <button class="btn-premium" onclick="showPremium()">Upgrade for $4/month</button>
+        </div>`;
+    }
+  }
+
+  function showPremium() {
+    window.location.href = 'pricing-page.html';
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+</script>
+</body>
+</html>

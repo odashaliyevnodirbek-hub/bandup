@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BandUp — Ace Your IELTS</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c10;
+    --surface: #13161d;
+    --surface2: #1a1e28;
+    --border: #252a38;
+    --gold: #d4a843;
+    --gold-light: #f0c967;
+    --text: #e8eaf0;
+    --muted: #5a6278;
+    --muted2: #8892a4;
+    --green: #34d399;
+    --blue: #60a5fa;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; overflow-x:hidden; }
+
+  /* NAV */
+  nav {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:1.2rem 2.5rem;
+    border-bottom:1px solid var(--border);
+    position:sticky; top:0;
+    background:rgba(10,12,16,0.93);
+    backdrop-filter:blur(16px);
+    z-index:100;
+  }
+  .logo { font-family:'Playfair Display',serif; font-size:1.6rem; font-weight:900; color:var(--gold); }
+  .logo span { color:var(--text); }
+  .nav-links { display:flex; gap:2rem; align-items:center; }
+  .nav-links a { color:var(--muted2); text-decoration:none; font-size:0.88rem; font-weight:500; transition:color 0.2s; }
+  .nav-links a:hover { color:var(--text); }
+  .nav-cta { display:flex; gap:0.7rem; }
+  .btn-ghost { background:transparent; border:1px solid var(--border); color:var(--text); padding:0.5rem 1.2rem; border-radius:7px; font-family:'DM Sans',sans-serif; font-size:0.85rem; font-weight:500; cursor:pointer; transition:all 0.2s; }
+  .btn-ghost:hover { border-color:var(--gold); color:var(--gold); }
+  .btn-gold { background:linear-gradient(135deg,var(--gold),var(--gold-light)); color:#0a0c10; border:none; padding:0.55rem 1.3rem; border-radius:7px; font-family:'DM Sans',sans-serif; font-size:0.85rem; font-weight:700; cursor:pointer; transition:all 0.2s; }
+  .btn-gold:hover { opacity:0.9; transform:translateY(-1px); }
+
+  /* HERO */
+  .hero {
+    min-height: 92vh;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:4rem 2rem;
+    position:relative; overflow:hidden;
+  }
+  .hero-bg {
+    position:absolute; inset:0; pointer-events:none;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(212,168,67,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at 20% 80%, rgba(96,165,250,0.05) 0%, transparent 50%),
+      radial-gradient(ellipse 40% 30% at 80% 70%, rgba(52,211,153,0.04) 0%, transparent 50%);
+  }
+  .hero-grid {
+    position:absolute; inset:0; pointer-events:none;
+    background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 70%);
+  }
+
+  .hero-eyebrow {
+    display:inline-flex; align-items:center; gap:0.5rem;
+    background:rgba(212,168,67,0.08); color:var(--gold);
+    border:1px solid rgba(212,168,67,0.25);
+    padding:0.35rem 1rem; border-radius:20px;
+    font-size:0.72rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase;
+    margin-bottom:1.8rem;
+    animation: fadeUp 0.7s ease both;
+  }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+  .hero h1 {
+    font-family:'Playfair Display',serif;
+    font-size:clamp(3rem,6vw,5.5rem);
+    font-weight:900; line-height:1.05;
+    margin-bottom:1.5rem;
+    animation:fadeUp 0.7s 0.1s ease both;
+    position:relative;
+  }
+  .hero h1 em { color:var(--gold); font-style:italic; }
+
+  .hero-sub {
+    color:var(--muted2); font-size:1.1rem; max-width:540px;
+    line-height:1.75; margin-bottom:2.5rem;
+    animation:fadeUp 0.7s 0.2s ease both; position:relative;
+  }
+
+  .hero-actions {
+    display:flex; gap:1rem; flex-wrap:wrap; justify-content:center;
+    margin-bottom:3.5rem;
+    animation:fadeUp 0.7s 0.3s ease both; position:relative;
+  }
+  .btn-hero-primary {
+    background:linear-gradient(135deg,var(--gold),var(--gold-light));
+    color:#0a0c10; border:none; padding:0.9rem 2.2rem;
+    border-radius:10px; font-family:'DM Sans',sans-serif;
+    font-size:1rem; font-weight:700; cursor:pointer; transition:all 0.2s;
+  }
+  .btn-hero-primary:hover { transform:translateY(-2px); box-shadow:0 12px 32px rgba(212,168,67,0.3); }
+  .btn-hero-secondary {
+    background:transparent; border:1px solid var(--border);
+    color:var(--text); padding:0.9rem 2.2rem;
+    border-radius:10px; font-family:'DM Sans',sans-serif;
+    font-size:1rem; font-weight:500; cursor:pointer; transition:all 0.2s;
+  }
+  .btn-hero-secondary:hover { border-color:var(--muted2); }
+
+  /* STATS ROW */
+  .hero-stats {
+    display:flex; gap:3rem; flex-wrap:wrap; justify-content:center;
+    animation:fadeUp 0.7s 0.4s ease both; position:relative;
+  }
+  .stat { text-align:center; }
+  .stat-val { font-family:'Playfair Display',serif; font-size:2rem; font-weight:900; color:var(--gold); }
+  .stat-lbl { font-size:0.78rem; color:var(--muted2); margin-top:2px; }
+
+  /* SECTION COMMON */
+  section { padding:5rem 2rem; position:relative; }
+  .section-tag {
+    display:inline-block; background:rgba(212,168,67,0.08); color:var(--gold);
+    border:1px solid rgba(212,168,67,0.2); padding:0.25rem 0.8rem;
+    border-radius:20px; font-size:0.7rem; font-weight:700;
+    letter-spacing:0.1em; text-transform:uppercase; margin-bottom:1rem;
+  }
+  .section-heading {
+    font-family:'Playfair Display',serif; font-size:clamp(2rem,3.5vw,3rem);
+    font-weight:900; line-height:1.1; margin-bottom:1rem;
+  }
+  .section-heading em { color:var(--gold); font-style:italic; }
+  .section-desc { color:var(--muted2); font-size:0.95rem; line-height:1.7; max-width:500px; }
+
+  /* HOW IT WORKS */
+  .how-section { background:var(--surface); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+  .how-inner { max-width:1100px; margin:0 auto; }
+  .how-header { text-align:center; margin-bottom:4rem; }
+  .how-header .section-desc { margin:0 auto; }
+  .steps-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1.5rem; }
+  @media(max-width:768px){ .steps-grid{grid-template-columns:1fr 1fr;} }
+  @media(max-width:480px){ .steps-grid{grid-template-columns:1fr;} }
+
+  .step-card {
+    background:var(--bg); border:1px solid var(--border);
+    border-radius:16px; padding:1.8rem 1.5rem;
+    position:relative; transition:border-color 0.2s, transform 0.2s;
+  }
+  .step-card:hover { border-color:rgba(212,168,67,0.3); transform:translateY(-3px); }
+  .step-num {
+    font-family:'Playfair Display',serif; font-size:3.5rem; font-weight:900;
+    color:rgba(212,168,67,0.12); line-height:1; margin-bottom:0.5rem;
+  }
+  .step-icon { font-size:1.8rem; margin-bottom:0.8rem; }
+  .step-title { font-weight:700; font-size:0.95rem; margin-bottom:0.4rem; }
+  .step-desc { font-size:0.82rem; color:var(--muted2); line-height:1.6; }
+
+  /* FEATURES */
+  .features-section { max-width:1100px; margin:0 auto; }
+  .features-layout { display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; }
+  @media(max-width:768px){ .features-layout{grid-template-columns:1fr;} }
+
+  .feature-list { display:flex; flex-direction:column; gap:1.2rem; margin-top:2rem; }
+  .feature-item { display:flex; gap:1rem; align-items:flex-start; }
+  .feature-dot {
+    width:36px; height:36px; border-radius:10px;
+    background:var(--gold-dim,rgba(212,168,67,0.12));
+    display:flex; align-items:center; justify-content:center;
+    font-size:1rem; flex-shrink:0; margin-top:2px;
+  }
+  .feature-item h4 { font-weight:600; font-size:0.92rem; margin-bottom:0.2rem; }
+  .feature-item p { font-size:0.82rem; color:var(--muted2); line-height:1.6; }
+
+  /* MOCK PREVIEW CARD */
+  .preview-card {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:18px; overflow:hidden;
+  }
+  .preview-header {
+    background:var(--surface2); padding:1rem 1.2rem;
+    border-bottom:1px solid var(--border);
+    display:flex; align-items:center; gap:0.5rem;
+  }
+  .dot { width:10px; height:10px; border-radius:50%; }
+  .dot-r { background:#ff5f57; }
+  .dot-y { background:#ffbd2e; }
+  .dot-g { background:#28c840; }
+  .preview-body { padding:1.5rem; }
+  .preview-score { text-align:center; margin-bottom:1.5rem; }
+  .preview-score .big { font-family:'Playfair Display',serif; font-size:3.5rem; font-weight:900; color:var(--gold); line-height:1; }
+  .preview-score .lbl { font-size:0.75rem; color:var(--muted2); margin-top:0.2rem; }
+  .score-bars { display:flex; flex-direction:column; gap:0.7rem; }
+  .bar-row { display:flex; align-items:center; gap:0.7rem; font-size:0.78rem; }
+  .bar-label { width:80px; color:var(--muted2); text-align:right; flex-shrink:0; }
+  .bar-track { flex:1; height:7px; background:var(--border); border-radius:4px; overflow:hidden; }
+  .bar-fill { height:100%; border-radius:4px; background:linear-gradient(90deg,var(--gold),var(--gold-light)); transition:width 1.5s ease; }
+  .bar-val { width:30px; color:var(--text); font-weight:600; font-size:0.8rem; }
+
+  /* TESTIMONIALS */
+  .testimonials-section { background:var(--surface); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+  .testimonials-inner { max-width:1100px; margin:0 auto; }
+  .testimonials-header { text-align:center; margin-bottom:3rem; }
+  .testimonials-header .section-desc { margin:0 auto; }
+  .testimonials-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.2rem; }
+  @media(max-width:768px){ .testimonials-grid{grid-template-columns:1fr;} }
+
+  .testimonial-card {
+    background:var(--bg); border:1px solid var(--border);
+    border-radius:14px; padding:1.5rem;
+    transition:border-color 0.2s;
+  }
+  .testimonial-card:hover { border-color:rgba(212,168,67,0.25); }
+  .stars { color:var(--gold); font-size:0.85rem; margin-bottom:0.8rem; letter-spacing:0.1em; }
+  .testimonial-text { font-size:0.87rem; color:var(--muted2); line-height:1.7; margin-bottom:1.2rem; font-style:italic; }
+  .testimonial-author { display:flex; align-items:center; gap:0.7rem; }
+  .author-avatar {
+    width:36px; height:36px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.9rem; font-weight:700; flex-shrink:0;
+    background:var(--surface2); border:1px solid var(--border);
+  }
+  .author-name { font-size:0.85rem; font-weight:600; }
+  .author-meta { font-size:0.75rem; color:var(--muted2); }
+  .band-chip {
+    margin-left:auto; background:rgba(212,168,67,0.1);
+    color:var(--gold); border:1px solid rgba(212,168,67,0.2);
+    padding:0.2rem 0.6rem; border-radius:8px;
+    font-size:0.72rem; font-weight:700;
+  }
+
+  /* SECTIONS CTA */
+  .sections-preview { max-width:1100px; margin:0 auto; }
+  .sections-header { text-align:center; margin-bottom:3rem; }
+  .sections-header .section-desc { margin:0 auto; }
+  .sections-cards { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; }
+  @media(max-width:768px){ .sections-cards{grid-template-columns:1fr 1fr;} }
+  @media(max-width:480px){ .sections-cards{grid-template-columns:1fr;} }
+
+  .section-card {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:14px; padding:1.5rem 1.2rem;
+    text-align:center; cursor:pointer;
+    transition:all 0.2s;
+  }
+  .section-card:hover { border-color:rgba(212,168,67,0.3); transform:translateY(-3px); background:var(--surface2); }
+  .section-card .icon { font-size:2rem; margin-bottom:0.8rem; }
+  .section-card h3 { font-weight:700; font-size:0.95rem; margin-bottom:0.4rem; }
+  .section-card p { font-size:0.78rem; color:var(--muted2); line-height:1.5; margin-bottom:1rem; }
+  .section-card .free-tag {
+    display:inline-block; background:rgba(52,211,153,0.1); color:var(--green);
+    border:1px solid rgba(52,211,153,0.2); padding:0.2rem 0.6rem;
+    border-radius:10px; font-size:0.7rem; font-weight:600;
+  }
+  .section-card .lock-tag {
+    display:inline-block; background:var(--gold-dim,rgba(212,168,67,0.1)); color:var(--gold);
+    border:1px solid rgba(212,168,67,0.2); padding:0.2rem 0.6rem;
+    border-radius:10px; font-size:0.7rem; font-weight:600;
+  }
+
+  /* FINAL CTA */
+  .final-cta {
+    max-width:800px; margin:0 auto;
+    background:linear-gradient(135deg,#161820,#1a1c24);
+    border:1px solid rgba(212,168,67,0.25); border-radius:24px;
+    padding:4rem 2.5rem; text-align:center; position:relative; overflow:hidden;
+  }
+  .final-cta::before {
+    content:''; position:absolute; top:-100px; left:50%; transform:translateX(-50%);
+    width:500px; height:400px;
+    background:radial-gradient(ellipse, rgba(212,168,67,0.1) 0%, transparent 65%);
+    pointer-events:none;
+  }
+  .final-cta h2 { font-family:'Playfair Display',serif; font-size:clamp(2rem,4vw,3rem); font-weight:900; margin-bottom:1rem; position:relative; }
+  .final-cta h2 em { color:var(--gold); font-style:italic; }
+  .final-cta p { color:var(--muted2); font-size:0.95rem; margin-bottom:2rem; line-height:1.7; position:relative; }
+  .final-cta-btns { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; position:relative; }
+
+  footer { text-align:center; padding:2rem; color:var(--muted); font-size:0.78rem; border-top:1px solid var(--border); margin-top:5rem; }
+  footer a { color:var(--gold); text-decoration:none; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Band<span>Up</span></div>
+  <div class="nav-links">
+    <a href="#how">How it works</a>
+    <a href="#features">Features</a>
+    <a href="pricing-page.html">Pricing</a>
+  </div>
+  <div class="nav-cta">
+    <button class="btn-ghost" onclick="location.href='login.html'">Log In</button>
+    <button class="btn-gold" onclick="location.href='login.html'">Start Free</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-eyebrow">🎯 IELTS Preparation · All 4 Sections</div>
+  <h1>Your <em>Band 7+</em><br>Starts Here</h1>
+  <p class="hero-sub">Practice every section of the IELTS exam with real passages, AI feedback, and expert guidance — all in one place.</p>
+  <div class="hero-actions">
+    <button class="btn-hero-primary" onclick="location.href='login.html'">Start Practicing Free →</button>
+    <button class="btn-hero-secondary" onclick="location.href='ielts-platform.html'">View Demo</button>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-val">12k+</div><div class="stat-lbl">Active students</div></div>
+    <div class="stat"><div class="stat-val">7.8</div><div class="stat-lbl">Avg band score</div></div>
+    <div class="stat"><div class="stat-val">94%</div><div class="stat-lbl">Hit target score</div></div>
+    <div class="stat"><div class="stat-val">500+</div><div class="stat-lbl">Practice questions</div></div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section" id="how">
+  <div class="how-inner">
+    <div class="how-header">
+      <div class="section-tag">✦ Simple Process</div>
+      <h2 class="section-heading">Get your target score<br><em>in 4 steps</em></h2>
+      <p class="section-desc">No fluff, no wasted time. A clear path from where you are to where you need to be.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-icon">📋</div>
+        <div class="step-title">Take a Diagnostic Test</div>
+        <div class="step-desc">Find out your current band score across all 4 sections in under 30 minutes.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-icon">🎯</div>
+        <div class="step-title">Get a Study Plan</div>
+        <div class="step-desc">Receive a personalized plan focused on your weak areas and target score.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-icon">🏋️</div>
+        <div class="step-title">Practice Daily</div>
+        <div class="step-desc">Work through reading passages, writing tasks, listening tests and speaking drills.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">04</div>
+        <div class="step-icon">🏆</div>
+        <div class="step-title">Ace Your Exam</div>
+        <div class="step-desc">Walk into your IELTS exam confident, prepared and ready to hit your band target.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="features-section">
+    <div class="features-layout">
+      <div>
+        <div class="section-tag">✦ Why BandUp</div>
+        <h2 class="section-heading">Everything you need to <em>score higher</em></h2>
+        <p class="section-desc">We combine real exam content with AI-powered feedback to give you the most effective IELTS prep available.</p>
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="feature-dot">🤖</div>
+            <div><h4>AI Writing Feedback</h4><p>Get instant band score predictions and detailed corrections on Task 1 and Task 2 essays.</p></div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-dot">📖</div>
+            <div><h4>Real Exam Passages</h4><p>Practice with authentic IELTS-style academic and general reading passages with full answer keys.</p></div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-dot">📊</div>
+            <div><h4>Progress Analytics</h4><p>Track your improvement over time with detailed score breakdowns across all four skills.</p></div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-dot">⏱</div>
+            <div><h4>Timed Exam Mode</h4><p>Simulate real exam pressure with our countdown timer and strict section time limits.</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="preview-card">
+        <div class="preview-header">
+          <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+          <span style="font-size:0.78rem;color:var(--muted2);margin-left:0.5rem">Score Report · Ahmed K.</span>
+        </div>
+        <div class="preview-body">
+          <div class="preview-score">
+            <div class="big">7.5</div>
+            <div class="lbl">Overall Band Score</div>
+          </div>
+          <div class="score-bars">
+            <div class="bar-row">
+              <span class="bar-label">Reading</span>
+              <div class="bar-track"><div class="bar-fill" style="width:85%"></div></div>
+              <span class="bar-val">8.0</span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">Writing</span>
+              <div class="bar-track"><div class="bar-fill" style="width:70%"></div></div>
+              <span class="bar-val">7.0</span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">Listening</span>
+              <div class="bar-track"><div class="bar-fill" style="width:80%"></div></div>
+              <span class="bar-val">7.5</span>
+            </div>
+            <div class="bar-row">
+              <span class="bar-label">Speaking</span>
+              <div class="bar-track"><div class="bar-fill" style="width:75%"></div></div>
+              <span class="bar-val">7.5</span>
+            </div>
+          </div>
+          <div style="margin-top:1.2rem;padding:0.8rem;background:rgba(52,211,153,0.07);border:1px solid rgba(52,211,153,0.15);border-radius:8px;font-size:0.78rem;color:#34d399">
+            ✓ Target reached! +1.0 improvement in 6 weeks
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTIONS PREVIEW -->
+<section style="background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="sections-preview">
+    <div class="sections-header">
+      <div class="section-tag">✦ All 4 Skills</div>
+      <h2 class="section-heading">Full IELTS coverage,<br><em>one platform</em></h2>
+      <p class="section-desc">No need to jump between different resources. Practice everything in one place.</p>
+    </div>
+    <div class="sections-cards">
+      <div class="section-card" onclick="location.href='ielts-platform.html'">
+        <div class="icon">📖</div>
+        <h3>Reading</h3>
+        <p>Academic & General passages with all question types</p>
+        <span class="free-tag">Free to try</span>
+      </div>
+      <div class="section-card" onclick="location.href='ielts-platform.html'">
+        <div class="icon">✍️</div>
+        <h3>Writing</h3>
+        <p>Task 1 & 2 with AI feedback and Band 9 samples</p>
+        <span class="free-tag">Free to try</span>
+      </div>
+      <div class="section-card" onclick="location.href='pricing-page.html'">
+        <div class="icon">🎧</div>
+        <h3>Listening</h3>
+        <p>200+ audio tracks with multiple accents and transcripts</p>
+        <span class="lock-tag">⭐ Premium</span>
+      </div>
+      <div class="section-card" onclick="location.href='pricing-page.html'">
+        <div class="icon">🎤</div>
+        <h3>Speaking</h3>
+        <p>AI examiner for all 3 parts with pronunciation feedback</p>
+        <span class="lock-tag">⭐ Premium</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials-section">
+  <div class="testimonials-inner">
+    <div class="testimonials-header">
+      <div class="section-tag">✦ Student Stories</div>
+      <h2 class="section-heading">Real students,<br><em>real results</em></h2>
+      <p class="section-desc">Join thousands of students who improved their band score with BandUp.</p>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <div class="testimonial-text">"The AI writing feedback is incredibly detailed. It showed me exactly why my essays were getting a 6.5 and what I needed to change. Got a 7.5 in Writing on my actual exam."</div>
+        <div class="testimonial-author">
+          <div class="author-avatar">SA</div>
+          <div><div class="author-name">Sara A.</div><div class="author-meta">Pakistan · University student</div></div>
+          <div class="band-chip">7.5 ↑</div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <div class="testimonial-text">"I tried other platforms but BandUp's reading passages felt most similar to the real exam. The timed mode really helped me manage my time on test day."</div>
+        <div class="testimonial-author">
+          <div class="author-avatar">MK</div>
+          <div><div class="author-name">Mohammed K.</div><div class="author-meta">Egypt · Engineer</div></div>
+          <div class="band-chip">8.0 ↑</div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <div class="testimonial-text">"The speaking AI examiner was a game changer. I practiced my Part 2 answers every day and my fluency improved dramatically. Highly recommend Premium."</div>
+        <div class="testimonial-author">
+          <div class="author-avatar">LN</div>
+          <div><div class="author-name">Linh N.</div><div class="author-meta">Vietnam · Nurse</div></div>
+          <div class="band-chip">7.0 ↑</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section>
+  <div class="final-cta">
+    <h2>Your target score is<br><em>closer than you think</em></h2>
+    <p>Start free today. No credit card needed. Upgrade when you're ready.</p>
+    <div class="final-cta-btns">
+      <button class="btn-hero-primary" onclick="location.href='login.html'">🚀 Start Free Today</button>
+      <button class="btn-hero-secondary" onclick="location.href='pricing-page.html'">View Pricing</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2025 BandUp · IELTS Practice Platform &nbsp;·&nbsp;
+  <a href="pricing-page.html">Pricing</a> &nbsp;·&nbsp;
+  <a href="#">Privacy</a> &nbsp;·&nbsp;
+  <a href="#">Terms</a> &nbsp;·&nbsp;
+  <a href="#">Contact</a>
+</footer>
+
+</body>
+</html>
