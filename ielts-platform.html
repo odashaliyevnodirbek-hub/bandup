@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0057)file:///C:/Users/Nodirbek/Downloads/ielts-platform_5.html -->
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="en">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BandUp — IELTS Practice Platform</title>
-<link href="./BandUp — IELTS Practice Platform_files/css2" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #0d0f14;
@@ -495,29 +495,58 @@
     z-index: 999;
   }
   .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* DROPDOWN NAV */
+  .nav-link { color:var(--muted2); text-decoration:none; font-size:0.85rem; font-weight:500; padding:0.45rem 0.9rem; border-radius:7px; transition:all 0.2s; }
+  .nav-link:hover { color:var(--text); background:var(--surface); }
+  .nav-link.active { color:var(--gold); background:rgba(212,168,67,0.08); }
+  .dropdown { position:relative; }
+  .dropdown-menu { position:absolute; top:calc(100% + 8px); left:0; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:0.5rem; min-width:180px; opacity:0; pointer-events:none; transform:translateY(-8px); transition:all 0.2s; z-index:200; box-shadow:0 16px 40px rgba(0,0,0,0.4); }
+  .dropdown:hover .dropdown-menu { opacity:1; pointer-events:all; transform:translateY(0); }
+  .dropdown-item { display:flex; align-items:center; gap:0.7rem; padding:0.6rem 0.8rem; border-radius:8px; color:var(--muted2); text-decoration:none; font-size:0.83rem; font-weight:500; transition:all 0.15s; }
+  .dropdown-item:hover { background:var(--surface2); color:var(--text); }
+  .btn-login { background:transparent; border:1px solid var(--border); color:var(--text); padding:0.45rem 1.1rem; border-radius:7px; font-family:'DM Sans',sans-serif; font-size:0.83rem; font-weight:500; cursor:pointer; transition:all 0.2s; text-decoration:none; }
+  .btn-login:hover { border-color:var(--muted2); }
+  .btn-premium-nav { background:linear-gradient(135deg,var(--gold),var(--gold-light)); color:#0a0c10; border:none; padding:0.45rem 1.1rem; border-radius:7px; font-family:'DM Sans',sans-serif; font-size:0.83rem; font-weight:700; cursor:pointer; transition:all 0.2s; }
+  .btn-premium-nav:hover { opacity:0.9; }
+  .nav-right { display:flex; gap:0.7rem; align-items:center; }
+
 </style>
 </head>
 <body>
 
 <nav>
-  <div class="logo">Band<span>Up</span></div>
+  <a class="logo" href="index.html">Band<span>Up</span></a>
   <div class="nav-links">
-    <a href="file:///C:/Users/Nodirbek/Downloads/ielts-platform_5.html#">Practice</a>
-    <a href="file:///C:/Users/Nodirbek/Downloads/ielts-platform_5.html#">Lessons</a>
-    <a href="file:///C:/Users/Nodirbek/Downloads/ielts-platform_5.html#">Progress</a>
-    <button class="btn-premium" onclick="showPremium()">⭐ Go Premium</button>
+    <div class="dropdown">
+      <a class="nav-link" href="#">Practice <span style="font-size:0.6rem;margin-left:0.2rem">&#9662;</span></a>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="reading.html">&#128218; Reading</a>
+        <a class="dropdown-item" href="ielts-platform.html">&#9997;&#65039; Writing</a>
+        <a class="dropdown-item" href="pricing-page.html">&#127911; Listening</a>
+        <a class="dropdown-item" href="pricing-page.html">&#127908; Speaking</a>
+      </div>
+    </div>
+    <a class="nav-link" href="#">Mock</a>
+    <a class="nav-link" href="recent.html">Recent</a>
+    <a class="nav-link" href="#">Articles</a>
+    <a class="nav-link" href="#">Vocab</a>
+  </div>
+  <div class="nav-right">
+    <a class="btn-login" href="login.html">Log In</a>
+    <button class="btn-premium-nav" onclick="location.href='pricing-page.html'">&#11088; Premium</button>
   </div>
 </nav>
 
 <section class="hero">
   <div class="badge">🎯 IELTS Preparation Platform</div>
   <h1>Score Higher.<br><em>Practice Smarter.</em></h1>
-  <p>Real exam-style practice for all four IELTS sections — Reading, Writing, Listening &amp; Speaking.</p>
+  <p>Real exam-style practice for all four IELTS sections — Reading, Writing, Listening & Speaking.</p>
   <div class="section-tabs">
-    <button class="tab active" onclick="switchSection(&#39;reading&#39;, this)">📖 Reading</button>
-    <button class="tab" onclick="switchSection(&#39;writing&#39;, this)">✍️ Writing</button>
-    <button class="tab" onclick="switchSection(&#39;listening&#39;, this)">🎧 Listening</button>
-    <button class="tab" onclick="switchSection(&#39;speaking&#39;, this)">🎤 Speaking</button>
+    <button class="tab active" onclick="switchSection('reading', this)">📖 Reading</button>
+    <button class="tab" onclick="switchSection('writing', this)">✍️ Writing</button>
+    <button class="tab" onclick="switchSection('listening', this)">🎧 Listening</button>
+    <button class="tab" onclick="switchSection('speaking', this)">🎤 Speaking</button>
   </div>
 </section>
 
@@ -528,7 +557,7 @@
     <div class="test-header">
       <div class="timer-wrap">
         <span class="timer-icon">⏱</span>
-        <span class="timer" id="timer">19:26</span>
+        <span class="timer" id="timer">20:00</span>
       </div>
       <div class="test-meta">
         Section 1 · <strong>Reading Comprehension</strong>
@@ -709,7 +738,7 @@
 
         <div class="submit-row">
           <span style="font-size:0.8rem;color:var(--muted)" id="answeredCount">0 of 13 answered</span>
-          <button class="btn-submit" id="submitBtn" onclick="submitTest()" disabled="">Submit Answers</button>
+          <button class="btn-submit" id="submitBtn" onclick="submitTest()" disabled>Submit Answers</button>
         </div>
       </div>
     </div>
@@ -757,7 +786,7 @@
         <div style="width:12px;height:12px;border-radius:50%;background:var(--green)" title="Check available"></div>
         <div style="width:12px;height:12px;border-radius:50%;background:var(--green)" title="Check available"></div>
       </div>
-      <button id="aiCheckBtn" style="background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#0d0f14;border:none;padding:0.55rem 1.3rem;border-radius:7px;font-family:&#39;DM Sans&#39;,sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;transition:all 0.2s" onclick="useAiCheck()">✨ Check with AI</button>
+      <button id="aiCheckBtn" style="background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#0d0f14;border:none;padding:0.55rem 1.3rem;border-radius:7px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;transition:all 0.2s" onclick="useAiCheck()">✨ Check with AI</button>
     </div>
 
     <!-- AI FEEDBACK RESULT (hidden by default) -->
@@ -765,19 +794,19 @@
       <div style="font-size:0.75rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--gold);margin-bottom:0.8rem">✨ AI Feedback</div>
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.8rem;margin-bottom:1rem">
         <div style="text-align:center;background:var(--surface2);border-radius:8px;padding:0.7rem">
-          <div style="font-family:&#39;Playfair Display&#39;,serif;font-size:1.4rem;font-weight:900;color:var(--gold)">6.5</div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:var(--gold)">6.5</div>
           <div style="font-size:0.68rem;color:var(--muted2)">Task Achievement</div>
         </div>
         <div style="text-align:center;background:var(--surface2);border-radius:8px;padding:0.7rem">
-          <div style="font-family:&#39;Playfair Display&#39;,serif;font-size:1.4rem;font-weight:900;color:var(--gold)">6.0</div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:var(--gold)">6.0</div>
           <div style="font-size:0.68rem;color:var(--muted2)">Coherence</div>
         </div>
         <div style="text-align:center;background:var(--surface2);border-radius:8px;padding:0.7rem">
-          <div style="font-family:&#39;Playfair Display&#39;,serif;font-size:1.4rem;font-weight:900;color:var(--gold)">6.5</div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:var(--gold)">6.5</div>
           <div style="font-size:0.68rem;color:var(--muted2)">Vocabulary</div>
         </div>
         <div style="text-align:center;background:var(--surface2);border-radius:8px;padding:0.7rem">
-          <div style="font-family:&#39;Playfair Display&#39;,serif;font-size:1.4rem;font-weight:900;color:var(--gold)">6.0</div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:var(--gold)">6.0</div>
           <div style="font-size:0.68rem;color:var(--muted2)">Grammar</div>
         </div>
       </div>
@@ -829,7 +858,7 @@
       <p>Practice all three parts of the IELTS Speaking test with our AI examiner. Record your responses and get instant feedback on fluency, vocabulary, and pronunciation.</p>
       <div class="features-list">
         <span class="feature-tag">AI Examiner</span>
-        <span class="feature-tag">Part 1, 2 &amp; 3</span>
+        <span class="feature-tag">Part 1, 2 & 3</span>
         <span class="feature-tag">Pronunciation Score</span>
         <span class="feature-tag">Fluency Analysis</span>
         <span class="feature-tag">Model Answers</span>
@@ -842,7 +871,7 @@
 </main>
 
 <footer>
-  © 2025 BandUp · IELTS Practice Platform · <a href="file:///C:/Users/Nodirbek/Downloads/ielts-platform_5.html#" style="color:var(--gold)">Privacy</a> · <a href="file:///C:/Users/Nodirbek/Downloads/ielts-platform_5.html#" style="color:var(--gold)">Terms</a>
+  © 2025 BandUp · IELTS Practice Platform · <a href="#" style="color:var(--gold)">Privacy</a> · <a href="#" style="color:var(--gold)">Terms</a>
 </footer>
 
 <div class="toast" id="toast"></div>
@@ -1002,6 +1031,5 @@
     setTimeout(() => t.classList.remove('show'), 3500);
   }
 </script>
-
-
-</body></html>
+</body>
+</html>

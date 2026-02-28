@@ -596,16 +596,46 @@
     z-index: 1;
   }
   footer a { color: var(--gold); text-decoration: none; }
+
+  /* DROPDOWN NAV */
+  .nav-link { color:var(--muted2); text-decoration:none; font-size:0.85rem; font-weight:500; padding:0.45rem 0.9rem; border-radius:7px; transition:all 0.2s; }
+  .nav-link:hover { color:var(--text); background:var(--surface); }
+  .nav-link.active { color:var(--gold); background:rgba(212,168,67,0.08); }
+  .dropdown { position:relative; }
+  .dropdown-menu { position:absolute; top:calc(100% + 8px); left:0; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:0.5rem; min-width:180px; opacity:0; pointer-events:none; transform:translateY(-8px); transition:all 0.2s; z-index:200; box-shadow:0 16px 40px rgba(0,0,0,0.4); }
+  .dropdown:hover .dropdown-menu { opacity:1; pointer-events:all; transform:translateY(0); }
+  .dropdown-item { display:flex; align-items:center; gap:0.7rem; padding:0.6rem 0.8rem; border-radius:8px; color:var(--muted2); text-decoration:none; font-size:0.83rem; font-weight:500; transition:all 0.15s; }
+  .dropdown-item:hover { background:var(--surface2); color:var(--text); }
+  .btn-login { background:transparent; border:1px solid var(--border); color:var(--text); padding:0.45rem 1.1rem; border-radius:7px; font-family:'DM Sans',sans-serif; font-size:0.83rem; font-weight:500; cursor:pointer; transition:all 0.2s; text-decoration:none; }
+  .btn-login:hover { border-color:var(--muted2); }
+  .btn-premium-nav { background:linear-gradient(135deg,var(--gold),var(--gold-light)); color:#0a0c10; border:none; padding:0.45rem 1.1rem; border-radius:7px; font-family:'DM Sans',sans-serif; font-size:0.83rem; font-weight:700; cursor:pointer; transition:all 0.2s; }
+  .btn-premium-nav:hover { opacity:0.9; }
+  .nav-right { display:flex; gap:0.7rem; align-items:center; }
+
 </style>
 </head>
 <body>
 
 <nav>
-  <div class="logo">Band<span>Up</span></div>
+  <a class="logo" href="index.html">Band<span>Up</span></a>
+  <div class="nav-links">
+    <div class="dropdown">
+      <a class="nav-link" href="#">Practice <span style="font-size:0.6rem;margin-left:0.2rem">&#9662;</span></a>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="reading.html">&#128218; Reading</a>
+        <a class="dropdown-item" href="ielts-platform.html">&#9997;&#65039; Writing</a>
+        <a class="dropdown-item" href="pricing-page.html">&#127911; Listening</a>
+        <a class="dropdown-item" href="pricing-page.html">&#127908; Speaking</a>
+      </div>
+    </div>
+    <a class="nav-link" href="#">Mock</a>
+    <a class="nav-link" href="recent.html">Recent</a>
+    <a class="nav-link" href="#">Articles</a>
+    <a class="nav-link" href="#">Vocab</a>
+  </div>
   <div class="nav-right">
-    <a class="nav-link" href="ielts-platform.html">Practice</a>
-    <a class="nav-link" href="#">Lessons</a>
-    <button class="btn-outline" onclick="alert('Login coming soon!')">Log In</button>
+    <a class="btn-login" href="login.html">Log In</a>
+    <button class="btn-premium-nav" onclick="location.href='pricing-page.html'">&#11088; Premium</button>
   </div>
 </nav>
 
