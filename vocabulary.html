@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<!-- saved from url=(0051)file:///C:/Users/Nodirbek/Downloads/vocabulary.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BandUp — Vocabulary</title>
+<link href="./BandUp — Vocabulary_files/css2" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0a0c10; --surface:#13161d; --surface2:#1a1e28;
+    --border:#252a38; --gold:#d4a843; --gold-light:#f0c967;
+    --text:#e8eaf0; --muted:#5a6278; --muted2:#8892a4;
+    --green:#34d399; --red:#f87171; --blue:#60a5fa; --pink:#f472b6; --purple:#a78bfa;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; min-height:100vh; }
+
+  /* NAV */
+  nav { display:flex; align-items:center; justify-content:space-between; padding:1.1rem 2.5rem; border-bottom:1px solid var(--border); position:sticky; top:0; background:rgba(10,12,16,0.95); backdrop-filter:blur(16px); z-index:100; }
+  .logo { font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:900; color:var(--gold); text-decoration:none; }
+  .logo span { color:var(--text); }
+  .nav-links { display:flex; gap:0.3rem; align-items:center; }
+  .nav-link { color:var(--muted2); text-decoration:none; font-size:0.85rem; font-weight:500; padding:0.45rem 0.9rem; border-radius:7px; transition:all 0.2s; }
+  .nav-link:hover { color:var(--text); background:var(--surface); }
+  .nav-link.active { color:var(--gold); background:rgba(212,168,67,0.08); }
+  .dropdown { position:relative; }
+  .dropdown-menu { position:absolute; top:calc(100% + 8px); left:0; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:0.5rem; min-width:180px; opacity:0; pointer-events:none; transform:translateY(-8px); transition:all 0.2s; z-index:200; box-shadow:0 16px 40px rgba(0,0,0,0.4); }
+  .dropdown:hover .dropdown-menu { opacity:1; pointer-events:all; transform:translateY(0); }
+  .dropdown-item { display:flex; align-items:center; gap:0.7rem; padding:0.6rem 0.8rem; border-radius:8px; color:var(--muted2); text-decoration:none; font-size:0.83rem; font-weight:500; transition:all 0.15s; }
+  .dropdown-item:hover { background:var(--surface2); color:var(--text); }
+  .nav-right { display:flex; gap:0.7rem; align-items:center; }
+  .btn-login { background:transparent; border:1px solid var(--border); color:var(--text); padding:0.45rem 1.1rem; border-radius:7px; font-family:'DM Sans',sans-serif; font-size:0.83rem; font-weight:500; cursor:pointer; transition:all 0.2s; text-decoration:none; }
+  .btn-premium-nav { background:linear-gradient(135deg,var(--gold),var(--gold-light)); color:#0a0c10; border:none; padding:0.45rem 1.1rem; border-radius:7px; font-family:'DM Sans',sans-serif; font-size:0.83rem; font-weight:700; cursor:pointer; }
+
+  /* HERO */
+  .hero { padding:3rem 2rem 2rem; text-align:center; position:relative; }
+  .hero::before { content:''; position:absolute; top:0; left:50%; transform:translateX(-50%); width:600px; height:250px; background:radial-gradient(ellipse, rgba(212,168,67,0.07) 0%, transparent 65%); pointer-events:none; }
+  .hero-tag { display:inline-flex; align-items:center; gap:0.4rem; background:rgba(212,168,67,0.08); color:var(--gold); border:1px solid rgba(212,168,67,0.2); padding:0.3rem 0.9rem; border-radius:20px; font-size:0.72rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:1rem; animation:fadeUp 0.5s ease both; }
+  .hero h1 { font-family:'Playfair Display',serif; font-size:clamp(2rem,4vw,3rem); font-weight:900; margin-bottom:0.7rem; animation:fadeUp 0.5s 0.1s ease both; }
+  .hero h1 em { color:var(--gold); font-style:italic; }
+  .hero p { color:var(--muted2); font-size:0.92rem; max-width:460px; margin:0 auto 2rem; line-height:1.7; animation:fadeUp 0.5s 0.2s ease both; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+  /* PROGRESS BAR */
+  .progress-section { max-width:900px; margin:0 auto 2rem; padding:0 1.5rem; animation:fadeUp 0.5s 0.3s ease both; }
+  .progress-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:0.6rem; }
+  .progress-label { font-size:0.78rem; color:var(--muted2); font-weight:500; }
+  .progress-val { font-size:0.78rem; color:var(--gold); font-weight:700; }
+  .prog-bar { height:8px; background:var(--border); border-radius:4px; overflow:hidden; }
+  .prog-fill { height:100%; background:linear-gradient(90deg,var(--gold),var(--gold-light)); border-radius:4px; transition:width 0.5s ease; }
+  .stats-row { display:flex; gap:1rem; margin-top:0.8rem; flex-wrap:wrap; justify-content:center; }
+  .stat-pill { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:0.3rem 0.9rem; font-size:0.75rem; color:var(--muted2); display:flex; align-items:center; gap:0.4rem; }
+  .stat-pill span { color:var(--gold); font-weight:700; }
+
+  /* CONTROLS */
+  .controls { max-width:1100px; margin:0 auto 1.5rem; padding:0 1.5rem; display:flex; gap:0.8rem; flex-wrap:wrap; align-items:center; animation:fadeUp 0.5s 0.4s ease both; }
+  .search-wrap { position:relative; flex:1; min-width:200px; }
+  .search-input { width:100%; background:var(--surface); border:1px solid var(--border); color:var(--text); padding:0.6rem 0.9rem 0.6rem 2.2rem; border-radius:9px; font-family:'DM Sans',sans-serif; font-size:0.85rem; outline:none; transition:border-color 0.2s; }
+  .search-input:focus { border-color:var(--gold); }
+  .search-icon { position:absolute; left:0.75rem; top:50%; transform:translateY(-50%); font-size:0.85rem; color:var(--muted); pointer-events:none; }
+  .topic-tabs { display:flex; gap:0.4rem; flex-wrap:wrap; }
+  .topic-btn { padding:0.45rem 1rem; border-radius:20px; border:1px solid var(--border); background:var(--surface); color:var(--muted2); font-family:'DM Sans',sans-serif; font-size:0.78rem; font-weight:500; cursor:pointer; transition:all 0.2s; white-space:nowrap; }
+  .topic-btn:hover { border-color:var(--gold); color:var(--gold); }
+  .topic-btn.active { background:var(--gold); color:#0a0c10; border-color:var(--gold); font-weight:700; }
+  .btn-quiz-mode { background:linear-gradient(135deg,var(--purple),#c4b5fd); color:#0a0c10; border:none; padding:0.5rem 1.2rem; border-radius:9px; font-family:'DM Sans',sans-serif; font-size:0.82rem; font-weight:700; cursor:pointer; transition:all 0.2s; white-space:nowrap; }
+  .btn-quiz-mode:hover { opacity:0.9; transform:translateY(-1px); }
+
+  /* FLASHCARD GRID */
+  .cards-wrap { max-width:1100px; margin:0 auto; padding:0 1.5rem 5rem; }
+  .cards-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; }
+  @media(max-width:1000px){ .cards-grid{grid-template-columns:repeat(3,1fr);} }
+  @media(max-width:700px){ .cards-grid{grid-template-columns:repeat(2,1fr);} }
+  @media(max-width:440px){ .cards-grid{grid-template-columns:1fr;} }
+
+  /* FLASHCARD */
+  .flashcard { perspective:1000px; cursor:pointer; height:180px; }
+  .flashcard-inner { position:relative; width:100%; height:100%; transition:transform 0.5s cubic-bezier(0.4,0,0.2,1); transform-style:preserve-3d; }
+  .flashcard.flipped .flashcard-inner { transform:rotateY(180deg); }
+  .card-front, .card-back { position:absolute; inset:0; border-radius:14px; backface-visibility:hidden; display:flex; flex-direction:column; padding:1.1rem; }
+  .card-front { background:var(--surface); border:1px solid var(--border); justify-content:space-between; transition:border-color 0.2s; }
+  .flashcard:hover .card-front { border-color:rgba(212,168,67,0.3); }
+  .card-back { background:linear-gradient(135deg,#161820,#1a1c28); border:1px solid rgba(212,168,67,0.25); transform:rotateY(180deg); justify-content:space-between; }
+
+  .card-topic { font-size:0.62rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); margin-bottom:0.3rem; }
+  .card-word { font-family:'Playfair Display',serif; font-size:1.2rem; font-weight:900; color:var(--text); line-height:1.1; margin-bottom:0.3rem; }
+  .card-pron { font-size:0.72rem; color:var(--gold); font-style:italic; margin-bottom:auto; }
+  .card-type-tag { font-size:0.65rem; color:var(--muted2); background:var(--surface2); padding:0.15rem 0.45rem; border-radius:5px; display:inline-block; }
+  .card-hint { font-size:0.68rem; color:var(--muted); text-align:center; margin-top:0.5rem; }
+
+  .card-back-def { font-size:0.82rem; color:var(--text); line-height:1.5; margin-bottom:0.5rem; flex:1; }
+  .card-back-ex { font-size:0.72rem; color:var(--muted2); font-style:italic; border-left:2px solid var(--gold); padding-left:0.6rem; line-height:1.4; }
+  .card-back-word { font-family:'Playfair Display',serif; font-size:0.9rem; font-weight:700; color:var(--gold); margin-bottom:0.4rem; }
+
+  .card-studied { position:absolute; top:0.6rem; right:0.6rem; width:18px; height:18px; border-radius:50%; background:var(--green); display:none; align-items:center; justify-content:center; font-size:0.6rem; color:#0a0c10; font-weight:900; }
+  .flashcard.studied .card-studied { display:flex; }
+
+  /* LOCKED CARD */
+  .flashcard.locked .card-front { opacity:0.4; filter:blur(1px); cursor:default; }
+  .lock-overlay-card { position:absolute; inset:0; border-radius:14px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.3rem; z-index:2; }
+  .lock-overlay-card .lock-icon { font-size:1.2rem; }
+  .lock-overlay-card .lock-text { font-size:0.7rem; color:var(--gold); font-weight:600; }
+
+  /* QUIZ MODE */
+  #quizView { display:none; }
+  .quiz-wrap { max-width:600px; margin:0 auto; padding:2rem 1.5rem 5rem; }
+  .quiz-header { text-align:center; margin-bottom:2rem; }
+  .quiz-progress-text { font-size:0.78rem; color:var(--muted2); margin-bottom:0.5rem; }
+  .quiz-prog-bar { height:6px; background:var(--border); border-radius:3px; overflow:hidden; margin-bottom:1.5rem; }
+  .quiz-prog-fill { height:100%; background:linear-gradient(90deg,var(--purple),#c4b5fd); border-radius:3px; transition:width 0.4s; }
+  .quiz-card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:2rem; text-align:center; margin-bottom:1.5rem; }
+  .quiz-q-label { font-size:0.7rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--purple); margin-bottom:0.8rem; }
+  .quiz-word { font-family:'Playfair Display',serif; font-size:2.2rem; font-weight:900; color:var(--text); margin-bottom:0.3rem; }
+  .quiz-pron { font-size:0.82rem; color:var(--gold); font-style:italic; }
+  .quiz-options { display:flex; flex-direction:column; gap:0.6rem; }
+  .quiz-option { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:0.8rem 1.2rem; cursor:pointer; font-size:0.88rem; color:var(--muted2); transition:all 0.15s; text-align:left; font-family:'DM Sans',sans-serif; }
+  .quiz-option:hover { border-color:var(--purple); color:var(--text); }
+  .quiz-option.correct { border-color:var(--green); background:rgba(52,211,153,0.08); color:var(--green); }
+  .quiz-option.wrong { border-color:var(--red); background:rgba(248,113,113,0.08); color:var(--red); }
+  .quiz-feedback { margin-top:1rem; padding:0.8rem 1rem; border-radius:10px; font-size:0.83rem; display:none; }
+  .quiz-feedback.correct { background:rgba(52,211,153,0.08); border:1px solid rgba(52,211,153,0.3); color:var(--green); }
+  .quiz-feedback.wrong { background:rgba(248,113,113,0.08); border:1px solid rgba(248,113,113,0.3); color:var(--red); }
+  .btn-next { background:linear-gradient(135deg,var(--purple),#c4b5fd); color:#0a0c10; border:none; padding:0.7rem 2rem; border-radius:9px; font-family:'DM Sans',sans-serif; font-size:0.9rem; font-weight:700; cursor:pointer; margin-top:1rem; display:none; transition:all 0.2s; }
+  .btn-next:hover { opacity:0.9; }
+  .quiz-result { text-align:center; background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:2.5rem; display:none; }
+  .quiz-score-big { font-family:'Playfair Display',serif; font-size:4rem; font-weight:900; color:var(--gold); line-height:1; }
+  .btn-back-vocab { background:transparent; border:1px solid var(--border); color:var(--muted2); padding:0.55rem 1.2rem; border-radius:9px; font-family:'DM Sans',sans-serif; font-size:0.85rem; cursor:pointer; transition:all 0.2s; margin-top:1rem; }
+  .btn-back-vocab:hover { color:var(--text); border-color:var(--text); }
+
+  /* NO RESULTS */
+  .no-results { text-align:center; padding:3rem; color:var(--muted2); display:none; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="file:///C:/Users/Nodirbek/Downloads/index.html">Band<span>Up</span></a>
+  <div class="nav-links">
+    <div class="dropdown">
+      <a class="nav-link" href="file:///C:/Users/Nodirbek/Downloads/vocabulary.html#">Practice <span style="font-size:0.6rem;margin-left:0.2rem">▾</span></a>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="file:///C:/Users/Nodirbek/Downloads/reading.html">📖 Reading</a>
+        <a class="dropdown-item" href="file:///C:/Users/Nodirbek/Downloads/ielts-platform.html">✍️ Writing</a>
+        <a class="dropdown-item" href="file:///C:/Users/Nodirbek/Downloads/pricing-page.html">🎧 Listening</a>
+        <a class="dropdown-item" href="file:///C:/Users/Nodirbek/Downloads/pricing-page.html">🎤 Speaking</a>
+      </div>
+    </div>
+    <a class="nav-link" href="file:///C:/Users/Nodirbek/Downloads/vocabulary.html#">Mock</a>
+    <a class="nav-link" href="file:///C:/Users/Nodirbek/Downloads/recent.html">Recent</a>
+    <a class="nav-link" href="file:///C:/Users/Nodirbek/Downloads/articles.html">Articles</a>
+    <a class="nav-link active" href="file:///C:/Users/Nodirbek/Downloads/vocabulary.html">Vocab</a>
+  </div>
+  <div class="nav-right">
+    <a class="btn-login" href="file:///C:/Users/Nodirbek/Downloads/login.html">Log In</a>
+    <button class="btn-premium-nav" onclick="location.href=&#39;pricing-page.html&#39;">⭐ Premium</button>
+  </div>
+</nav>
+
+<!-- VOCAB VIEW -->
+<div id="vocabView">
+  <div class="hero">
+    <div class="hero-tag">📚 Vocabulary</div>
+    <h1>Master IELTS <em>Academic Words</em></h1>
+    <p>Learn the most important vocabulary for IELTS. Click any card to reveal the definition, pronunciation and example.</p>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-section">
+    <div class="progress-header">
+      <span class="progress-label">📊 Today's Progress</span>
+      <span class="progress-val" id="progressVal">0 / 30 words studied</span>
+    </div>
+    <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+    <div class="stats-row">
+      <div class="stat-pill">✅ Studied today: <span id="studiedCount">0</span></div>
+      <div class="stat-pill">🎯 Quiz score: <span id="quizScoreDisplay">—</span></div>
+      <div class="stat-pill">📚 Total words: <span>30</span></div>
+    </div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="controls">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="search-input" id="searchInput" placeholder="Search words..." oninput="filterWords()">
+    </div>
+    <div class="topic-tabs">
+      <button class="topic-btn active" onclick="filterTopic(&#39;all&#39;,this)">All</button>
+      <button class="topic-btn" onclick="filterTopic(&#39;environment&#39;,this)">🌿 Environment</button>
+      <button class="topic-btn" onclick="filterTopic(&#39;technology&#39;,this)">💻 Technology</button>
+      <button class="topic-btn" onclick="filterTopic(&#39;society&#39;,this)">👥 Society</button>
+      <button class="topic-btn" onclick="filterTopic(&#39;health&#39;,this)">🏥 Health</button>
+      <button class="topic-btn" onclick="filterTopic(&#39;business&#39;,this)">💼 Business</button>
+      <button class="topic-btn" onclick="filterTopic(&#39;education&#39;,this)">🎓 Education</button>
+    </div>
+    <button class="btn-quiz-mode" onclick="startQuiz()">🧪 Quiz Mode</button>
+  </div>
+
+  <!-- CARDS -->
+  <div class="cards-wrap">
+    <div class="cards-grid" id="cardsGrid"><div class="flashcard" data-word="proliferation" data-topic="environment">
+      <div class="flashcard-inner">
+        <div class="card-front">
+          <div>
+            <div class="card-topic">🌿 environment</div>
+            <div class="card-word">proliferation</div>
+            <div class="card-pron">/prə-lif-ə-RAY-shən/</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="card-type-tag">noun</span>
+            <span class="card-hint">click to flip</span>
+          </div>
+          <div class="card-studied">✓</div>
+        </div>
+        <div class="card-back">
+          <div>
+            <div class="card-back-word">proliferation</div>
+            <div class="card-back-def">Rapid increase in the number or amount of something.</div>
+          </div>
+          <div class="card-back-ex">"The proliferation of plastic waste has become a global crisis."</div>
+        </div>
+        
+      </div></div><div class="flashcard" data-word="deteriorate" data-topic="environment">
+      <div class="flashcard-inner">
+        <div class="card-front">
+          <div>
+            <div class="card-topic">🌿 environment</div>
+            <div class="card-word">deteriorate</div>
+            <div class="card-pron">/di-TEER-ee-ə-rayt/</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="card-type-tag">verb</span>
+            <span class="card-hint">click to flip</span>
+          </div>
+          <div class="card-studied">✓</div>
+        </div>
+        <div class="card-back">
+          <div>
+            <div class="card-back-word">deteriorate</div>
+            <div class="card-back-def">To become progressively worse over time.</div>
+          </div>
+          <div class="card-back-ex">"Air quality continues to deteriorate in many urban centres."</div>
+        </div>
+        
+      </div></div><div class="flashcard" data-word="sustainable" data-topic="environment">
+      <div class="flashcard-inner">
+        <div class="card-front">
+          <div>
+            <div class="card-topic">🌿 environment</div>
+            <div class="card-word">sustainable</div>
+            <div class="card-pron">/sə-STAYN-ə-bəl/</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="card-type-tag">adjective</span>
+            <span class="card-hint">click to flip</span>
+          </div>
+          <div class="card-studied">✓</div>
+        </div>
+        <div class="card-back">
+          <div>
+            <div class="card-back-word">sustainable</div>
+            <div class="card-back-def">Able to be maintained at a certain rate without depleting resources.</div>
+          </div>
+          <div class="card-back-ex">"Sustainable farming practices are essential for future food security."</div>
+        </div>
+        
+      </div></div><div class="flashcard" data-word="deforestation" data-topic="environment">
+      <div class="flashcard-inner">
+        <div class="card-front">
+          <div>
+            <div class="card-topic">🌿 environment</div>
+            <div class="card-word">deforestation</div>
+            <div class="card-pron">/dee-for-es-TAY-shən/</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="card-type-tag">noun</span>
+            <span class="card-hint">click to flip</span>
+          </div>
+          <div class="card-studied">✓</div>
+        </div>
+        <div class="card-back">
+          <div>
+            <div class="card-back-word">deforestation</div>
+            <div class="card-back-def">The clearing of trees from a large area of land.</div>
+          </div>
+          <div class="card-back-ex">"Deforestation in the Amazon has accelerated in recent decades."</div>
+        </div>
+        
+      </div></div><div class="flashcard" data-word="emissions" data-topic="environment">
+      <div class="flashcard-inner">
+        <div class="card-front">
+          <div>
+            <div class="card-topic">🌿 environment</div>
+            <div class="card-word">emissions</div>
+            <div class="card-pron">/i-MISH-ənz/</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="card-type-tag">noun</span>
+            <span class="card-hint">click to flip</span>
+          </div>
+          <div class="card-studied">✓</div>
+        </div>
+        <div class="card-back">
+          <div>
+            <div class="card-back-word">emissions</div>
+            <div class="card-back-def">Gases released into the atmosphere, especially those causing pollution.</div>
+          </div>
+          <div class="card-back-ex">"Carbon emissions must be reduced to limit global warming."</div>
+        </div>
+        
+      </div></div><div class="flashcard" data-word="innovative" data-topic="technology">
+      <div class="flashcard-inner">
+        <div class="card-front">
+          <div>
+            <div class="card-topic">💻 technology</div>
+            <div class="card-word">innovative</div>
+            <div class="card-pron">/IN-ə-vay-tiv/</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="card-type-tag">adjective</span>
+            <span class="card-hint">click to flip</span>
+          </div>
+          <div class="card-studied">✓</div>
+        </div>
+        <div class="card-back">
+          <div>
+            <div class="card-back-word">innovative</div>
+            <div class="card-back-def">Featuring new methods or ideas; original and creative.</div>
+          </div>
+          <div class="card-back-ex">"The company developed an innovative solution to data storage."</div>
+        </div>
+        
+      </div></div><div class="flashcard" data-word="algorithm" data-topic="technology">
+      <div class="flashcard-inner">
+        <div class="card-front">
+          <div>
+            <div class="card-topic">💻 technology</div>
+            <div class="card-word">algorithm</div>
+            <div class="card-pron">/AL-gə-rith-əm/</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="card-type-tag">noun</span>
+            <span class="card-hint">click to flip</span>
+          </div>
+          <div class="card-studied">✓</div>
+        </div>
+        <div class="card-back">
+          <div>
+            <div class="card-back-word">algorithm</div>
+            <div class="card-back-def">A set of rules or instructions followed by a computer to solve a problem.</div>
+          </div>
+          <div class="card-back-ex">"The recommendation algorithm learns from user behaviour."</div>
+        </div>
+        
+      </div></div><div class="flashcard" data-word="automation" data-topic="technology">
+      <div class="flashcard-inner">
+        <div class="card-front">
+          <div>
+            <div class="card-topic">💻 technology</div>
+            <div class="card-word">automation</div>
+            <div class="card-pron">/aw-tə-MAY-shən/</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="card-type-tag">noun</span>
+            <span class="card-hint">click to flip</span>
+          </div>
+          <div class="card-studied">✓</div>
+        </div>
+        <div class="card-back">
+          <div>
+            <div class="card-back-word">automation</div>
+            <div class="card-back-def">The use of machines to perform tasks previously done by humans.</div>
+          </div>
+          <div class="card-back-ex">"Automation has transformed manufacturing processes worldwide."</div>
+        </div>
+        
+      </div></div><div class="flashcard" data-word="surveillance" data-topic="technology">
+      <div class="flashcard-inner">
+        <div class="card-front">
+          <div>
+            <div class="card-topic">💻 technology</div>
+            <div class="card-word">surveillance</div>
+            <div class="card-pron">/sər-VAY-ləns/</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="card-type-tag">noun</span>
+            <span class="card-hint">click to flip</span>
+          </div>
+          <div class="card-studied">✓</div>
+        </div>
+        <div class="card-back">
+          <div>
+            <div class="card-back-word">surveillance</div>
+            <div class="card-back-def">Close observation of a person or group, especially by authorities.</div>
+          </div>
+          <div class="card-back-ex">"Digital surveillance raises serious privacy concerns."</div>
+        </div>
+        
+      </div></div><div class="flashcard" data-word="infrastructure" data-topic="technology">
+      <div class="flashcard-inner">
+        <div class="card-front">
+          <div>
+            <div class="card-topic">💻 technology</div>
+            <div class="card-word">infrastructure</div>
+            <div class="card-pron">/IN-frə-struk-chər/</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="card-type-tag">noun</span>
+            <span class="card-hint">click to flip</span>
+          </div>
+          <div class="card-studied">✓</div>
+        </div>
+        <div class="card-back">
+          <div>
+            <div class="card-back-word">infrastructure</div>
+            <div class="card-back-def">The basic physical systems of a country or organisation.</div>
+          </div>
+          <div class="card-back-ex">"Investing in digital infrastructure is crucial for economic growth."</div>
+        </div>
+        
+      </div></div><div class="flashcard" data-word="inequality" data-topic="society">
+      <div class="flashcard-inner">
+        <div class="card-front">
+          <div>
+            <div class="card-topic">👥 society</div>
+            <div class="card-word">inequality</div>
+            <div class="card-pron">/in-i-KWOL-i-tee/</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="card-type-tag">noun</span>
+            <span class="card-hint">click to flip</span>
+          </div>
+          <div class="card-studied">✓</div>
+        </div>
+        <div class="card-back">
+          <div>
+            <div class="card-back-word">inequality</div>
+            <div class="card-back-def">Difference in size, degree, or status; lack of equality.</div>
+          </div>
+          <div class="card-back-ex">"Income inequality continues to widen in many developed nations."</div>
+        </div>
+        
+      </div></div><div class="flashcard" data-word="assimilation" data-topic="society">
+      <div class="flashcard-inner">
+        <div class="card-front">
+          <div>
+            <div class="card-topic">👥 society</div>
+            <div class="card-word">assimilation</div>
+            <div class="card-pron">/ə-sim-i-LAY-shən/</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="card-type-tag">noun</span>
+            <span class="card-hint">click to flip</span>
+          </div>
+          <div class="card-studied">✓</div>
+        </div>
+        <div class="card-back">
+          <div>
+            <div class="card-back-word">assimilation</div>
+            <div class="card-back-def">The process of absorbing and integrating people into a society.</div>
+          </div>
+          <div class="card-back-ex">"Cultural assimilation can both unite and divide communities."</div>
+        </div>
+        
+      </div></div><div class="flashcard" data-word="marginalised" data-topic="society">
+      <div class="flashcard-inner">
+        <div class="card-front">
+          <div>
+            <div class="card-topic">👥 society</div>
+            <div class="card-word">marginalised</div>
+            <div class="card-pron">/MAR-ji-nə-lyzd/</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="card-type-tag">adjective</span>
+            <span class="card-hint">click to flip</span>
+          </div>
+          <div class="card-studied">✓</div>
+        </div>
+        <div class="card-back">
+          <div>
+            <div class="card-back-word">marginalised</div>
+            <div class="card-back-def">Treated as insignificant or excluded from the mainstream.</div>
+          </div>
+          <div class="card-back-ex">"Marginalised communities often lack access to quality education."</div>
+        </div>
+        
+      </div></div><div class="flashcard" data-word="urbanisation" data-topic="society">
+      <div class="flashcard-inner">
+        <div class="card-front">
+          <div>
+            <div class="card-topic">👥 society</div>
+            <div class="card-word">urbanisation</div>
+            <div class="card-pron">/ur-bən-i-ZAY-shən/</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="card-type-tag">noun</span>
+            <span class="card-hint">click to flip</span>
+          </div>
+          <div class="card-studied">✓</div>
+        </div>
+        <div class="card-back">
+          <div>
+            <div class="card-back-word">urbanisation</div>
+            <div class="card-back-def">The process by which towns and cities grow as more people move to them.</div>
+          </div>
+          <div class="card-back-ex">"Rapid urbanisation has strained housing supply in many regions."</div>
+        </div>
+        
+      </div></div><div class="flashcard" data-word="cohesion" data-topic="society">
+      <div class="flashcard-inner">
+        <div class="card-front">
+          <div>
+            <div class="card-topic">👥 society</div>
+            <div class="card-word">cohesion</div>
+            <div class="card-pron">/koh-HEE-zhən/</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="card-type-tag">noun</span>
+            <span class="card-hint">click to flip</span>
+          </div>
+          <div class="card-studied">✓</div>
+        </div>
+        <div class="card-back">
+          <div>
+            <div class="card-back-word">cohesion</div>
+            <div class="card-back-def">The action of forming a united whole; togetherness.</div>
+          </div>
+          <div class="card-back-ex">"Social cohesion is vital for a stable and peaceful community."</div>
+        </div>
+        
+      </div></div><div class="flashcard" data-word="prevalence" data-topic="health">
+      <div class="flashcard-inner">
+        <div class="card-front">
+          <div>
+            <div class="card-topic">🏥 health</div>
+            <div class="card-word">prevalence</div>
+            <div class="card-pron">/PREV-ə-ləns/</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="card-type-tag">noun</span>
+            <span class="card-hint">click to flip</span>
+          </div>
+          <div class="card-studied">✓</div>
+        </div>
+        <div class="card-back">
+          <div>
+            <div class="card-back-word">prevalence</div>
+            <div class="card-back-def">The fact of being widespread or commonly occurring.</div>
+          </div>
+          <div class="card-back-ex">"The prevalence of obesity has doubled in the past three decades."</div>
+        </div>
+        
+      </div></div><div class="flashcard" data-word="chronic" data-topic="health">
+      <div class="flashcard-inner">
+        <div class="card-front">
+          <div>
+            <div class="card-topic">🏥 health</div>
+            <div class="card-word">chronic</div>
+            <div class="card-pron">/KRON-ik/</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="card-type-tag">adjective</span>
+            <span class="card-hint">click to flip</span>
+          </div>
+          <div class="card-studied">✓</div>
+        </div>
+        <div class="card-back">
+          <div>
+            <div class="card-back-word">chronic</div>
+            <div class="card-back-def">Persisting for a long time; constant.</div>
+          </div>
+          <div class="card-back-ex">"Chronic stress can have severe long-term health consequences."</div>
+        </div>
+        
+      </div></div><div class="flashcard" data-word="sedentary" data-topic="health">
+      <div class="flashcard-inner">
+        <div class="card-front">
+          <div>
+            <div class="card-topic">🏥 health</div>
+            <div class="card-word">sedentary</div>
+            <div class="card-pron">/SED-ən-ter-ee/</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="card-type-tag">adjective</span>
+            <span class="card-hint">click to flip</span>
+          </div>
+          <div class="card-studied">✓</div>
+        </div>
+        <div class="card-back">
+          <div>
+            <div class="card-back-word">sedentary</div>
+            <div class="card-back-def">Tending to spend much time seated; inactive.</div>
+          </div>
+          <div class="card-back-ex">"A sedentary lifestyle is linked to increased risk of heart disease."</div>
+        </div>
+        
+      </div></div><div class="flashcard" data-word="mortality" data-topic="health">
+      <div class="flashcard-inner">
+        <div class="card-front">
+          <div>
+            <div class="card-topic">🏥 health</div>
+            <div class="card-word">mortality</div>
+            <div class="card-pron">/mor-TAL-i-tee/</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="card-type-tag">noun</span>
+            <span class="card-hint">click to flip</span>
+          </div>
+          <div class="card-studied">✓</div>
+        </div>
+        <div class="card-back">
+          <div>
+            <div class="card-back-word">mortality</div>
+            <div class="card-back-def">The state of being subject to death; death rate.</div>
+          </div>
+          <div class="card-back-ex">"Child mortality rates have declined significantly in recent decades."</div>
+        </div>
+        
+      </div></div><div class="flashcard" data-word="detrimental" data-topic="health">
+      <div class="flashcard-inner">
+        <div class="card-front">
+          <div>
+            <div class="card-topic">🏥 health</div>
+            <div class="card-word">detrimental</div>
+            <div class="card-pron">/det-ri-MEN-təl/</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="card-type-tag">adjective</span>
+            <span class="card-hint">click to flip</span>
+          </div>
+          <div class="card-studied">✓</div>
+        </div>
+        <div class="card-back">
+          <div>
+            <div class="card-back-word">detrimental</div>
+            <div class="card-back-def">Causing harm or damage.</div>
+          </div>
+          <div class="card-back-ex">"Excessive screen time can be detrimental to children's mental health."</div>
+        </div>
+        
+      </div></div><div class="flashcard locked" data-word="fluctuate" data-topic="business">
+      <div class="flashcard-inner">
+        <div class="card-front">
+          <div>
+            <div class="card-topic">💼 business</div>
+            <div class="card-word">fluctuate</div>
+            <div class="card-pron">/FLUK-choo-ayt/</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="card-type-tag">verb</span>
+            <span class="card-hint">click to flip</span>
+          </div>
+          <div class="card-studied">✓</div>
+        </div>
+        <div class="card-back">
+          <div>
+            <div class="card-back-word">fluctuate</div>
+            <div class="card-back-def">To rise and fall irregularly; to vary.</div>
+          </div>
+          <div class="card-back-ex">"Oil prices fluctuate depending on global demand and supply."</div>
+        </div>
+        <div class="lock-overlay-card"><div class="lock-icon">🔒</div><div class="lock-text">Premium</div></div>
+      </div></div><div class="flashcard locked" data-word="recession" data-topic="business">
+      <div class="flashcard-inner">
+        <div class="card-front">
+          <div>
+            <div class="card-topic">💼 business</div>
+            <div class="card-word">recession</div>
+            <div class="card-pron">/ri-SESH-ən/</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="card-type-tag">noun</span>
+            <span class="card-hint">click to flip</span>
+          </div>
+          <div class="card-studied">✓</div>
+        </div>
+        <div class="card-back">
+          <div>
+            <div class="card-back-word">recession</div>
+            <div class="card-back-def">A period of temporary economic decline.</div>
+          </div>
+          <div class="card-back-ex">"The recession led to widespread unemployment across the sector."</div>
+        </div>
+        <div class="lock-overlay-card"><div class="lock-icon">🔒</div><div class="lock-text">Premium</div></div>
+      </div></div><div class="flashcard locked" data-word="incentive" data-topic="business">
+      <div class="flashcard-inner">
+        <div class="card-front">
+          <div>
+            <div class="card-topic">💼 business</div>
+            <div class="card-word">incentive</div>
+            <div class="card-pron">/in-SEN-tiv/</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="card-type-tag">noun</span>
+            <span class="card-hint">click to flip</span>
+          </div>
+          <div class="card-studied">✓</div>
+        </div>
+        <div class="card-back">
+          <div>
+            <div class="card-back-word">incentive</div>
+            <div class="card-back-def">A thing that motivates or encourages someone to do something.</div>
+          </div>
+          <div class="card-back-ex">"Tax incentives encourage companies to invest in renewable energy."</div>
+        </div>
+        <div class="lock-overlay-card"><div class="lock-icon">🔒</div><div class="lock-text">Premium</div></div>
+      </div></div><div class="flashcard locked" data-word="monopoly" data-topic="business">
+      <div class="flashcard-inner">
+        <div class="card-front">
+          <div>
+            <div class="card-topic">💼 business</div>
+            <div class="card-word">monopoly</div>
+            <div class="card-pron">/mə-NOP-ə-lee/</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="card-type-tag">noun</span>
+            <span class="card-hint">click to flip</span>
+          </div>
+          <div class="card-studied">✓</div>
+        </div>
+        <div class="card-back">
+          <div>
+            <div class="card-back-word">monopoly</div>
+            <div class="card-back-def">Exclusive control of the supply of a product or service.</div>
+          </div>
+          <div class="card-back-ex">"The government broke up the company's monopoly on telecoms."</div>
+        </div>
+        <div class="lock-overlay-card"><div class="lock-icon">🔒</div><div class="lock-text">Premium</div></div>
+      </div></div><div class="flashcard locked" data-word="sustainable" data-topic="business">
+      <div class="flashcard-inner">
+        <div class="card-front">
+          <div>
+            <div class="card-topic">💼 business</div>
+            <div class="card-word">sustainable</div>
+            <div class="card-pron">/sə-STAYN-ə-bəl/</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="card-type-tag">adjective</span>
+            <span class="card-hint">click to flip</span>
+          </div>
+          <div class="card-studied">✓</div>
+        </div>
+        <div class="card-back">
+          <div>
+            <div class="card-back-word">sustainable</div>
+            <div class="card-back-def">Able to be maintained; not depleting resources.</div>
+          </div>
+          <div class="card-back-ex">"Businesses must adopt sustainable practices to remain competitive."</div>
+        </div>
+        <div class="lock-overlay-card"><div class="lock-icon">🔒</div><div class="lock-text">Premium</div></div>
+      </div></div><div class="flashcard locked" data-word="curriculum" data-topic="education">
+      <div class="flashcard-inner">
+        <div class="card-front">
+          <div>
+            <div class="card-topic">🎓 education</div>
+            <div class="card-word">curriculum</div>
+            <div class="card-pron">/kə-RIK-yoo-ləm/</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="card-type-tag">noun</span>
+            <span class="card-hint">click to flip</span>
+          </div>
+          <div class="card-studied">✓</div>
+        </div>
+        <div class="card-back">
+          <div>
+            <div class="card-back-word">curriculum</div>
+            <div class="card-back-def">The subjects comprising a course of study at a school or university.</div>
+          </div>
+          <div class="card-back-ex">"The curriculum has been updated to include digital literacy skills."</div>
+        </div>
+        <div class="lock-overlay-card"><div class="lock-icon">🔒</div><div class="lock-text">Premium</div></div>
+      </div></div><div class="flashcard locked" data-word="literacy" data-topic="education">
+      <div class="flashcard-inner">
+        <div class="card-front">
+          <div>
+            <div class="card-topic">🎓 education</div>
+            <div class="card-word">literacy</div>
+            <div class="card-pron">/LIT-ər-ə-see/</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="card-type-tag">noun</span>
+            <span class="card-hint">click to flip</span>
+          </div>
+          <div class="card-studied">✓</div>
+        </div>
+        <div class="card-back">
+          <div>
+            <div class="card-back-word">literacy</div>
+            <div class="card-back-def">The ability to read and write; competence in a specific area.</div>
+          </div>
+          <div class="card-back-ex">"Improving digital literacy is a priority in modern education systems."</div>
+        </div>
+        <div class="lock-overlay-card"><div class="lock-icon">🔒</div><div class="lock-text">Premium</div></div>
+      </div></div><div class="flashcard locked" data-word="cognitive" data-topic="education">
+      <div class="flashcard-inner">
+        <div class="card-front">
+          <div>
+            <div class="card-topic">🎓 education</div>
+            <div class="card-word">cognitive</div>
+            <div class="card-pron">/KOG-ni-tiv/</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="card-type-tag">adjective</span>
+            <span class="card-hint">click to flip</span>
+          </div>
+          <div class="card-studied">✓</div>
+        </div>
+        <div class="card-back">
+          <div>
+            <div class="card-back-word">cognitive</div>
+            <div class="card-back-def">Related to conscious mental activities such as thinking and learning.</div>
+          </div>
+          <div class="card-back-ex">"Early childhood education supports cognitive development."</div>
+        </div>
+        <div class="lock-overlay-card"><div class="lock-icon">🔒</div><div class="lock-text">Premium</div></div>
+      </div></div><div class="flashcard locked" data-word="pedagogy" data-topic="education">
+      <div class="flashcard-inner">
+        <div class="card-front">
+          <div>
+            <div class="card-topic">🎓 education</div>
+            <div class="card-word">pedagogy</div>
+            <div class="card-pron">/PED-ə-goj-ee/</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="card-type-tag">noun</span>
+            <span class="card-hint">click to flip</span>
+          </div>
+          <div class="card-studied">✓</div>
+        </div>
+        <div class="card-back">
+          <div>
+            <div class="card-back-word">pedagogy</div>
+            <div class="card-back-def">The method and practice of teaching.</div>
+          </div>
+          <div class="card-back-ex">"Modern pedagogy emphasises student-centred learning approaches."</div>
+        </div>
+        <div class="lock-overlay-card"><div class="lock-icon">🔒</div><div class="lock-text">Premium</div></div>
+      </div></div><div class="flashcard locked" data-word="academic" data-topic="education">
+      <div class="flashcard-inner">
+        <div class="card-front">
+          <div>
+            <div class="card-topic">🎓 education</div>
+            <div class="card-word">academic</div>
+            <div class="card-pron">/ak-ə-DEM-ik/</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="card-type-tag">adjective</span>
+            <span class="card-hint">click to flip</span>
+          </div>
+          <div class="card-studied">✓</div>
+        </div>
+        <div class="card-back">
+          <div>
+            <div class="card-back-word">academic</div>
+            <div class="card-back-def">Relating to education and scholarship, especially at university level.</div>
+          </div>
+          <div class="card-back-ex">"Strong academic performance opens doors to competitive universities."</div>
+        </div>
+        <div class="lock-overlay-card"><div class="lock-icon">🔒</div><div class="lock-text">Premium</div></div>
+      </div></div></div>
+    <div class="no-results" id="noResults" style="display: none;">No words found for "<span id="searchTerm"></span>"</div>
+  </div>
+</div>
+
+<!-- QUIZ VIEW -->
+<div id="quizView">
+  <div class="quiz-wrap">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem">
+      <button class="btn-back-vocab" onclick="exitQuiz()">← Back to Vocab</button>
+      <div style="font-size:0.82rem;color:var(--muted2)">🧪 Quiz Mode</div>
+    </div>
+    <div class="quiz-header">
+      <div class="quiz-progress-text" id="quizProgressText">Question 1 of 10</div>
+      <div class="quiz-prog-bar"><div class="quiz-prog-fill" id="quizProgFill" style="width:10%"></div></div>
+    </div>
+    <div class="quiz-card" id="quizCard">
+      <div class="quiz-q-label">What does this word mean?</div>
+      <div class="quiz-word" id="quizWord">—</div>
+      <div class="quiz-pron" id="quizPron">—</div>
+    </div>
+    <div class="quiz-options" id="quizOptions"></div>
+    <div class="quiz-feedback" id="quizFeedback"></div>
+    <button class="btn-next" id="btnNext" onclick="nextQuestion()">Next →</button>
+
+    <div class="quiz-result" id="quizResult">
+      <div style="font-size:2rem;margin-bottom:0.5rem">🎉</div>
+      <div class="quiz-score-big" id="quizScoreBig">—</div>
+      <div style="color:var(--muted2);font-size:0.85rem;margin:0.5rem 0 1.5rem">Quiz complete!</div>
+      <div style="display:flex;gap:0.8rem;justify-content:center;flex-wrap:wrap">
+        <button class="btn-back-vocab" onclick="exitQuiz()">← Back to Vocab</button>
+        <button class="btn-quiz-mode" onclick="startQuiz()">🔄 Try Again</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const words = [
+  // ENVIRONMENT
+  { word:'proliferation', pron:'prə-lif-ə-RAY-shən', type:'noun', topic:'environment', def:'Rapid increase in the number or amount of something.', ex:'The proliferation of plastic waste has become a global crisis.' },
+  { word:'deteriorate', pron:'di-TEER-ee-ə-rayt', type:'verb', topic:'environment', def:'To become progressively worse over time.', ex:'Air quality continues to deteriorate in many urban centres.' },
+  { word:'sustainable', pron:'sə-STAYN-ə-bəl', type:'adjective', topic:'environment', def:'Able to be maintained at a certain rate without depleting resources.', ex:'Sustainable farming practices are essential for future food security.' },
+  { word:'deforestation', pron:'dee-for-es-TAY-shən', type:'noun', topic:'environment', def:'The clearing of trees from a large area of land.', ex:'Deforestation in the Amazon has accelerated in recent decades.' },
+  { word:'emissions', pron:'i-MISH-ənz', type:'noun', topic:'environment', def:'Gases released into the atmosphere, especially those causing pollution.', ex:'Carbon emissions must be reduced to limit global warming.' },
+
+  // TECHNOLOGY
+  { word:'innovative', pron:'IN-ə-vay-tiv', type:'adjective', topic:'technology', def:'Featuring new methods or ideas; original and creative.', ex:'The company developed an innovative solution to data storage.' },
+  { word:'algorithm', pron:'AL-gə-rith-əm', type:'noun', topic:'technology', def:'A set of rules or instructions followed by a computer to solve a problem.', ex:'The recommendation algorithm learns from user behaviour.' },
+  { word:'automation', pron:'aw-tə-MAY-shən', type:'noun', topic:'technology', def:'The use of machines to perform tasks previously done by humans.', ex:'Automation has transformed manufacturing processes worldwide.' },
+  { word:'surveillance', pron:'sər-VAY-ləns', type:'noun', topic:'technology', def:'Close observation of a person or group, especially by authorities.', ex:'Digital surveillance raises serious privacy concerns.' },
+  { word:'infrastructure', pron:'IN-frə-struk-chər', type:'noun', topic:'technology', def:'The basic physical systems of a country or organisation.', ex:'Investing in digital infrastructure is crucial for economic growth.' },
+
+  // SOCIETY
+  { word:'inequality', pron:'in-i-KWOL-i-tee', type:'noun', topic:'society', def:'Difference in size, degree, or status; lack of equality.', ex:'Income inequality continues to widen in many developed nations.' },
+  { word:'assimilation', pron:'ə-sim-i-LAY-shən', type:'noun', topic:'society', def:'The process of absorbing and integrating people into a society.', ex:'Cultural assimilation can both unite and divide communities.' },
+  { word:'marginalised', pron:'MAR-ji-nə-lyzd', type:'adjective', topic:'society', def:'Treated as insignificant or excluded from the mainstream.', ex:'Marginalised communities often lack access to quality education.' },
+  { word:'urbanisation', pron:'ur-bən-i-ZAY-shən', type:'noun', topic:'society', def:'The process by which towns and cities grow as more people move to them.', ex:'Rapid urbanisation has strained housing supply in many regions.' },
+  { word:'cohesion', pron:'koh-HEE-zhən', type:'noun', topic:'society', def:'The action of forming a united whole; togetherness.', ex:'Social cohesion is vital for a stable and peaceful community.' },
+
+  // HEALTH
+  { word:'prevalence', pron:'PREV-ə-ləns', type:'noun', topic:'health', def:'The fact of being widespread or commonly occurring.', ex:'The prevalence of obesity has doubled in the past three decades.' },
+  { word:'chronic', pron:'KRON-ik', type:'adjective', topic:'health', def:'Persisting for a long time; constant.', ex:'Chronic stress can have severe long-term health consequences.' },
+  { word:'sedentary', pron:'SED-ən-ter-ee', type:'adjective', topic:'health', def:'Tending to spend much time seated; inactive.', ex:'A sedentary lifestyle is linked to increased risk of heart disease.' },
+  { word:'mortality', pron:'mor-TAL-i-tee', type:'noun', topic:'health', def:'The state of being subject to death; death rate.', ex:'Child mortality rates have declined significantly in recent decades.' },
+  { word:'detrimental', pron:'det-ri-MEN-təl', type:'adjective', topic:'health', def:'Causing harm or damage.', ex:'Excessive screen time can be detrimental to children\'s mental health.' },
+
+  // BUSINESS
+  { word:'fluctuate', pron:'FLUK-choo-ayt', type:'verb', topic:'business', def:'To rise and fall irregularly; to vary.', ex:'Oil prices fluctuate depending on global demand and supply.' },
+  { word:'recession', pron:'ri-SESH-ən', type:'noun', topic:'business', def:'A period of temporary economic decline.', ex:'The recession led to widespread unemployment across the sector.' },
+  { word:'incentive', pron:'in-SEN-tiv', type:'noun', topic:'business', def:'A thing that motivates or encourages someone to do something.', ex:'Tax incentives encourage companies to invest in renewable energy.' },
+  { word:'monopoly', pron:'mə-NOP-ə-lee', type:'noun', topic:'business', def:'Exclusive control of the supply of a product or service.', ex:'The government broke up the company\'s monopoly on telecoms.' },
+  { word:'sustainable', pron:'sə-STAYN-ə-bəl', type:'adjective', topic:'business', def:'Able to be maintained; not depleting resources.', ex:'Businesses must adopt sustainable practices to remain competitive.' },
+
+  // EDUCATION
+  { word:'curriculum', pron:'kə-RIK-yoo-ləm', type:'noun', topic:'education', def:'The subjects comprising a course of study at a school or university.', ex:'The curriculum has been updated to include digital literacy skills.' },
+  { word:'literacy', pron:'LIT-ər-ə-see', type:'noun', topic:'education', def:'The ability to read and write; competence in a specific area.', ex:'Improving digital literacy is a priority in modern education systems.' },
+  { word:'cognitive', pron:'KOG-ni-tiv', type:'adjective', topic:'education', def:'Related to conscious mental activities such as thinking and learning.', ex:'Early childhood education supports cognitive development.' },
+  { word:'pedagogy', pron:'PED-ə-goj-ee', type:'noun', topic:'education', def:'The method and practice of teaching.', ex:'Modern pedagogy emphasises student-centred learning approaches.' },
+  { word:'academic', pron:'ak-ə-DEM-ik', type:'adjective', topic:'education', def:'Relating to education and scholarship, especially at university level.', ex:'Strong academic performance opens doors to competitive universities.' },
+];
+
+let studiedWords = new Set();
+let currentTopic = 'all';
+let quizQuestions = [];
+let quizIndex = 0;
+let quizScore = 0;
+let quizAnswered = false;
+
+// ===== RENDER CARDS =====
+function renderCards(filtered) {
+  const grid = document.getElementById('cardsGrid');
+  grid.innerHTML = '';
+  const noRes = document.getElementById('noResults');
+
+  if(filtered.length === 0) {
+    noRes.style.display = 'block';
+    document.getElementById('searchTerm').textContent = document.getElementById('searchInput').value;
+    return;
+  }
+  noRes.style.display = 'none';
+
+  filtered.forEach((w, i) => {
+    const isStudied = studiedWords.has(w.word);
+    const isLocked = i >= 20; // free: first 20 words
+    const card = document.createElement('div');
+    card.className = `flashcard${isStudied ? ' studied' : ''}${isLocked ? ' locked' : ''}`;
+    card.dataset.word = w.word;
+    card.dataset.topic = w.topic;
+    if(!isLocked) card.onclick = () => flipCard(card, w.word);
+
+    card.innerHTML = `
+      <div class="flashcard-inner">
+        <div class="card-front">
+          <div>
+            <div class="card-topic">${topicEmoji(w.topic)} ${w.topic}</div>
+            <div class="card-word">${w.word}</div>
+            <div class="card-pron">/${w.pron}/</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <span class="card-type-tag">${w.type}</span>
+            <span class="card-hint">click to flip</span>
+          </div>
+          <div class="card-studied">✓</div>
+        </div>
+        <div class="card-back">
+          <div>
+            <div class="card-back-word">${w.word}</div>
+            <div class="card-back-def">${w.def}</div>
+          </div>
+          <div class="card-back-ex">"${w.ex}"</div>
+        </div>
+        ${isLocked ? `<div class="lock-overlay-card"><div class="lock-icon">🔒</div><div class="lock-text">Premium</div></div>` : ''}
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+function topicEmoji(t) {
+  const map = {environment:'🌿',technology:'💻',society:'👥',health:'🏥',business:'💼',education:'🎓'};
+  return map[t] || '📚';
+}
+
+function flipCard(card, word) {
+  card.classList.toggle('flipped');
+  if(card.classList.contains('flipped') && !studiedWords.has(word)) {
+    studiedWords.add(word);
+    card.classList.add('studied');
+    updateProgress();
+  }
+}
+
+function updateProgress() {
+  const count = studiedWords.size;
+  const total = 30;
+  document.getElementById('studiedCount').textContent = count;
+  document.getElementById('progressVal').textContent = `${count} / ${total} words studied`;
+  document.getElementById('progFill').style.width = `${(count/total)*100}%`;
+}
+
+function filterTopic(topic, btn) {
+  currentTopic = topic;
+  document.querySelectorAll('.topic-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilters();
+}
+
+function filterWords() { applyFilters(); }
+
+function applyFilters() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const filtered = words.filter(w => {
+    const matchTopic = currentTopic === 'all' || w.topic === currentTopic;
+    const matchSearch = w.word.includes(search) || w.def.toLowerCase().includes(search);
+    return matchTopic && matchSearch;
+  });
+  renderCards(filtered);
+}
+
+// ===== QUIZ =====
+function startQuiz() {
+  const pool = words.slice(0, 20);
+  quizQuestions = shuffle([...pool]).slice(0, 10);
+  quizIndex = 0; quizScore = 0; quizAnswered = false;
+  document.getElementById('vocabView').style.display = 'none';
+  document.getElementById('quizView').style.display = 'block';
+  document.getElementById('quizResult').style.display = 'none';
+  document.getElementById('quizCard').style.display = 'block';
+  document.getElementById('quizOptions').style.display = 'flex';
+  document.getElementById('quizFeedback').style.display = 'none';
+  document.getElementById('btnNext').style.display = 'none';
+  renderQuizQuestion();
+  window.scrollTo(0,0);
+}
+
+function renderQuizQuestion() {
+  if(quizIndex >= quizQuestions.length) { showQuizResult(); return; }
+  const q = quizQuestions[quizIndex];
+  document.getElementById('quizProgressText').textContent = `Question ${quizIndex+1} of ${quizQuestions.length}`;
+  document.getElementById('quizProgFill').style.width = `${((quizIndex+1)/quizQuestions.length)*100}%`;
+  document.getElementById('quizWord').textContent = q.word;
+  document.getElementById('quizPron').textContent = `/${q.pron}/`;
+  document.getElementById('quizFeedback').style.display = 'none';
+  document.getElementById('btnNext').style.display = 'none';
+  quizAnswered = false;
+
+  // Build options — 1 correct + 3 wrong
+  const wrong = shuffle(words.filter(w => w.word !== q.word)).slice(0,3);
+  const options = shuffle([q, ...wrong]);
+  const container = document.getElementById('quizOptions');
+  container.innerHTML = '';
+  options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-option';
+    btn.textContent = opt.def;
+    btn.onclick = () => answerQuiz(btn, opt.word === q.word, q);
+    container.appendChild(btn);
+  });
+}
+
+function answerQuiz(btn, isCorrect, q) {
+  if(quizAnswered) return;
+  quizAnswered = true;
+  const fb = document.getElementById('quizFeedback');
+  if(isCorrect) {
+    btn.classList.add('correct');
+    quizScore++;
+    fb.textContent = '✅ Correct!';
+    fb.className = 'quiz-feedback correct';
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent = `❌ The correct answer is: "${q.def}"`;
+    fb.className = 'quiz-feedback wrong';
+    // Show correct
+    document.querySelectorAll('.quiz-option').forEach(b => {
+      if(b.textContent === q.def) b.classList.add('correct');
+    });
+  }
+  fb.style.display = 'block';
+  document.getElementById('btnNext').style.display = 'block';
+  studiedWords.add(q.word);
+  updateProgress();
+}
+
+function nextQuestion() {
+  quizIndex++;
+  renderQuizQuestion();
+}
+
+function showQuizResult() {
+  document.getElementById('quizCard').style.display = 'none';
+  document.getElementById('quizOptions').style.display = 'none';
+  document.getElementById('quizFeedback').style.display = 'none';
+  document.getElementById('btnNext').style.display = 'none';
+  const res = document.getElementById('quizResult');
+  res.style.display = 'block';
+  const pct = Math.round((quizScore/quizQuestions.length)*100);
+  document.getElementById('quizScoreBig').textContent = `${quizScore}/${quizQuestions.length}`;
+  document.getElementById('quizScoreDisplay').textContent = `${quizScore}/10`;
+  res.querySelector('div[style]').textContent = pct >= 80 ? '🔥 Excellent work!' : pct >= 60 ? '👍 Good effort!' : '📖 Keep studying!';
+}
+
+function exitQuiz() {
+  document.getElementById('quizView').style.display = 'none';
+  document.getElementById('vocabView').style.display = 'block';
+  window.scrollTo(0,0);
+}
+
+function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
+
+// INIT
+renderCards(words);
+</script>
+
+
+</body></html>
