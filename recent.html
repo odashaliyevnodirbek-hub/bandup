@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0047)file:///C:/Users/Nodirbek/Downloads/recent.html -->
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="en">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BandUp — Recent</title>
-<link href="./BandUp — Recent_files/css2" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg:#0a0c10; --surface:#13161d; --surface2:#1a1e28;
@@ -214,25 +214,25 @@
 <body>
 
 <nav>
-  <a class="logo" href="file:///C:/Users/Nodirbek/Downloads/index.html">Band<span>Up</span></a>
+  <a class="logo" href="index.html">Band<span>Up</span></a>
   <div class="nav-links">
     <div class="dropdown">
-      <a class="nav-link" href="file:///C:/Users/Nodirbek/Downloads/recent.html#">Practice <span class="arrow">▾</span></a>
+      <a class="nav-link" href="#">Practice <span class="arrow">▾</span></a>
       <div class="dropdown-menu">
-        <a class="dropdown-item" href="file:///C:/Users/Nodirbek/Downloads/ielts-platform.html">📖 Reading</a>
-        <a class="dropdown-item" href="file:///C:/Users/Nodirbek/Downloads/ielts-platform.html">✍️ Writing</a>
-        <a class="dropdown-item" href="file:///C:/Users/Nodirbek/Downloads/pricing-page.html">🎧 Listening</a>
-        <a class="dropdown-item" href="file:///C:/Users/Nodirbek/Downloads/pricing-page.html">🎤 Speaking</a>
+        <a class="dropdown-item" href="ielts-platform.html">📖 Reading</a>
+        <a class="dropdown-item" href="ielts-platform.html">✍️ Writing</a>
+        <a class="dropdown-item" href="pricing-page.html">🎧 Listening</a>
+        <a class="dropdown-item" href="pricing-page.html">🎤 Speaking</a>
       </div>
     </div>
-    <a class="nav-link" href="file:///C:/Users/Nodirbek/Downloads/recent.html#">Mock</a>
-    <a class="nav-link active" href="file:///C:/Users/Nodirbek/Downloads/recent.html">Recent</a>
-    <a class="nav-link" href="file:///C:/Users/Nodirbek/Downloads/recent.html#">Articles</a>
-    <a class="nav-link" href="file:///C:/Users/Nodirbek/Downloads/recent.html#">Vocab</a>
+    <a class="nav-link" href="javascript:void(0)" onclick="alert('Mock tests coming soon! 🚀')">Mock</a>
+    <a class="nav-link active" href="recent.html">Recent</a>
+    <a class="nav-link" href="#">Articles</a>
+    <a class="nav-link" href="vocabulary.html">Vocab</a>
   </div>
   <div class="nav-right">
-    <a class="btn-login" href="file:///C:/Users/Nodirbek/Downloads/login.html">Log In</a>
-    <button class="btn-premium" onclick="location.href=&#39;pricing-page.html&#39;">⭐ Premium</button>
+    <a class="btn-login" href="login.html">Log In</a>
+    <button class="btn-premium" onclick="location.href='pricing-page.html'">⭐ Premium</button>
   </div>
 </nav>
 
@@ -242,12 +242,12 @@
   <p>Fresh reading passages, listening tests and writing prompts — added regularly so you always have new material to practice with.</p>
 
   <div class="filter-row">
-    <button class="filter-btn active" onclick="filterCards(&#39;all&#39;, this)">All</button>
-    <button class="filter-btn" onclick="filterCards(&#39;reading&#39;, this)">📖 Reading</button>
-    <button class="filter-btn" onclick="filterCards(&#39;listening&#39;, this)">🎧 Listening</button>
-    <button class="filter-btn" onclick="filterCards(&#39;writing&#39;, this)">✍️ Writing</button>
-    <button class="filter-btn" onclick="filterCards(&#39;speaking&#39;, this)">🎤 Speaking</button>
-    <button class="filter-btn" onclick="filterCards(&#39;mock&#39;, this)">📋 Mock</button>
+    <button class="filter-btn active" onclick="filterCards('all', this)">All</button>
+    <button class="filter-btn" onclick="filterCards('reading', this)">📖 Reading</button>
+    <button class="filter-btn" onclick="filterCards('listening', this)">🎧 Listening</button>
+    <button class="filter-btn" onclick="filterCards('writing', this)">✍️ Writing</button>
+    <button class="filter-btn" onclick="filterCards('speaking', this)">🎤 Speaking</button>
+    <button class="filter-btn" onclick="filterCards('mock', this)">📋 Mock</button>
   </div>
 </section>
 
@@ -258,7 +258,7 @@
     <div class="stats-bar-item"><div class="stats-bar-val">1</div><div class="stats-bar-lbl">Reading passages</div></div>
     <div class="stats-bar-item"><div class="stats-bar-val">0</div><div class="stats-bar-lbl">Listening tests</div></div>
     <div class="stats-bar-item"><div class="stats-bar-val">1</div><div class="stats-bar-lbl">Writing prompts</div></div>
-    <div class="stats-bar-item"><div class="stats-bar-val">0</div><div class="stats-bar-lbl">Speaking Q&amp;As</div></div>
+    <div class="stats-bar-item"><div class="stats-bar-val">0</div><div class="stats-bar-lbl">Speaking Q&As</div></div>
     <div class="stats-bar-item"><div class="stats-bar-val">0</div><div class="stats-bar-lbl">Mock tests</div></div>
   </div>
 
@@ -271,7 +271,7 @@
   <div class="cards-grid" id="cardsGrid">
 
     <!-- FEATURED — Chocolate Passage -->
-    <a class="featured-card reading" href="file:///C:/Users/Nodirbek/Downloads/ielts-platform.html" data-type="reading">
+    <a class="featured-card reading" href="ielts-platform.html" data-type="reading">
       <div class="featured-label">⭐ Featured · Reading Passage</div>
       <div class="featured-title">Chocolate for the Masses</div>
       <div class="featured-desc">From the drink of elites in ancient South America to a global industry — explore the fascinating history of chocolate manufacturing and the men who built empires around it.</div>
@@ -286,7 +286,7 @@
     </a>
 
     <!-- Writing Prompt -->
-    <div class="content-card writing" data-type="writing" onclick="location.href=&#39;ielts-platform.html&#39;">
+    <div class="content-card writing" data-type="writing" onclick="location.href='ielts-platform.html'">
       <div class="card-top">
         <span class="card-type writing">✍️ Writing</span>
         <span class="new-pill">NEW</span>
@@ -384,6 +384,5 @@
   }
 </script>
 
-
-
-</body></html>
+</body>
+</html>
