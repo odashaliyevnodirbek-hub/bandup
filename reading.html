@@ -5,82 +5,61 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BandUp — Reading</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   :root {
     --bg:#0a0c10; --surface:#13161d; --surface2:#1a1e28;
     --border:#252a38; --gold:#d4a843; --gold-light:#f0c967;
     --text:#e8eaf0; --muted:#5a6278; --muted2:#8892a4;
     --green:#34d399; --red:#f87171; --blue:#60a5fa; --pink:#f472b6;
-    --hl-yellow:rgba(255,220,50,0.35);
-    --hl-green:rgba(52,211,153,0.3);
-    --hl-blue:rgba(96,165,250,0.3);
-    --hl-pink:rgba(244,114,182,0.3);
+    --hl-yellow:rgba(255,220,50,0.35); --hl-green:rgba(52,211,153,0.3);
+    --hl-blue:rgba(96,165,250,0.3); --hl-pink:rgba(244,114,182,0.3);
   }
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; min-height:100vh; }
+  body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; min-height:100vh; display:flex; }
 
-  /* NAV */
-  nav {
-    display:flex; align-items:center; justify-content:space-between;
-    padding:1.1rem 2.5rem; border-bottom:1px solid var(--border);
-    position:sticky; top:0; background:rgba(10,12,16,0.95);
-    backdrop-filter:blur(16px); z-index:100;
-  }
-  .logo { font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:900; color:var(--gold); text-decoration:none; }
-  .logo span { color:var(--text); }
-  .nav-links { display:flex; gap:0.3rem; align-items:center; }
-  .nav-link { color:var(--muted2); text-decoration:none; font-size:0.85rem; font-weight:500; padding:0.45rem 0.9rem; border-radius:7px; transition:all 0.2s; }
-  .nav-link:hover { color:var(--text); background:var(--surface); }
-  .nav-link.active { color:var(--gold); background:rgba(212,168,67,0.08); }
-  .dropdown { position:relative; }
-  .dropdown-menu {
-    position:absolute; top:calc(100% + 8px); left:0;
-    background:var(--surface); border:1px solid var(--border);
-    border-radius:12px; padding:0.5rem; min-width:180px;
-    opacity:0; pointer-events:none; transform:translateY(-8px);
-    transition:all 0.2s; z-index:200; box-shadow:0 16px 40px rgba(0,0,0,0.4);
-  }
-  .dropdown:hover .dropdown-menu { opacity:1; pointer-events:all; transform:translateY(0); }
-  .dropdown-item { display:flex; align-items:center; gap:0.7rem; padding:0.6rem 0.8rem; border-radius:8px; color:var(--muted2); text-decoration:none; font-size:0.83rem; font-weight:500; transition:all 0.15s; }
-  .dropdown-item:hover { background:var(--surface2); color:var(--text); }
-  .dropdown-item.active-section { color:var(--gold); background:rgba(212,168,67,0.08); }
-  .nav-right { display:flex; gap:0.7rem; align-items:center; }
-  .btn-login { background:transparent; border:1px solid var(--border); color:var(--text); padding:0.45rem 1.1rem; border-radius:7px; font-family:'DM Sans',sans-serif; font-size:0.83rem; font-weight:500; cursor:pointer; transition:all 0.2s; text-decoration:none; }
-  .btn-premium-nav { background:linear-gradient(135deg,var(--gold),var(--gold-light)); color:#0a0c10; border:none; padding:0.45rem 1.1rem; border-radius:7px; font-family:'DM Sans',sans-serif; font-size:0.83rem; font-weight:700; cursor:pointer; transition:all 0.2s; }
-  .btn-premium-nav:hover { opacity:0.9; }
+  /* SIDEBAR */
+  .sidebar { width:230px; background:var(--surface); border-right:1px solid var(--border); display:flex; flex-direction:column; position:fixed; top:0; left:0; height:100vh; z-index:50; }
+  .sidebar-logo { padding:1.5rem 1.5rem 1rem; border-bottom:1px solid var(--border); font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:900; color:var(--gold); }
+  .sidebar-logo a { text-decoration:none; color:inherit; }
+  .sidebar-logo span { color:var(--text); }
+  .sidebar-nav { flex:1; padding:1rem 0.7rem; display:flex; flex-direction:column; gap:0.2rem; overflow-y:auto; }
+  .nav-item { display:flex; align-items:center; gap:0.7rem; padding:0.65rem 0.9rem; border-radius:9px; font-size:0.87rem; font-weight:500; color:var(--muted2); cursor:pointer; transition:all 0.15s; text-decoration:none; }
+  .nav-item:hover { background:var(--surface2); color:var(--text); }
+  .nav-item.active { background:rgba(212,168,67,0.12); color:var(--gold); font-weight:600; }
+  .nav-item .icon { font-size:1rem; width:20px; text-align:center; }
+  .nav-section-label { font-size:0.67rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); padding:0.8rem 0.9rem 0.3rem; }
+  .sidebar-bottom { padding:1rem 0.7rem; border-top:1px solid var(--border); }
+  .user-chip { display:flex; align-items:center; gap:0.7rem; padding:0.65rem 0.9rem; border-radius:9px; }
+  .avatar { width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,var(--gold),var(--gold-light)); display:flex; align-items:center; justify-content:center; font-size:0.8rem; font-weight:700; color:#0a0c10; flex-shrink:0; }
+  .user-name { font-size:0.83rem; font-weight:600; }
+  .user-plan { font-size:0.7rem; color:var(--gold); }
+  .btn-logout { display:flex; align-items:center; gap:0.7rem; padding:0.65rem 0.9rem; border-radius:9px; font-size:0.85rem; font-weight:500; color:var(--red); cursor:pointer; transition:background 0.15s; border:none; background:transparent; font-family:'DM Sans',sans-serif; width:100%; margin-top:0.3rem; }
+  .btn-logout:hover { background:rgba(248,113,113,0.08); }
 
-  /* ========== TEST SELECTOR VIEW ========== */
+  /* MAIN */
+  .main { margin-left:230px; flex:1; min-height:100vh; display:flex; flex-direction:column; }
+
+  /* SELECTOR VIEW */
   #selectorView { display:block; }
   #testView { display:none; }
 
   .selector-hero { padding:3rem 2rem 2rem; text-align:center; position:relative; }
-  .selector-hero::before {
-    content:''; position:absolute; top:0; left:50%; transform:translateX(-50%);
-    width:500px; height:200px;
-    background:radial-gradient(ellipse, rgba(212,168,67,0.08) 0%, transparent 65%);
-    pointer-events:none;
-  }
+  .selector-hero::before { content:''; position:absolute; top:0; left:50%; transform:translateX(-50%); width:500px; height:200px; background:radial-gradient(ellipse, rgba(212,168,67,0.08) 0%, transparent 65%); pointer-events:none; }
   .hero-tag { display:inline-flex; align-items:center; gap:0.4rem; background:rgba(212,168,67,0.08); color:var(--gold); border:1px solid rgba(212,168,67,0.2); padding:0.3rem 0.9rem; border-radius:20px; font-size:0.72rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:1rem; }
   .selector-hero h1 { font-family:'Playfair Display',serif; font-size:clamp(2rem,4vw,3rem); font-weight:900; margin-bottom:0.7rem; }
   .selector-hero h1 em { color:var(--gold); font-style:italic; }
   .selector-hero p { color:var(--muted2); font-size:0.92rem; max-width:460px; margin:0 auto 2rem; line-height:1.7; }
-
-  /* DIFFICULTY FILTER */
   .difficulty-row { display:flex; justify-content:center; gap:0.5rem; flex-wrap:wrap; margin-bottom:2.5rem; }
   .diff-btn { padding:0.45rem 1.1rem; border-radius:20px; border:1px solid var(--border); background:var(--surface); color:var(--muted2); font-family:'DM Sans',sans-serif; font-size:0.8rem; font-weight:500; cursor:pointer; transition:all 0.2s; }
   .diff-btn:hover { border-color:var(--gold); color:var(--gold); }
   .diff-btn.active { background:var(--gold); color:#0a0c10; border-color:var(--gold); font-weight:700; }
 
-  /* TESTS GRID */
   .tests-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.2rem; max-width:1100px; margin:0 auto; padding:0 1.5rem 5rem; }
   @media(max-width:900px){ .tests-grid{grid-template-columns:1fr 1fr;} }
   @media(max-width:560px){ .tests-grid{grid-template-columns:1fr;} }
 
-  .test-card {
-    background:var(--surface); border:1px solid var(--border);
-    border-radius:16px; padding:1.4rem; cursor:pointer;
-    transition:all 0.2s; position:relative; overflow:hidden;
-  }
+  .test-card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:1.4rem; cursor:pointer; transition:all 0.2s; position:relative; overflow:hidden; }
   .test-card:hover { transform:translateY(-4px); border-color:rgba(212,168,67,0.3); }
   .test-card.locked { opacity:0.6; }
   .test-card .tc-num { font-family:'Playfair Display',serif; font-size:3rem; font-weight:900; color:rgba(212,168,67,0.12); line-height:1; margin-bottom:0.3rem; }
@@ -99,22 +78,13 @@
   .diff-medium { background:rgba(212,168,67,0.12); color:var(--gold); }
   .diff-hard { background:rgba(248,113,113,0.12); color:var(--red); }
 
-  /* ========== TEST VIEW ========== */
+  /* TEST VIEW */
   #testView { flex-direction:column; }
-
-  /* TEST TOP BAR */
-  .test-topbar {
-    display:flex; align-items:center; justify-content:space-between;
-    padding:0.8rem 1.5rem; background:var(--surface);
-    border-bottom:1px solid var(--border);
-    position:sticky; top:65px; z-index:90; flex-wrap:wrap; gap:0.5rem;
-  }
+  .test-topbar { display:flex; align-items:center; justify-content:space-between; padding:0.8rem 1.5rem; background:var(--surface); border-bottom:1px solid var(--border); position:sticky; top:0; z-index:90; flex-wrap:wrap; gap:0.5rem; }
   .test-topbar-left { display:flex; align-items:center; gap:1rem; }
   .btn-back { background:transparent; border:1px solid var(--border); color:var(--muted2); padding:0.4rem 0.9rem; border-radius:7px; font-family:'DM Sans',sans-serif; font-size:0.8rem; cursor:pointer; transition:all 0.2s; }
   .btn-back:hover { border-color:var(--text); color:var(--text); }
   .test-title-bar { font-weight:600; font-size:0.88rem; }
-
-  /* TIMER */
   .timer-display { display:flex; align-items:center; gap:0.5rem; }
   .timer-val { font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:900; color:var(--gold); letter-spacing:0.05em; min-width:70px; }
   .timer-val.warning { color:var(--red); animation:pulse 1s infinite; }
@@ -123,100 +93,62 @@
   .timer-btn { background:var(--surface2); border:1px solid var(--border); color:var(--muted2); padding:0.3rem 0.7rem; border-radius:6px; font-size:0.75rem; cursor:pointer; transition:all 0.2s; font-family:'DM Sans',sans-serif; }
   .timer-btn:hover { color:var(--text); border-color:var(--muted2); }
   .timer-btn.active { background:rgba(212,168,67,0.1); color:var(--gold); border-color:rgba(212,168,67,0.3); }
-
-  /* PROGRESS */
   .progress-wrap { display:flex; align-items:center; gap:0.6rem; }
   .progress-bar { width:120px; height:6px; background:var(--border); border-radius:3px; overflow:hidden; }
   .progress-fill { height:100%; background:linear-gradient(90deg,var(--gold),var(--gold-light)); border-radius:3px; transition:width 0.4s; }
   .progress-text { font-size:0.72rem; color:var(--muted2); white-space:nowrap; }
 
-  /* HIGHLIGHT TOOLBAR */
-  .highlight-toolbar {
-    display:flex; align-items:center; gap:0.6rem;
-    padding:0.6rem 1.5rem; background:var(--surface2);
-    border-bottom:1px solid var(--border);
-    flex-wrap:wrap;
-  }
+  .highlight-toolbar { display:flex; align-items:center; gap:0.6rem; padding:0.6rem 1.5rem; background:var(--surface2); border-bottom:1px solid var(--border); flex-wrap:wrap; }
   .hl-label { font-size:0.72rem; color:var(--muted2); font-weight:600; text-transform:uppercase; letter-spacing:0.08em; margin-right:0.3rem; }
-  .hl-btn {
-    width:26px; height:26px; border-radius:50%; cursor:pointer;
-    border:2px solid transparent; transition:all 0.15s;
-    display:flex; align-items:center; justify-content:center;
-  }
+  .hl-btn { width:26px; height:26px; border-radius:50%; cursor:pointer; border:2px solid transparent; transition:all 0.15s; display:flex; align-items:center; justify-content:center; }
   .hl-btn:hover { transform:scale(1.2); }
   .hl-btn.selected { border-color:white; transform:scale(1.15); }
-  .hl-yellow { background:#ffdc32; }
-  .hl-green { background:#34d399; }
-  .hl-blue { background:#60a5fa; }
-  .hl-pink { background:#f472b6; }
+  .hl-yellow { background:#ffdc32; } .hl-green { background:#34d399; } .hl-blue { background:#60a5fa; } .hl-pink { background:#f472b6; }
   .hl-erase { background:var(--surface); border:1px solid var(--border); color:var(--muted2); font-size:0.7rem; padding:0 0.6rem; border-radius:6px; cursor:pointer; height:26px; font-family:'DM Sans',sans-serif; white-space:nowrap; transition:all 0.2s; }
   .hl-erase:hover { color:var(--red); border-color:var(--red); }
   .hl-divider { width:1px; height:20px; background:var(--border); margin:0 0.3rem; }
   .hl-tip { font-size:0.72rem; color:var(--muted); font-style:italic; margin-left:auto; }
 
-  /* READING LAYOUT */
-  .reading-layout {
-    display:grid; grid-template-columns:1fr 1fr;
-    height:calc(100vh - 185px); overflow:hidden;
-  }
+  .reading-layout { display:grid; grid-template-columns:1fr 1fr; height:calc(100vh - 130px); overflow:hidden; }
   @media(max-width:768px){ .reading-layout{grid-template-columns:1fr; height:auto;} }
 
-  /* PASSAGE */
-  .passage-panel {
-    border-right:1px solid var(--border);
-    overflow-y:auto; padding:1.8rem;
-    scroll-behavior:smooth;
-  }
+  .passage-panel { border-right:1px solid var(--border); overflow-y:auto; padding:1.8rem; scroll-behavior:smooth; }
   .passage-panel::-webkit-scrollbar { width:5px; }
   .passage-panel::-webkit-scrollbar-track { background:var(--border); }
   .passage-panel::-webkit-scrollbar-thumb { background:var(--gold); border-radius:3px; }
-
   .passage-eyebrow { font-size:0.68rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--gold); margin-bottom:0.5rem; }
   .passage-title { font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:900; margin-bottom:0.3rem; line-height:1.2; }
   .passage-meta { font-size:0.75rem; color:var(--muted2); margin-bottom:1.2rem; display:flex; gap:1rem; }
   .passage-body { font-size:0.9rem; line-height:1.85; color:#c0c8d8; user-select:text; }
   .passage-body p { margin-bottom:1rem; }
-  .passage-body p::first-letter { }
-
-  /* Highlight styles */
   .hl-y { background:var(--hl-yellow); border-radius:2px; padding:0 1px; }
   .hl-g { background:var(--hl-green); border-radius:2px; padding:0 1px; }
   .hl-b { background:var(--hl-blue); border-radius:2px; padding:0 1px; }
   .hl-p { background:var(--hl-pink); border-radius:2px; padding:0 1px; }
 
-  /* QUESTIONS PANEL */
   .questions-panel { overflow-y:auto; padding:1.5rem; }
   .questions-panel::-webkit-scrollbar { width:5px; }
   .questions-panel::-webkit-scrollbar-track { background:var(--border); }
   .questions-panel::-webkit-scrollbar-thumb { background:var(--gold); border-radius:3px; }
-
   .q-section-label { font-size:0.68rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--blue); margin-bottom:0.6rem; }
   .q-instruction { font-size:0.78rem; color:var(--muted2); line-height:1.5; margin-bottom:1.2rem; padding:0.7rem 0.9rem; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:8px; }
-
   .question-block { margin-bottom:1.4rem; padding-bottom:1.4rem; border-bottom:1px solid var(--border); }
   .question-block:last-of-type { border-bottom:none; }
   .q-num { font-size:0.7rem; color:var(--muted); margin-bottom:0.3rem; font-weight:600; }
   .q-text { font-size:0.88rem; line-height:1.5; margin-bottom:0.7rem; color:var(--text); }
   .options { display:flex; flex-direction:column; gap:0.35rem; }
-  .option {
-    display:flex; align-items:center; gap:0.65rem;
-    padding:0.5rem 0.75rem; border:1px solid var(--border);
-    border-radius:8px; cursor:pointer; transition:all 0.15s;
-    font-size:0.83rem; color:var(--muted2);
-  }
+  .option { display:flex; align-items:center; gap:0.65rem; padding:0.5rem 0.75rem; border:1px solid var(--border); border-radius:8px; cursor:pointer; transition:all 0.15s; font-size:0.83rem; color:var(--muted2); }
   .option:hover { border-color:var(--gold); color:var(--text); background:rgba(212,168,67,0.04); }
   .option.selected { border-color:var(--gold); color:var(--gold); background:rgba(212,168,67,0.08); }
   .option.correct { border-color:var(--green); color:var(--green); background:rgba(52,211,153,0.07); }
   .option.wrong { border-color:var(--red); color:var(--red); background:rgba(248,113,113,0.07); }
   .opt-letter { width:22px; height:22px; border:1px solid currentColor; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.68rem; font-weight:700; flex-shrink:0; }
 
-  /* SUBMIT ROW */
   .submit-row { display:flex; align-items:center; justify-content:space-between; padding-top:1rem; flex-wrap:wrap; gap:0.8rem; }
   .btn-submit { background:linear-gradient(135deg,var(--gold),var(--gold-light)); color:#0a0c10; border:none; padding:0.7rem 1.8rem; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:0.9rem; font-weight:700; cursor:pointer; transition:all 0.2s; }
   .btn-submit:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(212,168,67,0.25); }
   .btn-submit:disabled { opacity:0.4; cursor:not-allowed; transform:none; box-shadow:none; }
 
-  /* RESULT */
   .result-card { display:none; background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:2.5rem; text-align:center; margin:1.5rem; animation:fadeUp 0.5s ease; }
   .result-card.show { display:block; }
   @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
@@ -226,401 +158,244 @@
   .score-item-res .val { font-size:1.6rem; font-weight:700; }
   .score-item-res .lbl { font-size:0.72rem; color:var(--muted2); }
 
-  /* TIME WARNING TOAST */
-  .time-toast {
-    position:fixed; bottom:2rem; right:2rem;
-    background:var(--surface2); border:1px solid var(--border);
-    border-radius:10px; padding:0.9rem 1.2rem;
-    font-size:0.83rem; color:var(--text);
-    transform:translateY(80px); opacity:0;
-    transition:all 0.3s; z-index:999;
-    display:flex; align-items:center; gap:0.5rem;
-  }
+  .time-toast { position:fixed; bottom:2rem; right:2rem; background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:0.9rem 1.2rem; font-size:0.83rem; color:var(--text); transform:translateY(80px); opacity:0; transition:all 0.3s; z-index:999; display:flex; align-items:center; gap:0.5rem; }
   .time-toast.show { transform:translateY(0); opacity:1; }
   .time-toast.warning { border-color:rgba(248,113,113,0.4); background:rgba(248,113,113,0.08); }
+
+  @media(max-width:768px){ .main{margin-left:0;} .sidebar{display:none;} }
 </style>
 </head>
 <body>
 
-<nav>
-  <a class="logo" href="index.html">Band<span>Up</span></a>
-  <div class="nav-links">
-    <div class="dropdown">
-      <a class="nav-link active" href="#">Practice <span style="font-size:0.6rem;margin-left:0.2rem">▾</span></a>
-      <div class="dropdown-menu">
-        <a class="dropdown-item active-section" href="reading.html">📖 Reading</a>
-        <a class="dropdown-item" href="ielts-platform.html">✍️ Writing</a>
-        <a class="dropdown-item" href="pricing-page.html">🎧 Listening</a>
-        <a class="dropdown-item" href="pricing-page.html">🎤 Speaking</a>
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo"><a href="index.html">Band<span>Up</span></a></div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Main</div>
+    <a class="nav-item" href="dashboard.html"><span class="icon">🏠</span> Dashboard</a>
+    <a class="nav-item active" href="reading.html"><span class="icon">📖</span> Reading</a>
+    <a class="nav-item" href="ielts-platform.html"><span class="icon">✍️</span> Writing</a>
+    <a class="nav-item" href="pricing-page.html"><span class="icon">🎧</span> Listening <span style="font-size:0.65rem;color:var(--gold);margin-left:auto">PRO</span></a>
+    <a class="nav-item" href="pricing-page.html"><span class="icon">🎤</span> Speaking <span style="font-size:0.65rem;color:var(--gold);margin-left:auto">PRO</span></a>
+    <div class="nav-section-label" style="margin-top:0.5rem">Explore</div>
+    <a class="nav-item" href="recent.html"><span class="icon">📊</span> Recent</a>
+    <a class="nav-item" href="articles.html"><span class="icon">📰</span> Articles</a>
+    <a class="nav-item" href="vocabulary.html"><span class="icon">📚</span> Vocabulary</a>
+    <div class="nav-section-label" style="margin-top:0.5rem">Account</div>
+    <a class="nav-item" href="pricing-page.html"><span class="icon">⭐</span> Upgrade</a>
+    <a class="nav-item" href="#"><span class="icon">⚙️</span> Settings</a>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="user-chip">
+      <div class="avatar" id="sidebarAvatar">?</div>
+      <div>
+        <div class="user-name" id="sidebarName">Loading...</div>
+        <div class="user-plan">⭐ Free Plan</div>
       </div>
     </div>
-    <a class="nav-link" href="javascript:void(0)" onclick="alert('Mock tests coming soon! 🚀')">Mock</a>
-    <a class="nav-link" href="recent.html">Recent</a>
-    <a class="nav-link" href="articles.html">Articles</a>
-    <a class="nav-link" href="vocabulary.html">Vocab</a>
+    <button class="btn-logout" onclick="handleLogout()"><span>🚪</span> Log Out</button>
   </div>
-  <div class="nav-right">
-    <a class="btn-login" href="login.html">Log In</a>
-    <button class="btn-premium-nav" onclick="location.href='pricing-page.html'">⭐ Premium</button>
-  </div>
-</nav>
+</aside>
 
-<!-- ========== SELECTOR VIEW ========== -->
-<div id="selectorView">
-  <div class="selector-hero">
-    <div class="hero-tag">📖 Reading Practice</div>
-    <h1>Choose Your <em>Reading Test</em></h1>
-    <p>Select a passage below and start practicing. Each test is timed just like the real IELTS exam.</p>
-    <div class="difficulty-row">
-      <button class="diff-btn active" onclick="filterDiff('all',this)">All</button>
-      <button class="diff-btn" onclick="filterDiff('easy',this)">Easy</button>
-      <button class="diff-btn" onclick="filterDiff('medium',this)">Medium</button>
-      <button class="diff-btn" onclick="filterDiff('hard',this)">Hard</button>
-    </div>
-  </div>
+<!-- MAIN -->
+<div class="main">
 
-  <div class="tests-grid">
-
-    <!-- TEST 1 — Chocolate (FREE) -->
-    <div class="test-card" data-diff="medium" onclick="startTest()">
-      <div class="diff-badge diff-medium">Medium</div>
-      <div class="tc-num">01</div>
-      <div class="tc-title">Chocolate for the Masses</div>
-      <div class="tc-desc">From ancient South American elites to global mass production — the fascinating history of how chocolate became accessible to everyone.</div>
-      <div class="tc-tags">
-        <span class="tc-tag gold">✓ Free</span>
-        <span class="tc-tag">13 Questions</span>
-        <span class="tc-tag">T/F/NG</span>
-        <span class="tc-tag">Note Completion</span>
-        <span class="tc-tag">Academic</span>
-      </div>
-      <div class="tc-footer">
-        <span class="tc-meta">⏱ 20 min · 📖 ~900 words</span>
-        <button class="btn-start" onclick="startTest(event)">Start →</button>
+  <!-- SELECTOR VIEW -->
+  <div id="selectorView">
+    <div class="selector-hero">
+      <div class="hero-tag">📖 Reading Practice</div>
+      <h1>Choose Your <em>Reading Test</em></h1>
+      <p>Select a passage below and start practicing. Each test is timed just like the real IELTS exam.</p>
+      <div class="difficulty-row">
+        <button class="diff-btn active" onclick="filterDiff('all',this)">All</button>
+        <button class="diff-btn" onclick="filterDiff('easy',this)">Easy</button>
+        <button class="diff-btn" onclick="filterDiff('medium',this)">Medium</button>
+        <button class="diff-btn" onclick="filterDiff('hard',this)">Hard</button>
       </div>
     </div>
-
-    <!-- TEST 2 — LOCKED -->
-    <div class="test-card locked" data-diff="medium">
-      <div class="diff-badge diff-medium">Medium</div>
-      <div class="tc-num">02</div>
-      <div class="tc-title">Coming Soon</div>
-      <div class="tc-desc">More passages are being added regularly. Upload your own passage or check back soon for new content.</div>
-      <div class="tc-tags">
-        <span class="tc-tag">Academic</span>
-        <span class="tc-tag">13 Questions</span>
-      </div>
-      <div class="tc-footer">
-        <span class="tc-meta">⏱ 20 min</span>
-        <button class="btn-locked" onclick="location.href='pricing-page.html'">🔒 Locked</button>
-      </div>
-    </div>
-
-    <!-- TEST 3 — LOCKED -->
-    <div class="test-card locked" data-diff="hard">
-      <div class="diff-badge diff-hard">Hard</div>
-      <div class="tc-num">03</div>
-      <div class="tc-title">Coming Soon</div>
-      <div class="tc-desc">A challenging academic passage for students targeting Band 7.5 and above. Unlock with Premium.</div>
-      <div class="tc-tags">
-        <span class="tc-tag">Academic</span>
-        <span class="tc-tag">14 Questions</span>
-      </div>
-      <div class="tc-footer">
-        <span class="tc-meta">⏱ 20 min</span>
-        <button class="btn-locked" onclick="location.href='pricing-page.html'">⭐ Premium</button>
-      </div>
-    </div>
-
-    <!-- TEST 4 — LOCKED -->
-    <div class="test-card locked" data-diff="easy">
-      <div class="diff-badge diff-easy">Easy</div>
-      <div class="tc-num">04</div>
-      <div class="tc-title">Coming Soon</div>
-      <div class="tc-desc">A general training passage ideal for students just starting out. Great for building confidence.</div>
-      <div class="tc-tags">
-        <span class="tc-tag">General</span>
-        <span class="tc-tag">13 Questions</span>
-      </div>
-      <div class="tc-footer">
-        <span class="tc-meta">⏱ 20 min</span>
-        <button class="btn-locked" onclick="location.href='pricing-page.html'">⭐ Premium</button>
-      </div>
-    </div>
-
-    <!-- TEST 5 — LOCKED -->
-    <div class="test-card locked" data-diff="hard">
-      <div class="diff-badge diff-hard">Hard</div>
-      <div class="tc-num">05</div>
-      <div class="tc-title">Coming Soon</div>
-      <div class="tc-desc">Advanced academic passage for Band 8+ candidates. Complex vocabulary and sophisticated argument structure.</div>
-      <div class="tc-tags">
-        <span class="tc-tag">Academic</span>
-        <span class="tc-tag">14 Questions</span>
-      </div>
-      <div class="tc-footer">
-        <span class="tc-meta">⏱ 20 min</span>
-        <button class="btn-locked" onclick="location.href='pricing-page.html'">⭐ Premium</button>
-      </div>
-    </div>
-
-    <!-- ADD MORE -->
-    <div class="test-card" style="border-style:dashed;cursor:default;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:0.5rem;opacity:0.5">
-      <div style="font-size:2rem">➕</div>
-      <div style="font-weight:600;font-size:0.88rem">More coming soon</div>
-      <div style="font-size:0.75rem;color:var(--muted2)">New passages added regularly</div>
-    </div>
-
-  </div>
-</div>
-
-<!-- ========== TEST VIEW ========== -->
-<div id="testView">
-
-  <!-- TEST TOP BAR -->
-  <div class="test-topbar">
-    <div class="test-topbar-left">
-      <button class="btn-back" onclick="goBack()">← Back</button>
-      <span class="test-title-bar">📖 Chocolate for the Masses · Test 1</span>
-    </div>
-
-    <div class="timer-display">
-      <span style="font-size:0.75rem;color:var(--muted2);margin-right:0.3rem">⏱</span>
-      <span class="timer-val" id="timerVal">20:00</span>
-      <div class="timer-controls">
-        <button class="timer-btn" id="pauseBtn" onclick="togglePause()">⏸ Pause</button>
-        <button class="timer-btn" onclick="resetTimer()">↺ Reset</button>
-      </div>
-    </div>
-
-    <div class="progress-wrap">
-      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
-      <span class="progress-text" id="progressText">0 / 13</span>
-    </div>
-  </div>
-
-  <!-- HIGHLIGHT TOOLBAR -->
-  <div class="highlight-toolbar">
-    <span class="hl-label">Highlight:</span>
-    <div class="hl-btn hl-yellow selected" id="hl-y" onclick="setColor('yellow')" title="Yellow"></div>
-    <div class="hl-btn hl-green" id="hl-g" onclick="setColor('green')" title="Green"></div>
-    <div class="hl-btn hl-blue" id="hl-b" onclick="setColor('blue')" title="Blue"></div>
-    <div class="hl-btn hl-pink" id="hl-p" onclick="setColor('pink')" title="Pink"></div>
-    <div class="hl-divider"></div>
-    <button class="hl-erase" onclick="eraseHighlight()">✕ Erase</button>
-    <button class="hl-erase" onclick="clearAllHighlights()" style="margin-left:0.2rem">Clear All</button>
-    <span class="hl-tip">Select text in the passage to highlight it</span>
-  </div>
-
-  <!-- READING LAYOUT -->
-  <div class="reading-layout">
-
-    <!-- PASSAGE -->
-    <div class="passage-panel">
-      <div class="passage-eyebrow">Passage 1 of 1</div>
-      <div class="passage-title">Chocolate for the Masses</div>
-      <div class="passage-meta">
-        <span>📖 ~900 words</span>
-        <span>⏱ ~8 min read</span>
-        <span>🎓 Academic</span>
-      </div>
-      <div class="passage-body" id="passageBody" onmouseup="handleHighlight()">
-        <p>For almost three thousand years, chocolate was a drink of the elite and the wealthy, originally in South America and later on in Europe. In the early 19th century, however, chocolate became far more widely available, and consumption shot up dramatically across the populations of Europe in particular.</p>
-        <p>It was 1828 that marked the beginning of the modern era in chocolate making and production. Chocolate as a drink had been known for centuries, but in 1828 a Dutch chemist named Van Houten developed a process for the manufacture of a new kind of powdered chocolate using a hydraulic press. Untreated 'chocolate liquor' — the end result of grinding the cacao beans from which chocolate is obtained — contains about 53 per cent cacao butter, but this machine removed nearly half of this, leaving a cake that could be pulverized into a fine powder — what is now known as 'cocoa'.</p>
-        <p>In 1847, the British firm Fry and Sons found a way to mix a blend of cocoa powder and sugar with melted cacao butter to produce a thin paste which could be cast into various shapes. This was the world's first true solid chocolate. Thanks to immediate high demand for this product, the price of cacao butter escalated, so the new solid chocolate was only accessible for the elite. But this would eventually change, because of the introduction of cost-cutting methods and mass production.</p>
-        <p>By the latter half of the 19th century, many manufacturers had begun making their own chocolate, and using cocoa powder to hand-coat sugar confections. Cocoa powder also reached wide use in many other products, like ice creams and biscuits. Entrepreneurial families like the Frys and Cadburys in Britain had a social conscience in the midst of all this money-making. In the Birmingham suburb of Bournville, where they had established their chocolate factory, the Cadburys created a model town with adequate housing for their workers, and even dining and reading rooms so that their employees had no need to spend anything on entertaining themselves.</p>
-        <p>However, the rising demand for chocolate also made it a target for unscrupulous producers and merchants. Sometimes the expensive cacao butter was completely extracted and replaced with olive or almond oil, or egg yolks. Alternatively, cheaper materials such as potato starch or flour were added. In 1850, a health commission was created in Britain for the analysis of foods — suspicions about chocolate proved well-founded — most of the samples contained starch grains from potatoes or other plants. The investigation inspired the British Food and Drug Act of 1860 and the Adulteration of Food Act of 1872.</p>
-        <p>The invention of milk chocolate took place in Switzerland, and was a collaboration between two men. The first was Henri Nestlé, a chemist who in 1867 discovered a process to make powdered milk by evaporation; when mixed with water, this could be fed to infants and small children. The second man, Daniel Peter, came up with the idea of using Nestlé's milk powder in the manufacture of a new kind of chocolate, and, in 1879, the first milk chocolate bar was produced.</p>
-        <p>Also in 1879 another Swiss, Rodolphe Lindt, invented the conche machine, which vastly improved the quality of chocolate confectionery. Before Lindt, solid chocolate was usually coarse and gritty. Now, however, it achieved such a degree of smoothness that Lindt named it 'fondant'. People on both sides of the Atlantic developed a taste for fondant chocolate, and the use of the conche machine for solid chocolate became universal in the business.</p>
-        <p>In the USA, Milton Hershey dominated the chocolate industry. In 1893, after seeing examples of the machinery used in Europe in action at an international exhibition in Chicago, he bought some and began turning out chocolate coatings for the caramels he was already producing. But after a trip to the chocolate centres of Europe, he sold his caramel business for a million dollars, bought a farm in Pennsylvania, and built a chocolate factory there.</p>
-        <p>This became the nucleus of 'Hershey, the Chocolate Town', which contained amongst other things Hershey's imposing mansion, the Hershey Department Store and the Hershey Bank. There was, however, no elected mayor or indeed any democratic system in place. The whole town was in essence Milton Hershey's private kingdom, and he ran it as he wanted.</p>
-        <p>During a trip to Cuba in 1915, Hershey was inspired to build a new model town centred round a mill for grinding sugar. To transport the refined sugar so that it could be shipped by sea to his chocolate and cocoa factory, Hershey built modern electric railroads.</p>
-        <p>To help advertise his products, Hershey employed nutritionists to proclaim their health qualities, and his chocolate bars and cocoa soon commanded the American market. Everything was mechanized — a true assembly-line operation. Hershey's best-selling King bar contained almonds imported from southern Europe dropped by machines into the waiting moulds. Another popular product was 'Hershey's Kisses' — bite-sized, flat-bottomed drops of chocolate, individually wrapped.</p>
-        <p>Nowadays so many tourists visit Hershey that the company no longer offers tours of its factory. Rather, visitors are whisked along on automated carts through an exhibition called 'Chocolate World', where they can see how their favourite products are produced.</p>
-      </div>
-    </div>
-
-    <!-- QUESTIONS -->
-    <div class="questions-panel">
-      <div class="q-section-label">Questions 1–6 · True / False / Not Given</div>
-      <div class="q-instruction">Write <strong>TRUE</strong> if the statement agrees, <strong>FALSE</strong> if it contradicts, or <strong>NOT GIVEN</strong> if there is no information.</div>
-
-      <div class="question-block">
-        <div class="q-num">Question 1</div>
-        <div class="q-text">Chocolate was consumed by greater numbers of people in the nineteenth century than in previous times.</div>
-        <div class="options">
-          <div class="option" onclick="pick(this,1,true)"><span class="opt-letter" style="color:var(--green);border-color:var(--green)">T</span> TRUE</div>
-          <div class="option" onclick="pick(this,1,false)"><span class="opt-letter" style="color:var(--red);border-color:var(--red)">F</span> FALSE</div>
-          <div class="option" onclick="pick(this,1,false)"><span class="opt-letter" style="color:var(--blue);border-color:var(--blue)">NG</span> NOT GIVEN</div>
+    <div class="tests-grid">
+      <div class="test-card" data-diff="medium" onclick="startTest()">
+        <div class="diff-badge diff-medium">Medium</div>
+        <div class="tc-num">01</div>
+        <div class="tc-title">Chocolate for the Masses</div>
+        <div class="tc-desc">From ancient South American elites to global mass production — the fascinating history of how chocolate became accessible to everyone.</div>
+        <div class="tc-tags">
+          <span class="tc-tag gold">✓ Free</span><span class="tc-tag">13 Questions</span>
+          <span class="tc-tag">T/F/NG</span><span class="tc-tag">Note Completion</span><span class="tc-tag">Academic</span>
+        </div>
+        <div class="tc-footer">
+          <span class="tc-meta">⏱ 20 min · 📖 ~900 words</span>
+          <button class="btn-start" onclick="startTest(event)">Start →</button>
         </div>
       </div>
-
-      <div class="question-block">
-        <div class="q-num">Question 2</div>
-        <div class="q-text">Fry's chocolate became more affordable because of the fall in price of one ingredient.</div>
-        <div class="options">
-          <div class="option" onclick="pick(this,2,false)"><span class="opt-letter" style="color:var(--green);border-color:var(--green)">T</span> TRUE</div>
-          <div class="option" onclick="pick(this,2,true)"><span class="opt-letter" style="color:var(--red);border-color:var(--red)">F</span> FALSE</div>
-          <div class="option" onclick="pick(this,2,false)"><span class="opt-letter" style="color:var(--blue);border-color:var(--blue)">NG</span> NOT GIVEN</div>
-        </div>
+      <div class="test-card locked" data-diff="medium">
+        <div class="diff-badge diff-medium">Medium</div>
+        <div class="tc-num">02</div>
+        <div class="tc-title">Coming Soon</div>
+        <div class="tc-desc">More passages are being added regularly. Check back soon for new content.</div>
+        <div class="tc-tags"><span class="tc-tag">Academic</span><span class="tc-tag">13 Questions</span></div>
+        <div class="tc-footer"><span class="tc-meta">⏱ 20 min</span><button class="btn-locked" onclick="location.href='pricing-page.html'">🔒 Locked</button></div>
       </div>
-
-      <div class="question-block">
-        <div class="q-num">Question 3</div>
-        <div class="q-text">Entrepreneurial British chocolate manufacturers paid their employees well.</div>
-        <div class="options">
-          <div class="option" onclick="pick(this,3,false)"><span class="opt-letter" style="color:var(--green);border-color:var(--green)">T</span> TRUE</div>
-          <div class="option" onclick="pick(this,3,false)"><span class="opt-letter" style="color:var(--red);border-color:var(--red)">F</span> FALSE</div>
-          <div class="option" onclick="pick(this,3,true)"><span class="opt-letter" style="color:var(--blue);border-color:var(--blue)">NG</span> NOT GIVEN</div>
-        </div>
+      <div class="test-card locked" data-diff="hard">
+        <div class="diff-badge diff-hard">Hard</div>
+        <div class="tc-num">03</div>
+        <div class="tc-title">Coming Soon</div>
+        <div class="tc-desc">A challenging academic passage for students targeting Band 7.5 and above.</div>
+        <div class="tc-tags"><span class="tc-tag">Academic</span><span class="tc-tag">14 Questions</span></div>
+        <div class="tc-footer"><span class="tc-meta">⏱ 20 min</span><button class="btn-locked" onclick="location.href='pricing-page.html'">⭐ Premium</button></div>
       </div>
-
-      <div class="question-block">
-        <div class="q-num">Question 4</div>
-        <div class="q-text">Customers were made ill through the practices of unscrupulous chocolate producers.</div>
-        <div class="options">
-          <div class="option" onclick="pick(this,4,false)"><span class="opt-letter" style="color:var(--green);border-color:var(--green)">T</span> TRUE</div>
-          <div class="option" onclick="pick(this,4,false)"><span class="opt-letter" style="color:var(--red);border-color:var(--red)">F</span> FALSE</div>
-          <div class="option" onclick="pick(this,4,true)"><span class="opt-letter" style="color:var(--blue);border-color:var(--blue)">NG</span> NOT GIVEN</div>
-        </div>
+      <div class="test-card locked" data-diff="easy">
+        <div class="diff-badge diff-easy">Easy</div>
+        <div class="tc-num">04</div>
+        <div class="tc-title">Coming Soon</div>
+        <div class="tc-desc">A general training passage ideal for students just starting out.</div>
+        <div class="tc-tags"><span class="tc-tag">General</span><span class="tc-tag">13 Questions</span></div>
+        <div class="tc-footer"><span class="tc-meta">⏱ 20 min</span><button class="btn-locked" onclick="location.href='pricing-page.html'">⭐ Premium</button></div>
       </div>
-
-      <div class="question-block">
-        <div class="q-num">Question 5</div>
-        <div class="q-text">Fresh milk was used in the production of milk chocolate in Switzerland.</div>
-        <div class="options">
-          <div class="option" onclick="pick(this,5,false)"><span class="opt-letter" style="color:var(--green);border-color:var(--green)">T</span> TRUE</div>
-          <div class="option" onclick="pick(this,5,true)"><span class="opt-letter" style="color:var(--red);border-color:var(--red)">F</span> FALSE</div>
-          <div class="option" onclick="pick(this,5,false)"><span class="opt-letter" style="color:var(--blue);border-color:var(--blue)">NG</span> NOT GIVEN</div>
-        </div>
+      <div class="test-card locked" data-diff="hard">
+        <div class="diff-badge diff-hard">Hard</div>
+        <div class="tc-num">05</div>
+        <div class="tc-title">Coming Soon</div>
+        <div class="tc-desc">Advanced academic passage for Band 8+ candidates.</div>
+        <div class="tc-tags"><span class="tc-tag">Academic</span><span class="tc-tag">14 Questions</span></div>
+        <div class="tc-footer"><span class="tc-meta">⏱ 20 min</span><button class="btn-locked" onclick="location.href='pricing-page.html'">⭐ Premium</button></div>
       </div>
-
-      <div class="question-block">
-        <div class="q-num">Question 6</div>
-        <div class="q-text">Lindt's conche machine was adopted by other manufacturers.</div>
-        <div class="options">
-          <div class="option" onclick="pick(this,6,true)"><span class="opt-letter" style="color:var(--green);border-color:var(--green)">T</span> TRUE</div>
-          <div class="option" onclick="pick(this,6,false)"><span class="opt-letter" style="color:var(--red);border-color:var(--red)">F</span> FALSE</div>
-          <div class="option" onclick="pick(this,6,false)"><span class="opt-letter" style="color:var(--blue);border-color:var(--blue)">NG</span> NOT GIVEN</div>
-        </div>
-      </div>
-
-      <div class="q-section-label" style="margin-top:1rem">Questions 7–13 · Note Completion (ONE WORD ONLY)</div>
-      <div class="q-instruction">Choose <strong>ONE WORD ONLY</strong> from the passage for each answer.</div>
-
-      <div class="question-block">
-        <div class="q-num">Question 7</div>
-        <div class="q-text">Hershey bought some ________ after visiting a trade fair in Chicago.</div>
-        <div class="options">
-          <div class="option" onclick="pick(this,7,true)"><span class="opt-letter">A</span> machinery</div>
-          <div class="option" onclick="pick(this,7,false)"><span class="opt-letter">B</span> chocolate</div>
-          <div class="option" onclick="pick(this,7,false)"><span class="opt-letter">C</span> equipment</div>
-          <div class="option" onclick="pick(this,7,false)"><span class="opt-letter">D</span> caramels</div>
-        </div>
-      </div>
-
-      <div class="question-block">
-        <div class="q-num">Question 8</div>
-        <div class="q-text">After selling his caramel business, Hershey purchased a ________.</div>
-        <div class="options">
-          <div class="option" onclick="pick(this,8,false)"><span class="opt-letter">A</span> factory</div>
-          <div class="option" onclick="pick(this,8,true)"><span class="opt-letter">B</span> farm</div>
-          <div class="option" onclick="pick(this,8,false)"><span class="opt-letter">C</span> mansion</div>
-          <div class="option" onclick="pick(this,8,false)"><span class="opt-letter">D</span> mill</div>
-        </div>
-      </div>
-
-      <div class="question-block">
-        <div class="q-num">Question 9</div>
-        <div class="q-text">The inhabitants of Hershey could not vote for a ________.</div>
-        <div class="options">
-          <div class="option" onclick="pick(this,9,false)"><span class="opt-letter">A</span> president</div>
-          <div class="option" onclick="pick(this,9,false)"><span class="opt-letter">B</span> leader</div>
-          <div class="option" onclick="pick(this,9,true)"><span class="opt-letter">C</span> mayor</div>
-          <div class="option" onclick="pick(this,9,false)"><span class="opt-letter">D</span> manager</div>
-        </div>
-      </div>
-
-      <div class="question-block">
-        <div class="q-num">Question 10</div>
-        <div class="q-text">Hershey constructed ________ to transport material in Cuba.</div>
-        <div class="options">
-          <div class="option" onclick="pick(this,10,false)"><span class="opt-letter">A</span> roads</div>
-          <div class="option" onclick="pick(this,10,true)"><span class="opt-letter">B</span> railroads</div>
-          <div class="option" onclick="pick(this,10,false)"><span class="opt-letter">C</span> ships</div>
-          <div class="option" onclick="pick(this,10,false)"><span class="opt-letter">D</span> factories</div>
-        </div>
-      </div>
-
-      <div class="question-block">
-        <div class="q-num">Question 11</div>
-        <div class="q-text">Hershey brought in ________ to improve the image of his chocolate.</div>
-        <div class="options">
-          <div class="option" onclick="pick(this,11,false)"><span class="opt-letter">A</span> advertisers</div>
-          <div class="option" onclick="pick(this,11,false)"><span class="opt-letter">B</span> scientists</div>
-          <div class="option" onclick="pick(this,11,true)"><span class="opt-letter">C</span> nutritionists</div>
-          <div class="option" onclick="pick(this,11,false)"><span class="opt-letter">D</span> chemists</div>
-        </div>
-      </div>
-
-      <div class="question-block">
-        <div class="q-num">Question 12</div>
-        <div class="q-text">One popular chocolate product had ________ added to it.</div>
-        <div class="options">
-          <div class="option" onclick="pick(this,12,true)"><span class="opt-letter">A</span> almonds</div>
-          <div class="option" onclick="pick(this,12,false)"><span class="opt-letter">B</span> caramel</div>
-          <div class="option" onclick="pick(this,12,false)"><span class="opt-letter">C</span> sugar</div>
-          <div class="option" onclick="pick(this,12,false)"><span class="opt-letter">D</span> milk</div>
-        </div>
-      </div>
-
-      <div class="question-block">
-        <div class="q-num">Question 13</div>
-        <div class="q-text">Because of high demand, tourists can only visit the ________ at Hershey.</div>
-        <div class="options">
-          <div class="option" onclick="pick(this,13,false)"><span class="opt-letter">A</span> factory</div>
-          <div class="option" onclick="pick(this,13,false)"><span class="opt-letter">B</span> town</div>
-          <div class="option" onclick="pick(this,13,true)"><span class="opt-letter">C</span> exhibition</div>
-          <div class="option" onclick="pick(this,13,false)"><span class="opt-letter">D</span> museum</div>
-        </div>
-      </div>
-
-      <div class="submit-row">
-        <span style="font-size:0.78rem;color:var(--muted)" id="answeredCount">0 of 13 answered</span>
-        <button class="btn-submit" id="submitBtn" onclick="submitTest()" disabled>Submit Answers</button>
+      <div class="test-card" style="border-style:dashed;cursor:default;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:0.5rem;opacity:0.5">
+        <div style="font-size:2rem">➕</div>
+        <div style="font-weight:600;font-size:0.88rem">More coming soon</div>
+        <div style="font-size:0.75rem;color:var(--muted2)">New passages added regularly</div>
       </div>
     </div>
   </div>
 
-  <!-- RESULT -->
-  <div class="result-card" id="resultCard">
-    <div class="band-big" id="bandScore">—</div>
-    <div class="band-lbl">Estimated Band Score · Reading</div>
-    <div class="score-row-res">
-      <div class="score-item-res"><div class="val" id="correctCount" style="color:var(--green)">0</div><div class="lbl">Correct</div></div>
-      <div class="score-item-res"><div class="val" id="wrongCount" style="color:var(--red)">0</div><div class="lbl">Wrong</div></div>
-      <div class="score-item-res"><div class="val">13</div><div class="lbl">Total</div></div>
-      <div class="score-item-res"><div class="val" id="timeTaken" style="color:var(--gold)">—</div><div class="lbl">Time taken</div></div>
+  <!-- TEST VIEW -->
+  <div id="testView">
+    <div class="test-topbar">
+      <div class="test-topbar-left">
+        <button class="btn-back" onclick="goBack()">← Back</button>
+        <span class="test-title-bar">📖 Chocolate for the Masses · Test 1</span>
+      </div>
+      <div class="timer-display">
+        <span style="font-size:0.75rem;color:var(--muted2);margin-right:0.3rem">⏱</span>
+        <span class="timer-val" id="timerVal">20:00</span>
+        <div class="timer-controls">
+          <button class="timer-btn" id="pauseBtn" onclick="togglePause()">⏸ Pause</button>
+          <button class="timer-btn" onclick="resetTimer()">↺ Reset</button>
+        </div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+        <span class="progress-text" id="progressText">0 / 13</span>
+      </div>
     </div>
-    <p style="color:var(--muted2);font-size:0.83rem;margin-bottom:1.5rem">Upgrade to Premium for detailed answer explanations and unlimited tests!</p>
-    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
-      <button style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:0.65rem 1.5rem;border-radius:8px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.88rem;cursor:pointer" onclick="goBack()">← Try Another Test</button>
-      <button class="btn-submit" onclick="location.href='pricing-page.html'">⭐ Unlock Premium</button>
+
+    <div class="highlight-toolbar">
+      <span class="hl-label">Highlight:</span>
+      <div class="hl-btn hl-yellow selected" id="hl-y" onclick="setColor('yellow')" title="Yellow"></div>
+      <div class="hl-btn hl-green" id="hl-g" onclick="setColor('green')" title="Green"></div>
+      <div class="hl-btn hl-blue" id="hl-b" onclick="setColor('blue')" title="Blue"></div>
+      <div class="hl-btn hl-pink" id="hl-p" onclick="setColor('pink')" title="Pink"></div>
+      <div class="hl-divider"></div>
+      <button class="hl-erase" onclick="eraseHighlight()">✕ Erase</button>
+      <button class="hl-erase" onclick="clearAllHighlights()" style="margin-left:0.2rem">Clear All</button>
+      <span class="hl-tip">Select text in the passage to highlight it</span>
+    </div>
+
+    <div class="reading-layout">
+      <div class="passage-panel">
+        <div class="passage-eyebrow">Passage 1 of 1</div>
+        <div class="passage-title">Chocolate for the Masses</div>
+        <div class="passage-meta"><span>📖 ~900 words</span><span>⏱ ~8 min read</span><span>🎓 Academic</span></div>
+        <div class="passage-body" id="passageBody" onmouseup="handleHighlight()">
+          <p>For almost three thousand years, chocolate was a drink of the elite and the wealthy, originally in South America and later on in Europe. In the early 19th century, however, chocolate became far more widely available, and consumption shot up dramatically across the populations of Europe in particular.</p>
+          <p>It was 1828 that marked the beginning of the modern era in chocolate making and production. Chocolate as a drink had been known for centuries, but in 1828 a Dutch chemist named Van Houten developed a process for the manufacture of a new kind of powdered chocolate using a hydraulic press. Untreated 'chocolate liquor' — the end result of grinding the cacao beans from which chocolate is obtained — contains about 53 per cent cacao butter, but this machine removed nearly half of this, leaving a cake that could be pulverized into a fine powder — what is now known as 'cocoa'.</p>
+          <p>In 1847, the British firm Fry and Sons found a way to mix a blend of cocoa powder and sugar with melted cacao butter to produce a thin paste which could be cast into various shapes. This was the world's first true solid chocolate. Thanks to immediate high demand for this product, the price of cacao butter escalated, so the new solid chocolate was only accessible for the elite. But this would eventually change, because of the introduction of cost-cutting methods and mass production.</p>
+          <p>By the latter half of the 19th century, many manufacturers had begun making their own chocolate, and using cocoa powder to hand-coat sugar confections. Cocoa powder also reached wide use in many other products, like ice creams and biscuits. Entrepreneurial families like the Frys and Cadburys in Britain had a social conscience in the midst of all this money-making. In the Birmingham suburb of Bournville, where they had established their chocolate factory, the Cadburys created a model town with adequate housing for their workers, and even dining and reading rooms so that their employees had no need to spend anything on entertaining themselves.</p>
+          <p>However, the rising demand for chocolate also made it a target for unscrupulous producers and merchants. Sometimes the expensive cacao butter was completely extracted and replaced with olive or almond oil, or egg yolks. Alternatively, cheaper materials such as potato starch or flour were added. In 1850, a health commission was created in Britain for the analysis of foods — suspicions about chocolate proved well-founded — most of the samples contained starch grains from potatoes or other plants. The investigation inspired the British Food and Drug Act of 1860 and the Adulteration of Food Act of 1872.</p>
+          <p>The invention of milk chocolate took place in Switzerland, and was a collaboration between two men. The first was Henri Nestlé, a chemist who in 1867 discovered a process to make powdered milk by evaporation; when mixed with water, this could be fed to infants and small children. The second man, Daniel Peter, came up with the idea of using Nestlé's milk powder in the manufacture of a new kind of chocolate, and, in 1879, the first milk chocolate bar was produced.</p>
+          <p>Also in 1879 another Swiss, Rodolphe Lindt, invented the conche machine, which vastly improved the quality of chocolate confectionery. Before Lindt, solid chocolate was usually coarse and gritty. Now, however, it achieved such a degree of smoothness that Lindt named it 'fondant'. People on both sides of the Atlantic developed a taste for fondant chocolate, and the use of the conche machine for solid chocolate became universal in the business.</p>
+          <p>In the USA, Milton Hershey dominated the chocolate industry. In 1893, after seeing examples of the machinery used in Europe in action at an international exhibition in Chicago, he bought some and began turning out chocolate coatings for the caramels he was already producing. But after a trip to the chocolate centres of Europe, he sold his caramel business for a million dollars, bought a farm in Pennsylvania, and built a chocolate factory there.</p>
+          <p>This became the nucleus of 'Hershey, the Chocolate Town', which contained amongst other things Hershey's imposing mansion, the Hershey Department Store and the Hershey Bank. There was, however, no elected mayor or indeed any democratic system in place. The whole town was in essence Milton Hershey's private kingdom, and he ran it as he wanted.</p>
+          <p>During a trip to Cuba in 1915, Hershey was inspired to build a new model town centred round a mill for grinding sugar. To transport the refined sugar so that it could be shipped by sea to his chocolate and cocoa factory, Hershey built modern electric railroads.</p>
+          <p>To help advertise his products, Hershey employed nutritionists to proclaim their health qualities, and his chocolate bars and cocoa soon commanded the American market. Everything was mechanized — a true assembly-line operation. Hershey's best-selling King bar contained almonds imported from southern Europe dropped by machines into the waiting moulds. Another popular product was 'Hershey's Kisses' — bite-sized, flat-bottomed drops of chocolate, individually wrapped.</p>
+          <p>Nowadays so many tourists visit Hershey that the company no longer offers tours of its factory. Rather, visitors are whisked along on automated carts through an exhibition called 'Chocolate World', where they can see how their favourite products are produced.</p>
+        </div>
+      </div>
+
+      <div class="questions-panel">
+        <div class="q-section-label">Questions 1–6 · True / False / Not Given</div>
+        <div class="q-instruction">Write <strong>TRUE</strong> if the statement agrees, <strong>FALSE</strong> if it contradicts, or <strong>NOT GIVEN</strong> if there is no information.</div>
+        <div class="question-block"><div class="q-num">Question 1</div><div class="q-text">Chocolate was consumed by greater numbers of people in the nineteenth century than in previous times.</div><div class="options"><div class="option" onclick="pick(this,1,true)"><span class="opt-letter" style="color:var(--green);border-color:var(--green)">T</span> TRUE</div><div class="option" onclick="pick(this,1,false)"><span class="opt-letter" style="color:var(--red);border-color:var(--red)">F</span> FALSE</div><div class="option" onclick="pick(this,1,false)"><span class="opt-letter" style="color:var(--blue);border-color:var(--blue)">NG</span> NOT GIVEN</div></div></div>
+        <div class="question-block"><div class="q-num">Question 2</div><div class="q-text">Fry's chocolate became more affordable because of the fall in price of one ingredient.</div><div class="options"><div class="option" onclick="pick(this,2,false)"><span class="opt-letter" style="color:var(--green);border-color:var(--green)">T</span> TRUE</div><div class="option" onclick="pick(this,2,true)"><span class="opt-letter" style="color:var(--red);border-color:var(--red)">F</span> FALSE</div><div class="option" onclick="pick(this,2,false)"><span class="opt-letter" style="color:var(--blue);border-color:var(--blue)">NG</span> NOT GIVEN</div></div></div>
+        <div class="question-block"><div class="q-num">Question 3</div><div class="q-text">Entrepreneurial British chocolate manufacturers paid their employees well.</div><div class="options"><div class="option" onclick="pick(this,3,false)"><span class="opt-letter" style="color:var(--green);border-color:var(--green)">T</span> TRUE</div><div class="option" onclick="pick(this,3,false)"><span class="opt-letter" style="color:var(--red);border-color:var(--red)">F</span> FALSE</div><div class="option" onclick="pick(this,3,true)"><span class="opt-letter" style="color:var(--blue);border-color:var(--blue)">NG</span> NOT GIVEN</div></div></div>
+        <div class="question-block"><div class="q-num">Question 4</div><div class="q-text">Customers were made ill through the practices of unscrupulous chocolate producers.</div><div class="options"><div class="option" onclick="pick(this,4,false)"><span class="opt-letter" style="color:var(--green);border-color:var(--green)">T</span> TRUE</div><div class="option" onclick="pick(this,4,false)"><span class="opt-letter" style="color:var(--red);border-color:var(--red)">F</span> FALSE</div><div class="option" onclick="pick(this,4,true)"><span class="opt-letter" style="color:var(--blue);border-color:var(--blue)">NG</span> NOT GIVEN</div></div></div>
+        <div class="question-block"><div class="q-num">Question 5</div><div class="q-text">Fresh milk was used in the production of milk chocolate in Switzerland.</div><div class="options"><div class="option" onclick="pick(this,5,false)"><span class="opt-letter" style="color:var(--green);border-color:var(--green)">T</span> TRUE</div><div class="option" onclick="pick(this,5,true)"><span class="opt-letter" style="color:var(--red);border-color:var(--red)">F</span> FALSE</div><div class="option" onclick="pick(this,5,false)"><span class="opt-letter" style="color:var(--blue);border-color:var(--blue)">NG</span> NOT GIVEN</div></div></div>
+        <div class="question-block"><div class="q-num">Question 6</div><div class="q-text">Lindt's conche machine was adopted by other manufacturers.</div><div class="options"><div class="option" onclick="pick(this,6,true)"><span class="opt-letter" style="color:var(--green);border-color:var(--green)">T</span> TRUE</div><div class="option" onclick="pick(this,6,false)"><span class="opt-letter" style="color:var(--red);border-color:var(--red)">F</span> FALSE</div><div class="option" onclick="pick(this,6,false)"><span class="opt-letter" style="color:var(--blue);border-color:var(--blue)">NG</span> NOT GIVEN</div></div></div>
+        <div class="q-section-label" style="margin-top:1rem">Questions 7–13 · Note Completion (ONE WORD ONLY)</div>
+        <div class="q-instruction">Choose <strong>ONE WORD ONLY</strong> from the passage for each answer.</div>
+        <div class="question-block"><div class="q-num">Question 7</div><div class="q-text">Hershey bought some ________ after visiting a trade fair in Chicago.</div><div class="options"><div class="option" onclick="pick(this,7,true)"><span class="opt-letter">A</span> machinery</div><div class="option" onclick="pick(this,7,false)"><span class="opt-letter">B</span> chocolate</div><div class="option" onclick="pick(this,7,false)"><span class="opt-letter">C</span> equipment</div><div class="option" onclick="pick(this,7,false)"><span class="opt-letter">D</span> caramels</div></div></div>
+        <div class="question-block"><div class="q-num">Question 8</div><div class="q-text">After selling his caramel business, Hershey purchased a ________.</div><div class="options"><div class="option" onclick="pick(this,8,false)"><span class="opt-letter">A</span> factory</div><div class="option" onclick="pick(this,8,true)"><span class="opt-letter">B</span> farm</div><div class="option" onclick="pick(this,8,false)"><span class="opt-letter">C</span> mansion</div><div class="option" onclick="pick(this,8,false)"><span class="opt-letter">D</span> mill</div></div></div>
+        <div class="question-block"><div class="q-num">Question 9</div><div class="q-text">The inhabitants of Hershey could not vote for a ________.</div><div class="options"><div class="option" onclick="pick(this,9,false)"><span class="opt-letter">A</span> president</div><div class="option" onclick="pick(this,9,false)"><span class="opt-letter">B</span> leader</div><div class="option" onclick="pick(this,9,true)"><span class="opt-letter">C</span> mayor</div><div class="option" onclick="pick(this,9,false)"><span class="opt-letter">D</span> manager</div></div></div>
+        <div class="question-block"><div class="q-num">Question 10</div><div class="q-text">Hershey constructed ________ to transport material in Cuba.</div><div class="options"><div class="option" onclick="pick(this,10,false)"><span class="opt-letter">A</span> roads</div><div class="option" onclick="pick(this,10,true)"><span class="opt-letter">B</span> railroads</div><div class="option" onclick="pick(this,10,false)"><span class="opt-letter">C</span> ships</div><div class="option" onclick="pick(this,10,false)"><span class="opt-letter">D</span> factories</div></div></div>
+        <div class="question-block"><div class="q-num">Question 11</div><div class="q-text">Hershey brought in ________ to improve the image of his chocolate.</div><div class="options"><div class="option" onclick="pick(this,11,false)"><span class="opt-letter">A</span> advertisers</div><div class="option" onclick="pick(this,11,false)"><span class="opt-letter">B</span> scientists</div><div class="option" onclick="pick(this,11,true)"><span class="opt-letter">C</span> nutritionists</div><div class="option" onclick="pick(this,11,false)"><span class="opt-letter">D</span> chemists</div></div></div>
+        <div class="question-block"><div class="q-num">Question 12</div><div class="q-text">One popular chocolate product had ________ added to it.</div><div class="options"><div class="option" onclick="pick(this,12,true)"><span class="opt-letter">A</span> almonds</div><div class="option" onclick="pick(this,12,false)"><span class="opt-letter">B</span> caramel</div><div class="option" onclick="pick(this,12,false)"><span class="opt-letter">C</span> sugar</div><div class="option" onclick="pick(this,12,false)"><span class="opt-letter">D</span> milk</div></div></div>
+        <div class="question-block"><div class="q-num">Question 13</div><div class="q-text">Because of high demand, tourists can only visit the ________ at Hershey.</div><div class="options"><div class="option" onclick="pick(this,13,false)"><span class="opt-letter">A</span> factory</div><div class="option" onclick="pick(this,13,false)"><span class="opt-letter">B</span> town</div><div class="option" onclick="pick(this,13,true)"><span class="opt-letter">C</span> exhibition</div><div class="option" onclick="pick(this,13,false)"><span class="opt-letter">D</span> museum</div></div></div>
+        <div class="submit-row">
+          <span style="font-size:0.78rem;color:var(--muted)" id="answeredCount">0 of 13 answered</span>
+          <button class="btn-submit" id="submitBtn" onclick="submitTest()" disabled>Submit Answers</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="result-card" id="resultCard">
+      <div class="band-big" id="bandScore">—</div>
+      <div class="band-lbl">Estimated Band Score · Reading</div>
+      <div class="score-row-res">
+        <div class="score-item-res"><div class="val" id="correctCount" style="color:var(--green)">0</div><div class="lbl">Correct</div></div>
+        <div class="score-item-res"><div class="val" id="wrongCount" style="color:var(--red)">0</div><div class="lbl">Wrong</div></div>
+        <div class="score-item-res"><div class="val">13</div><div class="lbl">Total</div></div>
+        <div class="score-item-res"><div class="val" id="timeTaken" style="color:var(--gold)">—</div><div class="lbl">Time taken</div></div>
+      </div>
+      <p style="color:var(--muted2);font-size:0.83rem;margin-bottom:1.5rem">Upgrade to Premium for detailed answer explanations and unlimited tests!</p>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+        <button style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:0.65rem 1.5rem;border-radius:8px;font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.88rem;cursor:pointer" onclick="goBack()">← Try Another Test</button>
+        <button class="btn-submit" onclick="location.href='pricing-page.html'">⭐ Unlock Premium</button>
+      </div>
     </div>
   </div>
-
 </div>
 
 <div class="time-toast" id="toast"></div>
 
 <script>
-  // ===== SELECTOR =====
+  const SUPABASE_URL = 'https://xiyeuhchpllqlwmlkcma.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_x3yErNcERzTk66ksbsBGEg_5AFfbeAz';
+  const { createClient } = supabase;
+  const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  async function loadUser() {
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) { location.href = 'login.html'; return; }
+    const meta = session.user.user_metadata || {};
+    const firstName = meta.first_name || meta.full_name?.split(' ')[0] || session.user.email.split('@')[0];
+    const initials = (meta.first_name?.[0] || '').toUpperCase() + (meta.last_name?.[0] || '').toUpperCase() || firstName[0].toUpperCase();
+    document.getElementById('sidebarName').textContent = meta.full_name || firstName;
+    document.getElementById('sidebarAvatar').textContent = initials;
+  }
+
+  async function handleLogout() {
+    await sb.auth.signOut();
+    location.href = 'login.html';
+  }
+
+  loadUser();
+
+  // SELECTOR
   function filterDiff(diff, btn) {
     document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     document.querySelectorAll('.test-card').forEach(card => {
-      if(diff === 'all' || card.dataset.diff === diff) card.style.display = 'block';
-      else card.style.display = 'none';
+      card.style.display = (diff === 'all' || card.dataset.diff === diff) ? 'block' : 'none';
     });
   }
 
@@ -628,9 +403,7 @@
     if(e) e.stopPropagation();
     document.getElementById('selectorView').style.display = 'none';
     document.getElementById('testView').style.display = 'flex';
-    timeLeft = 20 * 60;
-    updateTimerDisplay();
-    startTimer();
+    timeLeft = 20 * 60; updateTimerDisplay(); startTimer();
     window.scrollTo(0,0);
   }
 
@@ -639,9 +412,7 @@
     document.getElementById('testView').style.display = 'none';
     document.getElementById('resultCard').classList.remove('show');
     document.getElementById('selectorView').style.display = 'block';
-    timeLeft = 20 * 60;
-    paused = false;
-    answers = {};
+    timeLeft = 20 * 60; paused = false; answers = {};
     document.getElementById('timerVal').textContent = '20:00';
     document.getElementById('timerVal').classList.remove('warning');
     document.getElementById('progressFill').style.width = '0%';
@@ -652,18 +423,13 @@
     window.scrollTo(0,0);
   }
 
-  // ===== TIMER =====
-  let timeLeft = 20 * 60;
-  let timerInterval = null;
-  let paused = false;
-  let startTime = null;
+  // TIMER
+  let timeLeft = 20 * 60, timerInterval = null, paused = false;
 
   function startTimer() {
-    startTime = Date.now();
     timerInterval = setInterval(() => {
       if(paused) return;
-      timeLeft--;
-      updateTimerDisplay();
+      timeLeft--; updateTimerDisplay();
       if(timeLeft === 300) showToast('⚠️ 5 minutes remaining!', true);
       if(timeLeft === 60) showToast('🚨 1 minute left!', true);
       if(timeLeft <= 0) { clearInterval(timerInterval); submitTest(); }
@@ -671,12 +437,11 @@
   }
 
   function updateTimerDisplay() {
-    const m = Math.floor(timeLeft / 60).toString().padStart(2,'0');
-    const s = (timeLeft % 60).toString().padStart(2,'0');
+    const m = Math.floor(timeLeft/60).toString().padStart(2,'0');
+    const s = (timeLeft%60).toString().padStart(2,'0');
     const el = document.getElementById('timerVal');
     el.textContent = `${m}:${s}`;
-    if(timeLeft <= 120) el.classList.add('warning');
-    else el.classList.remove('warning');
+    el.classList.toggle('warning', timeLeft <= 120);
   }
 
   function togglePause() {
@@ -684,20 +449,17 @@
     const btn = document.getElementById('pauseBtn');
     btn.textContent = paused ? '▶ Resume' : '⏸ Pause';
     btn.classList.toggle('active', paused);
-    if(paused) showToast('⏸ Timer paused', false);
-    else showToast('▶ Timer resumed', false);
+    showToast(paused ? '⏸ Timer paused' : '▶ Timer resumed', false);
   }
 
   function resetTimer() {
-    timeLeft = 20 * 60;
-    paused = false;
+    timeLeft = 20 * 60; paused = false;
     document.getElementById('pauseBtn').textContent = '⏸ Pause';
     document.getElementById('pauseBtn').classList.remove('active');
-    updateTimerDisplay();
-    showToast('↺ Timer reset to 20:00', false);
+    updateTimerDisplay(); showToast('↺ Timer reset to 20:00', false);
   }
 
-  // ===== HIGHLIGHT =====
+  // HIGHLIGHT
   let currentColor = 'yellow';
   const colorMap = { yellow:'hl-y', green:'hl-g', blue:'hl-b', pink:'hl-p' };
 
@@ -709,21 +471,14 @@
 
   function handleHighlight() {
     const sel = window.getSelection();
-    if(!sel || sel.isCollapsed || sel.toString().trim() === '') return;
+    if(!sel || sel.isCollapsed || !sel.toString().trim()) return;
     const range = sel.getRangeAt(0);
     const passage = document.getElementById('passageBody');
     if(!passage.contains(range.commonAncestorContainer)) { sel.removeAllRanges(); return; }
     const span = document.createElement('span');
     span.className = colorMap[currentColor];
     span.dataset.highlight = 'true';
-    try {
-      range.surroundContents(span);
-    } catch(e) {
-      // If selection spans multiple elements, just wrap what we can
-      const fragment = range.extractContents();
-      span.appendChild(fragment);
-      range.insertNode(span);
-    }
+    try { range.surroundContents(span); } catch(e) { const f = range.extractContents(); span.appendChild(f); range.insertNode(span); }
     sel.removeAllRanges();
   }
 
@@ -731,33 +486,24 @@
     const sel = window.getSelection();
     if(!sel || sel.isCollapsed) return;
     const range = sel.getRangeAt(0);
-    const spans = document.getElementById('passageBody').querySelectorAll('[data-highlight]');
-    spans.forEach(span => {
-      if(range.intersectsNode(span)) {
-        const parent = span.parentNode;
-        while(span.firstChild) parent.insertBefore(span.firstChild, span);
-        parent.removeChild(span);
-      }
+    document.getElementById('passageBody').querySelectorAll('[data-highlight]').forEach(span => {
+      if(range.intersectsNode(span)) { const p = span.parentNode; while(span.firstChild) p.insertBefore(span.firstChild, span); p.removeChild(span); }
     });
     sel.removeAllRanges();
   }
 
   function clearAllHighlights() {
-    const spans = document.getElementById('passageBody').querySelectorAll('[data-highlight]');
-    spans.forEach(span => {
-      const parent = span.parentNode;
-      while(span.firstChild) parent.insertBefore(span.firstChild, span);
-      parent.removeChild(span);
+    document.getElementById('passageBody').querySelectorAll('[data-highlight]').forEach(span => {
+      const p = span.parentNode; while(span.firstChild) p.insertBefore(span.firstChild, span); p.removeChild(span);
     });
     showToast('🗑 All highlights cleared', false);
   }
 
-  // ===== ANSWERS =====
-  const answers = {};
+  // ANSWERS
+  let answers = {};
 
   function pick(el, qNum, isCorrect) {
-    const parent = el.parentElement;
-    parent.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+    el.parentElement.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
     el.classList.add('selected');
     answers[qNum] = { el, isCorrect };
     const count = Object.keys(answers).length;
@@ -774,26 +520,19 @@
       const { el, isCorrect } = answers[q];
       el.parentElement.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
       if(isCorrect) { el.classList.add('correct'); c++; }
-      else {
-        el.classList.add('wrong'); w++;
-        el.parentElement.querySelectorAll('.option').forEach(o => {
-          if(o.getAttribute('onclick') && o.getAttribute('onclick').includes('true')) o.classList.add('correct');
-        });
-      }
+      else { el.classList.add('wrong'); w++; el.parentElement.querySelectorAll('.option').forEach(o => { if(o.getAttribute('onclick')?.includes('true')) o.classList.add('correct'); }); }
     }
     const bandMap = {13:9,12:8.5,11:8,10:7.5,9:7,8:6.5,7:6,6:5.5,5:5,4:4.5,3:4,2:3.5,1:3,0:2.5};
-    document.getElementById('bandScore').textContent = (bandMap[c] % 1 === 0 ? bandMap[c]+'.0' : bandMap[c]);
+    document.getElementById('bandScore').textContent = bandMap[c] % 1 === 0 ? bandMap[c]+'.0' : bandMap[c];
     document.getElementById('correctCount').textContent = c;
     document.getElementById('wrongCount').textContent = w;
-    const elapsed = Math.round((20*60 - timeLeft));
-    const em = Math.floor(elapsed/60), es = elapsed%60;
+    const elapsed = 20*60 - timeLeft, em = Math.floor(elapsed/60), es = elapsed%60;
     document.getElementById('timeTaken').textContent = `${em}:${es.toString().padStart(2,'0')}`;
     const rc = document.getElementById('resultCard');
     rc.classList.add('show');
     rc.scrollIntoView({ behavior:'smooth', block:'start' });
   }
 
-  // ===== TOAST =====
   function showToast(msg, isWarning) {
     const t = document.getElementById('toast');
     t.textContent = msg;
