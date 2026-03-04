@@ -5,55 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BandUp — Recent</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="sidebar.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-  :root {
-    --bg:#0a0c10; --surface:#13161d; --surface2:#1a1e28;
-    --border:#252a38; --gold:#d4a843; --gold-light:#f0c967;
-    --text:#e8eaf0; --muted:#5a6278; --muted2:#8892a4;
-    --green:#34d399; --red:#f87171; --blue:#60a5fa; --pink:#f472b6; --purple:#a78bfa;
-  }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; min-height:100vh; display:flex; }
-
-  /* SIDEBAR */
-  .sidebar { width:230px; background:var(--surface); border-right:1px solid var(--border); display:flex; flex-direction:column; position:fixed; top:0; left:0; height:100vh; z-index:50; }
-  .sidebar-logo { padding:1.5rem 1.5rem 1rem; border-bottom:1px solid var(--border); font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:900; color:var(--gold); }
-  .sidebar-logo a { text-decoration:none; color:inherit; }
-  .sidebar-logo span { color:var(--text); }
-  .sidebar-nav { flex:1; padding:1rem 0.7rem; display:flex; flex-direction:column; gap:0.2rem; overflow-y:auto; }
-  .nav-item { display:flex; align-items:center; gap:0.7rem; padding:0.65rem 0.9rem; border-radius:9px; font-size:0.87rem; font-weight:500; color:var(--muted2); cursor:pointer; transition:all 0.15s; text-decoration:none; }
-  .nav-item:hover { background:var(--surface2); color:var(--text); }
-  .nav-item.active { background:rgba(212,168,67,0.12); color:var(--gold); font-weight:600; }
-  .nav-item .icon { font-size:1rem; width:20px; text-align:center; }
-  .nav-section-label { font-size:0.67rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); padding:0.8rem 0.9rem 0.3rem; }
-  .sidebar-bottom { padding:1rem 0.7rem; border-top:1px solid var(--border); }
-  .user-chip { display:flex; align-items:center; gap:0.7rem; padding:0.65rem 0.9rem; border-radius:9px; }
-  .avatar { width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,var(--gold),var(--gold-light)); display:flex; align-items:center; justify-content:center; font-size:0.8rem; font-weight:700; color:#0a0c10; flex-shrink:0; }
-  .user-name { font-size:0.83rem; font-weight:600; }
-  .user-plan { font-size:0.7rem; color:var(--gold); }
-  .btn-logout { display:flex; align-items:center; gap:0.7rem; padding:0.65rem 0.9rem; border-radius:9px; font-size:0.85rem; font-weight:500; color:var(--red); cursor:pointer; transition:background 0.15s; border:none; background:transparent; font-family:'DM Sans',sans-serif; width:100%; margin-top:0.3rem; }
-  .btn-logout:hover { background:rgba(248,113,113,0.08); }
-
-  /* MAIN */
-  .main { margin-left:230px; flex:1; }
-
-  /* HERO */
   .hero { padding:3.5rem 2rem 2rem; text-align:center; position:relative; }
   .hero::before { content:''; position:absolute; top:0; left:50%; transform:translateX(-50%); width:600px; height:250px; background:radial-gradient(ellipse, rgba(212,168,67,0.08) 0%, transparent 65%); pointer-events:none; }
   .hero-tag { display:inline-flex; align-items:center; gap:0.4rem; background:rgba(212,168,67,0.08); color:var(--gold); border:1px solid rgba(212,168,67,0.2); padding:0.3rem 0.9rem; border-radius:20px; font-size:0.72rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:1.2rem; animation:fadeUp 0.5s ease both; }
-  @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
   .hero h1 { font-family:'Playfair Display',serif; font-size:clamp(2rem,4vw,3rem); font-weight:900; margin-bottom:0.8rem; animation:fadeUp 0.5s 0.1s ease both; }
   .hero h1 em { color:var(--gold); font-style:italic; }
   .hero p { color:var(--muted2); font-size:0.95rem; max-width:480px; margin:0 auto 2rem; line-height:1.7; animation:fadeUp 0.5s 0.2s ease both; }
-
   .filter-row { display:flex; justify-content:center; gap:0.5rem; flex-wrap:wrap; margin-bottom:2.5rem; animation:fadeUp 0.5s 0.3s ease both; }
   .filter-btn { padding:0.5rem 1.2rem; border-radius:20px; border:1px solid var(--border); background:var(--surface); color:var(--muted2); font-family:'DM Sans',sans-serif; font-size:0.82rem; font-weight:500; cursor:pointer; transition:all 0.2s; }
   .filter-btn:hover { border-color:var(--gold); color:var(--gold); }
   .filter-btn.active { background:var(--gold); color:#0a0c10; border-color:var(--gold); font-weight:700; }
 
   .main-wrap { max-width:1100px; margin:0 auto; padding:0 1.5rem 5rem; }
-
   .section-header { display:flex; align-items:center; gap:1rem; margin-bottom:1.2rem; }
   .section-label { font-size:0.7rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted2); white-space:nowrap; }
   .section-line { flex:1; height:1px; background:var(--border); }
@@ -83,10 +49,9 @@
   .card-title { font-weight:700; font-size:0.92rem; line-height:1.3; margin-bottom:0.4rem; }
   .card-desc { font-size:0.78rem; color:var(--muted2); line-height:1.5; margin-bottom:0.9rem; }
   .card-meta { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.4rem; }
-  .meta-left { display:flex; gap:0.8rem; }
   .meta-item { display:flex; align-items:center; gap:0.3rem; font-size:0.72rem; color:var(--muted); }
 
-  .featured-card { background:linear-gradient(135deg,#161820,#1a1c24); border:1px solid rgba(212,168,67,0.25); border-radius:16px; padding:1.5rem; grid-column:span 2; position:relative; overflow:hidden; cursor:pointer; transition:all 0.2s; text-decoration:none; display:block; color:var(--text); }
+  .featured-card { background:var(--surface); border:1px solid rgba(212,168,67,0.25); border-radius:16px; padding:1.5rem; grid-column:span 2; position:relative; overflow:hidden; cursor:pointer; transition:all 0.2s; text-decoration:none; display:block; color:var(--text); }
   .featured-card::before { content:''; position:absolute; top:-60px; right:-60px; width:250px; height:250px; background:radial-gradient(ellipse, rgba(212,168,67,0.08) 0%, transparent 65%); pointer-events:none; }
   .featured-card:hover { transform:translateY(-3px); border-color:rgba(212,168,67,0.4); }
   .featured-label { font-size:0.68rem; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:var(--gold); margin-bottom:0.6rem; }
@@ -100,43 +65,20 @@
   .stats-bar-val { font-family:'Playfair Display',serif; font-size:1.4rem; font-weight:900; color:var(--gold); }
   .stats-bar-lbl { font-size:0.7rem; color:var(--muted2); margin-top:1px; }
 
-  @media(max-width:768px){ .main{margin-left:0;} .sidebar{display:none;} }
+  .topbar { display:flex; align-items:center; justify-content:space-between; padding:1rem 2rem; border-bottom:1px solid var(--border); background:var(--topbar-bg); backdrop-filter:blur(10px); position:sticky; top:0; z-index:40; }
+  .topbar h1 { font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:700; }
+  .topbar-right { display:flex; align-items:center; gap:0.8rem; }
 </style>
 </head>
 <body>
-
-<!-- SIDEBAR -->
-<aside class="sidebar">
-  <div class="sidebar-logo"><a href="index.html">Band<span>Up</span></a></div>
-  <nav class="sidebar-nav">
-    <div class="nav-section-label">Main</div>
-    <a class="nav-item" href="dashboard.html"><span class="icon">🏠</span> Dashboard</a>
-    <a class="nav-item" href="reading.html"><span class="icon">📖</span> Reading</a>
-    <a class="nav-item" href="ielts-platform.html"><span class="icon">✍️</span> Writing</a>
-    <a class="nav-item" href="pricing-page.html"><span class="icon">🎧</span> Listening <span style="font-size:0.65rem;color:var(--gold);margin-left:auto">PRO</span></a>
-    <a class="nav-item" href="pricing-page.html"><span class="icon">🎤</span> Speaking <span style="font-size:0.65rem;color:var(--gold);margin-left:auto">PRO</span></a>
-    <div class="nav-section-label" style="margin-top:0.5rem">Explore</div>
-    <a class="nav-item active" href="recent.html"><span class="icon">🆕</span> Recent</a>
-    <a class="nav-item" href="articles.html"><span class="icon">📰</span> Articles</a>
-    <a class="nav-item" href="vocabulary.html"><span class="icon">📚</span> Vocabulary</a>
-    <div class="nav-section-label" style="margin-top:0.5rem">Account</div>
-    <a class="nav-item" href="pricing-page.html"><span class="icon">⭐</span> Upgrade</a>
-    <a class="nav-item" href="#"><span class="icon">⚙️</span> Settings</a>
-  </nav>
-  <div class="sidebar-bottom">
-    <div class="user-chip">
-      <div class="avatar" id="sidebarAvatar">?</div>
-      <div>
-        <div class="user-name" id="sidebarName">Loading...</div>
-        <div class="user-plan">⭐ Free Plan</div>
-      </div>
-    </div>
-    <button class="btn-logout" onclick="handleLogout()"><span>🚪</span> Log Out</button>
-  </div>
-</aside>
-
-<!-- MAIN -->
 <div class="main">
+  <div class="topbar">
+    <h1>Recent</h1>
+    <div class="topbar-right">
+      <button class="btn-upgrade" onclick="location.href='pricing-page.html'">⭐ Upgrade</button>
+    </div>
+  </div>
+
   <section class="hero">
     <div class="hero-tag">🆕 Latest Content</div>
     <h1>What's <em>New</em> on BandUp</h1>
@@ -176,25 +118,20 @@
           <span class="ftag">~20 min</span><span class="ftag">Academic</span>
         </div>
       </a>
-
       <div class="content-card writing" data-type="writing" onclick="location.href='ielts-platform.html'">
         <div class="card-top"><span class="card-type writing">✍️ Writing</span><span class="new-pill">NEW</span></div>
         <div class="card-title">Task 2 — Urban Migration</div>
         <div class="card-desc">In many countries, young people are leaving rural areas to move to cities. What are the reasons for this? Is this a positive or negative development?</div>
         <div class="card-meta">
-          <div class="meta-left"><span class="meta-item">⏱ 40 min</span><span class="meta-item">📝 250+ words</span></div>
+          <span class="meta-item">⏱ 40 min</span><span class="meta-item">📝 250+ words</span>
           <span style="font-size:0.72rem;color:var(--green)">✓ Free</span>
         </div>
       </div>
-
       <div class="content-card listening" data-type="listening" style="opacity:0.6">
         <div class="card-top"><span class="card-type listening">🎧 Listening</span><span style="font-size:0.7rem;color:var(--muted2)">Coming soon</span></div>
         <div class="card-title">Section 1 — Accommodation Enquiry</div>
         <div class="card-desc">A conversation between a student and a housing officer about available accommodation options near campus.</div>
-        <div class="card-meta">
-          <div class="meta-left"><span class="meta-item">⏱ 30 min</span><span class="meta-item">🎧 4 sections</span></div>
-          <span style="font-size:0.72rem;color:var(--muted)">🔒 Coming soon</span>
-        </div>
+        <div class="card-meta"><span class="meta-item">⏱ 30 min</span><span style="font-size:0.72rem;color:var(--muted)">🔒 Coming soon</span></div>
       </div>
     </div>
 
@@ -202,60 +139,43 @@
       <span class="section-label">Coming Soon</span>
       <div class="section-line"></div>
     </div>
-
     <div class="cards-grid">
       <div class="content-card reading" data-type="reading" style="opacity:0.5;cursor:default">
         <div class="card-top"><span class="card-type reading">📖 Reading</span><span style="font-size:0.7rem;color:var(--muted2)">Coming soon</span></div>
         <div class="card-title">Passage 2 — To be added</div>
         <div class="card-desc">More reading passages are being added. Check back soon or send your passages to be included.</div>
-        <div class="card-meta"><div class="meta-left"><span class="meta-item">📖 13 Questions</span></div></div>
-      </div>
-      <div class="content-card speaking" data-type="speaking" style="opacity:0.5;cursor:default">
-        <div class="card-top"><span class="card-type speaking">🎤 Speaking</span><span style="font-size:0.7rem;color:var(--muted2)">Coming soon</span></div>
-        <div class="card-title">Part 1 — Everyday Topics</div>
-        <div class="card-desc">Practice common Part 1 topics like family, hobbies, hometown and daily routines with model Band 9 answers.</div>
-        <div class="card-meta"><div class="meta-left"><span class="meta-item">🎤 15 Questions</span></div></div>
+        <div class="card-meta"><span class="meta-item">📖 13 Questions</span></div>
       </div>
       <div class="content-card mock" data-type="mock" style="opacity:0.5;cursor:default">
         <div class="card-top"><span class="card-type mock">📋 Mock</span><span style="font-size:0.7rem;color:var(--muted2)">Coming soon</span></div>
         <div class="card-title">Full Mock Test — Academic</div>
         <div class="card-desc">Complete timed IELTS Academic mock test including Reading, Writing and Listening with full band score report.</div>
-        <div class="card-meta"><div class="meta-left"><span class="meta-item">⏱ 2h 40min</span></div></div>
+        <div class="card-meta"><span class="meta-item">⏱ 2h 40min</span></div>
+      </div>
+      <div class="content-card speaking" data-type="speaking" style="opacity:0.5;cursor:default">
+        <div class="card-top"><span class="card-type speaking">🎤 Speaking</span><span style="font-size:0.7rem;color:var(--muted2)">Coming soon</span></div>
+        <div class="card-title">Part 1 — Everyday Topics</div>
+        <div class="card-desc">Practice common Part 1 topics like family, hobbies, hometown and daily routines with model Band 9 answers.</div>
+        <div class="card-meta"><span class="meta-item">🎤 15 Questions</span></div>
       </div>
     </div>
   </main>
 </div>
 
 <script>
-  const SUPABASE_URL = 'https://xiyeuhchpllqlwmlkcma.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_x3yErNcERzTk66ksbsBGEg_5AFfbeAz';
-  const { createClient } = supabase;
-  const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+  const SUPABASE_URL='https://xiyeuhchpllqlwmlkcma.supabase.co';
+  const SUPABASE_KEY='sb_publishable_x3yErNcERzTk66ksbsBGEg_5AFfbeAz';
+  const {createClient}=supabase;
+  window._sbClient=createClient(SUPABASE_URL,SUPABASE_KEY);
 
-  async function loadUser() {
-    const { data: { session } } = await sb.auth.getSession();
-    if (!session) { location.href = 'login.html'; return; }
-    const meta = session.user.user_metadata || {};
-    const firstName = meta.first_name || meta.full_name?.split(' ')[0] || session.user.email.split('@')[0];
-    const initials = (meta.first_name?.[0] || '').toUpperCase() + (meta.last_name?.[0] || '').toUpperCase() || firstName[0].toUpperCase();
-    document.getElementById('sidebarName').textContent = meta.full_name || firstName;
-    document.getElementById('sidebarAvatar').textContent = initials;
-  }
-
-  async function handleLogout() {
-    await sb.auth.signOut();
-    location.href = 'login.html';
-  }
-
-  function filterCards(type, btn) {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  function filterCards(type,btn){
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
-    document.querySelectorAll('[data-type]').forEach(card => {
-      card.style.display = (type === 'all' || card.dataset.type === type) ? 'block' : 'none';
+    document.querySelectorAll('[data-type]').forEach(card=>{
+      card.style.display=(type==='all'||card.dataset.type===type)?'block':'none';
     });
   }
-
-  loadUser();
 </script>
+<script src="sidebar.js"></script>
 </body>
 </html>
