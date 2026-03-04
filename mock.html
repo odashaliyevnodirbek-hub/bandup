@@ -1,431 +1,309 @@
 <!DOCTYPE html>
-<!-- saved from url=(0046)file:///C:/Users/Nodirbek/Downloads/login.html -->
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="en">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BandUp — Login</title>
-<link href="./mock_files/css2" rel="stylesheet">
+<title>BandUp — Mock Test 1</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="sidebar.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-  :root {
-    --bg:#0a0c10; --surface:#13161d; --surface2:#1a1e28;
-    --border:#252a38; --gold:#d4a843; --gold-light:#f0c967;
-    --text:#e8eaf0; --muted:#5a6278; --muted2:#8892a4;
-    --green:#34d399; --red:#f87171;
-  }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body {
-    background:var(--bg); color:var(--text);
-    font-family:'DM Sans',sans-serif; min-height:100vh;
-    display:grid; grid-template-columns:1fr 1fr;
-  }
-  @media(max-width:768px){ body{grid-template-columns:1fr;} .left-panel{display:none;} }
-
-  /* LEFT PANEL */
-  .left-panel {
-    background:var(--surface);
-    border-right:1px solid var(--border);
-    display:flex; flex-direction:column;
-    justify-content:space-between;
-    padding:2.5rem;
-    position:relative; overflow:hidden;
-  }
-  .left-panel::before {
-    content:''; position:absolute; top:-100px; right:-100px;
-    width:500px; height:500px;
-    background:radial-gradient(ellipse, rgba(212,168,67,0.1) 0%, transparent 60%);
-    pointer-events:none;
-  }
-  .left-panel::after {
-    content:''; position:absolute; bottom:-100px; left:-100px;
-    width:400px; height:400px;
-    background:radial-gradient(ellipse, rgba(96,165,250,0.05) 0%, transparent 60%);
-    pointer-events:none;
-  }
-
-  .logo { font-family:'Playfair Display',serif; font-size:1.6rem; font-weight:900; color:var(--gold); position:relative; z-index:1; }
-  .logo span { color:var(--text); }
-  .logo a { text-decoration:none; }
-
-  .left-content { position:relative; z-index:1; }
-  .left-content h2 {
-    font-family:'Playfair Display',serif;
-    font-size:2.5rem; font-weight:900; line-height:1.1;
-    margin-bottom:1rem;
-  }
-  .left-content h2 em { color:var(--gold); font-style:italic; }
-  .left-content p { color:var(--muted2); font-size:0.9rem; line-height:1.7; margin-bottom:2rem; }
-
-  .left-features { display:flex; flex-direction:column; gap:0.8rem; }
-  .left-feat {
-    display:flex; align-items:center; gap:0.8rem;
-    font-size:0.85rem; color:var(--muted2);
-  }
-  .left-feat .icon {
-    width:32px; height:32px; border-radius:8px;
-    background:rgba(212,168,67,0.1);
-    display:flex; align-items:center; justify-content:center;
-    font-size:0.9rem; flex-shrink:0;
-  }
-
-  .testimonial-mini {
-    background:var(--surface2); border:1px solid var(--border);
-    border-radius:12px; padding:1.2rem;
-    position:relative; z-index:1;
-  }
-  .testimonial-mini p { font-size:0.83rem; color:var(--muted2); font-style:italic; line-height:1.6; margin-bottom:0.8rem; }
-  .testimonial-mini .author { font-size:0.78rem; color:var(--gold); font-weight:600; }
-  .testimonial-mini .stars { color:var(--gold); font-size:0.75rem; margin-bottom:0.5rem; }
-
-  /* RIGHT PANEL */
-  .right-panel {
-    display:flex; align-items:center; justify-content:center;
-    padding:2rem; min-height:100vh;
-  }
-
-  .auth-box { width:100%; max-width:420px; }
-
-  .auth-tabs {
-    display:flex; background:var(--surface);
-    border:1px solid var(--border); border-radius:10px;
-    padding:0.3rem; margin-bottom:2rem;
-  }
-  .auth-tab {
-    flex:1; padding:0.6rem;
-    text-align:center; border-radius:7px;
-    font-size:0.88rem; font-weight:600;
-    cursor:pointer; transition:all 0.2s;
-    color:var(--muted2); border:none; background:transparent;
-    font-family:'DM Sans',sans-serif;
-  }
-  .auth-tab.active { background:var(--gold); color:#0a0c10; }
-
-  .auth-title {
-    font-family:'Playfair Display',serif;
-    font-size:1.8rem; font-weight:900;
-    margin-bottom:0.4rem;
-  }
-  .auth-title em { color:var(--gold); font-style:italic; }
-  .auth-subtitle { color:var(--muted2); font-size:0.85rem; margin-bottom:2rem; }
-
-  /* FORM */
-  .form-group { margin-bottom:1.1rem; }
-  .form-label { display:block; font-size:0.8rem; font-weight:600; color:var(--muted2); margin-bottom:0.4rem; letter-spacing:0.04em; text-transform:uppercase; }
-  .form-input {
-    width:100%; background:var(--surface);
-    border:1px solid var(--border); border-radius:8px;
-    padding:0.75rem 1rem; color:var(--text);
-    font-family:'DM Sans',sans-serif; font-size:0.9rem;
-    outline:none; transition:border-color 0.2s;
-  }
-  .form-input:focus { border-color:var(--gold); }
-  .form-input::placeholder { color:var(--muted); }
-  .form-input.error { border-color:var(--red); }
-
-  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:0.8rem; }
-
-  .form-hint { font-size:0.75rem; color:var(--muted2); margin-top:0.3rem; }
-  .form-error { font-size:0.75rem; color:var(--red); margin-top:0.3rem; display:none; }
-  .form-error.show { display:block; }
-
-  /* PASSWORD STRENGTH */
-  .password-strength { margin-top:0.4rem; }
-  .strength-bar { display:flex; gap:3px; margin-bottom:0.3rem; }
-  .strength-seg { flex:1; height:3px; border-radius:2px; background:var(--border); transition:background 0.3s; }
-  .strength-seg.weak { background:var(--red); }
-  .strength-seg.medium { background:var(--gold); }
-  .strength-seg.strong { background:var(--green); }
-  .strength-label { font-size:0.72rem; color:var(--muted2); }
-
-  .checkbox-row {
-    display:flex; align-items:flex-start; gap:0.6rem;
-    margin-bottom:1.3rem;
-  }
-  .checkbox-row input { margin-top:3px; accent-color:var(--gold); cursor:pointer; }
-  .checkbox-row label { font-size:0.82rem; color:var(--muted2); line-height:1.5; cursor:pointer; }
-  .checkbox-row a { color:var(--gold); text-decoration:none; }
-
-  .btn-submit {
-    width:100%; padding:0.85rem;
-    background:linear-gradient(135deg,var(--gold),var(--gold-light));
-    color:#0a0c10; border:none; border-radius:9px;
-    font-family:'DM Sans',sans-serif; font-size:0.95rem; font-weight:700;
-    cursor:pointer; transition:all 0.2s; margin-bottom:1rem;
-  }
-  .btn-submit:hover { transform:translateY(-1px); box-shadow:0 8px 24px rgba(212,168,67,0.3); }
-  .btn-submit:disabled { opacity:0.5; cursor:not-allowed; transform:none; box-shadow:none; }
-
-  .divider {
-    display:flex; align-items:center; gap:0.8rem;
-    margin-bottom:1rem; color:var(--muted); font-size:0.78rem;
-  }
-  .divider::before, .divider::after {
-    content:''; flex:1; height:1px; background:var(--border);
-  }
-
-  .btn-google {
-    width:100%; padding:0.75rem;
-    background:var(--surface); border:1px solid var(--border);
-    color:var(--text); border-radius:9px;
-    font-family:'DM Sans',sans-serif; font-size:0.88rem; font-weight:500;
-    cursor:pointer; transition:all 0.2s;
-    display:flex; align-items:center; justify-content:center; gap:0.6rem;
-  }
-  .btn-google:hover { border-color:var(--muted2); background:var(--surface2); }
-
-  .forgot-link { text-align:right; margin-bottom:1.2rem; }
-  .forgot-link a { color:var(--gold); font-size:0.8rem; text-decoration:none; }
-
-  .switch-text { text-align:center; font-size:0.82rem; color:var(--muted2); margin-top:1.2rem; }
-  .switch-text a { color:var(--gold); text-decoration:none; font-weight:600; cursor:pointer; }
-
-  /* SUCCESS STATE */
-  .success-state { display:none; text-align:center; padding:2rem 0; }
-  .success-state.show { display:block; }
-  .success-icon { font-size:3.5rem; margin-bottom:1rem; }
-  .success-state h3 { font-family:'Playfair Display',serif; font-size:1.5rem; margin-bottom:0.5rem; }
-  .success-state p { color:var(--muted2); font-size:0.88rem; margin-bottom:1.5rem; }
-
-  /* FORM PANELS */
-  .form-panel { display:none; }
-  .form-panel.active { display:block; }
-
-  /* LOADING */
-  .btn-submit.loading { pointer-events:none; }
-  .btn-submit.loading::after {
-    content:''; display:inline-block;
-    width:14px; height:14px; border:2px solid rgba(0,0,0,0.3);
-    border-top-color:#0a0c10; border-radius:50%;
-    animation:spin 0.6s linear infinite; margin-left:0.5rem;
-  }
-  @keyframes spin { to{ transform:rotate(360deg); } }
+.intro-screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem 1.5rem;position:relative;overflow:hidden;}
+.intro-screen::before{content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:800px;height:600px;background:radial-gradient(ellipse,rgba(212,168,67,0.07) 0%,transparent 65%);pointer-events:none;}
+.intro-screen::after{content:'IELTS';position:absolute;bottom:-60px;right:-30px;font-family:'Playfair Display',serif;font-size:18rem;font-weight:900;color:rgba(212,168,67,0.03);line-height:1;pointer-events:none;user-select:none;}
+.intro-pill{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(212,168,67,0.08);color:var(--gold);border:1px solid rgba(212,168,67,0.2);padding:0.35rem 1rem;border-radius:100px;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1.5rem;animation:fadeUp 0.5s ease both;}
+.intro-pill::before{content:'●';font-size:0.5rem;animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.intro-title{font-family:'Playfair Display',serif;font-size:clamp(2.5rem,5vw,4rem);font-weight:900;line-height:1.05;text-align:center;margin-bottom:1rem;animation:fadeUp 0.5s 0.1s ease both;}
+.intro-title em{color:var(--gold);font-style:italic;display:block;}
+.intro-sub{color:var(--muted2);font-size:0.9rem;max-width:440px;text-align:center;line-height:1.8;margin-bottom:2.5rem;animation:fadeUp 0.5s 0.2s ease both;}
+.intro-stats{display:flex;gap:0;margin-bottom:2.5rem;background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;animation:fadeUp 0.5s 0.3s ease both;}
+.intro-stat{padding:1.2rem 1.8rem;text-align:center;border-right:1px solid var(--border);}
+.intro-stat:last-child{border-right:none;}
+.intro-stat-val{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;color:var(--gold);line-height:1;}
+.intro-stat-lbl{font-size:0.7rem;color:var(--muted2);margin-top:0.3rem;text-transform:uppercase;letter-spacing:0.06em;}
+.intro-passages{display:flex;flex-direction:column;gap:0.5rem;width:100%;max-width:480px;margin-bottom:2.5rem;animation:fadeUp 0.5s 0.35s ease both;}
+.intro-passage{display:flex;align-items:center;gap:1rem;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:0.9rem 1.2rem;transition:border-color 0.2s;}
+.intro-passage:hover{border-color:rgba(212,168,67,0.3);}
+.intro-pnum{font-family:'DM Mono',monospace;font-size:0.75rem;color:rgba(212,168,67,0.4);font-weight:500;flex-shrink:0;width:20px;}
+.intro-pname{font-size:0.87rem;font-weight:600;}
+.intro-pmeta{font-size:0.71rem;color:var(--muted2);margin-top:0.1rem;}
+.intro-pqs{margin-left:auto;font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--muted);flex-shrink:0;}
+.btn-start{background:linear-gradient(135deg,var(--gold) 0%,var(--gold-light) 100%);color:#0a0c10;border:none;padding:1rem 3rem;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:all 0.25s;letter-spacing:0.02em;position:relative;overflow:hidden;animation:fadeUp 0.5s 0.4s ease both;}
+.btn-start:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(212,168,67,0.35);}
+.test-screen{display:none;flex-direction:column;height:100vh;}
+.topbar-test{display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:56px;flex-shrink:0;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;gap:0.5rem;flex-wrap:wrap;}
+.timer-wrap{display:flex;align-items:center;gap:0.7rem;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:0.4rem 0.9rem;}
+.timer-val{font-family:'DM Mono',monospace;font-size:1rem;font-weight:500;color:var(--text);min-width:50px;}
+.timer-val.warning{color:var(--red);animation:timerPulse 1s infinite;}
+@keyframes timerPulse{0%,100%{opacity:1}50%{opacity:0.5}}
+.passage-switcher{display:flex;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:3px;gap:3px;}
+.psw-btn{padding:0.35rem 1rem;border-radius:7px;font-size:0.8rem;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--muted2);font-family:'DM Sans',sans-serif;transition:all 0.2s;}
+.psw-btn.active{background:var(--gold);color:#0a0c10;}
+.psw-btn.done:not(.active){color:var(--green);}
+.topbar-right-test{display:flex;align-items:center;gap:0.8rem;}
+.answered-pill{font-size:0.78rem;color:var(--muted2);background:var(--surface2);border:1px solid var(--border);padding:0.35rem 0.8rem;border-radius:8px;}
+.answered-pill strong{color:var(--gold);}
+.btn-submit-test{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#0a0c10;border:none;padding:0.45rem 1.2rem;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:700;cursor:pointer;}
+.split-body{display:grid;grid-template-columns:1fr 1fr;flex:1;overflow:hidden;height:calc(100vh - 56px);}
+.passage-pane{overflow-y:auto;padding:2rem 2.5rem;border-right:1px solid var(--border);}
+.passage-pane::-webkit-scrollbar{width:3px;}
+.passage-pane::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+.pane-eyebrow{font-size:0.68rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:0.5rem;}
+.pane-title{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;line-height:1.15;margin-bottom:0.4rem;}
+.pane-subtitle{font-size:0.82rem;color:var(--muted2);margin-bottom:1.2rem;font-style:italic;}
+.time-note{display:inline-flex;align-items:center;gap:0.4rem;background:rgba(212,168,67,0.06);border:1px solid rgba(212,168,67,0.15);color:var(--gold);padding:0.4rem 0.8rem;border-radius:8px;font-size:0.75rem;font-weight:500;margin-bottom:1.5rem;}
+.passage-divider{height:1px;background:var(--border);margin:1.5rem 0;}
+.passage-text{font-size:0.9rem;line-height:1.95;color:var(--muted2);}
+.passage-text p{margin-bottom:1.1rem;}
+.passage-text em{color:var(--text);font-style:italic;}
+.para-lbl{display:inline-block;width:22px;height:22px;border-radius:6px;background:rgba(212,168,67,0.1);border:1px solid rgba(212,168,67,0.2);color:var(--gold);font-size:0.7rem;font-weight:800;text-align:center;line-height:22px;margin-right:0.5rem;vertical-align:middle;}
+.questions-pane{overflow-y:auto;padding:1.5rem 1.8rem 4rem;background:var(--bg);}
+.questions-pane::-webkit-scrollbar{width:3px;}
+.questions-pane::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+.qgroup{margin-bottom:2.2rem;}
+.qgroup-header{display:flex;align-items:center;gap:0.6rem;margin-bottom:0.6rem;}
+.qgroup-num{font-size:0.68rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);}
+.qgroup-line{flex:1;height:1px;background:var(--border);}
+.qgroup-instr{font-size:0.78rem;color:var(--muted2);line-height:1.6;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:0.7rem 1rem;margin-bottom:1rem;}
+.qgroup-instr strong{color:var(--text);}
+.qcard{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem;margin-bottom:0.7rem;transition:border-color 0.2s,box-shadow 0.2s;}
+.qcard.answered{border-color:rgba(52,211,153,0.3);}
+.qcard:hover{box-shadow:0 4px 16px var(--shadow);}
+.qcard-num{font-family:'DM Mono',monospace;font-size:0.68rem;color:var(--muted);margin-bottom:0.4rem;}
+.qcard-text{font-size:0.83rem;line-height:1.55;color:var(--text);margin-bottom:0.8rem;}
+.pill-group{display:flex;gap:0.4rem;flex-wrap:wrap;}
+.pill-opt{display:flex;align-items:center;gap:0.4rem;padding:0.45rem 0.9rem;border-radius:100px;border:1px solid var(--border);cursor:pointer;font-size:0.78rem;font-weight:600;transition:all 0.15s;user-select:none;color:var(--muted2);}
+.pill-opt:hover{border-color:var(--gold);color:var(--gold);}
+.pill-opt.selected{background:var(--gold);border-color:var(--gold);color:#0a0c10;}
+.pill-opt input{display:none;}
+.mcq-group{display:flex;flex-direction:column;gap:0.4rem;}
+.mcq-opt{display:flex;align-items:flex-start;gap:0.7rem;padding:0.55rem 0.8rem;border-radius:9px;border:1px solid var(--border);cursor:pointer;font-size:0.8rem;transition:all 0.15s;line-height:1.4;user-select:none;color:var(--muted2);}
+.mcq-opt:hover{background:var(--surface2);border-color:rgba(212,168,67,0.3);color:var(--text);}
+.mcq-opt.selected{background:rgba(212,168,67,0.08);border-color:var(--gold);color:var(--gold);font-weight:600;}
+.mcq-opt input{display:none;}
+.mcq-letter{width:20px;height:20px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700;flex-shrink:0;margin-top:1px;}
+.q-input{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:0.55rem 0.8rem;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.85rem;transition:border-color 0.2s;}
+.q-input:focus{outline:none;border-color:var(--gold);background:var(--surface);}
+.q-input::placeholder{color:var(--muted);font-size:0.78rem;}
+.q-select{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:0.55rem 0.8rem;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.85rem;cursor:pointer;}
+.q-select:focus{outline:none;border-color:var(--gold);}
+.pane-nav{display:flex;gap:0.7rem;justify-content:flex-end;margin-top:1.5rem;padding-top:1.2rem;border-top:1px solid var(--border);}
+.btn-pnav{padding:0.55rem 1.4rem;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:0.83rem;font-weight:600;cursor:pointer;transition:all 0.2s;border:1px solid var(--border);background:var(--surface);color:var(--muted2);}
+.btn-pnav:hover{color:var(--text);border-color:var(--text);}
+.btn-pnav.gold{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#0a0c10;border:none;}
+.btn-pnav.gold:hover{opacity:0.9;transform:translateY(-1px);}
+.btn-pnav.red-outline{border-color:rgba(248,113,113,0.3);color:var(--red);background:rgba(248,113,113,0.06);}
+.results-screen{display:none;padding:2.5rem 2rem 5rem;max-width:860px;margin:0 auto;}
+.results-hero{position:relative;overflow:hidden;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:2.5rem;text-align:center;margin-bottom:1.5rem;}
+.results-hero::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:500px;height:400px;background:radial-gradient(ellipse,rgba(212,168,67,0.1) 0%,transparent 65%);pointer-events:none;}
+.results-band{font-family:'Playfair Display',serif;font-size:6rem;font-weight:900;line-height:1;color:var(--gold);margin-bottom:0.2rem;}
+.results-band-lbl{font-size:0.8rem;color:var(--muted2);margin-bottom:1rem;}
+.results-score-row{display:flex;align-items:center;justify-content:center;gap:1.5rem;flex-wrap:wrap;}
+.rscore-item{text-align:center;}
+.rscore-val{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;}
+.rscore-lbl{font-size:0.7rem;color:var(--muted2);text-transform:uppercase;letter-spacing:0.06em;}
+.results-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;}
+.rcard{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.2rem 1.4rem;}
+.rcard-label{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted2);margin-bottom:0.8rem;}
+.rcard-score{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--gold);}
+.rcard-denom{font-size:1rem;color:var(--muted2);}
+.rcard-bar{height:4px;background:var(--border);border-radius:2px;margin-top:0.8rem;overflow:hidden;}
+.rcard-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--gold),var(--gold-light));transition:width 1s ease;}
+.review-section{margin-bottom:1.5rem;}
+.review-title{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted2);margin-bottom:0.8rem;display:flex;align-items:center;gap:0.7rem;}
+.review-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.review-grid{display:flex;flex-direction:column;gap:0.4rem;}
+.review-row{display:flex;align-items:center;gap:0.8rem;padding:0.6rem 1rem;border-radius:9px;border:1px solid var(--border);font-size:0.82rem;}
+.review-row.ok{background:rgba(52,211,153,0.04);border-color:rgba(52,211,153,0.2);}
+.review-row.bad{background:rgba(248,113,113,0.04);border-color:rgba(248,113,113,0.15);}
+.review-n{font-family:'DM Mono',monospace;font-size:0.72rem;color:var(--muted);width:24px;flex-shrink:0;}
+.review-given{flex:1;}
+.review-correct{color:var(--green);font-weight:600;}
+.review-wrong{color:var(--red);font-weight:500;text-decoration:line-through;margin-right:0.4rem;}
+.review-expected{color:var(--green);font-weight:600;}
+.review-icon{font-size:0.85rem;}
+.results-actions{display:flex;gap:0.8rem;justify-content:center;flex-wrap:wrap;margin-top:2rem;}
+.btn-retake{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:#0a0c10;border:none;padding:0.8rem 2rem;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:700;cursor:pointer;transition:all 0.2s;}
+.btn-retake:hover{opacity:0.9;transform:translateY(-2px);}
+.btn-home{background:var(--surface);border:1px solid var(--border);color:var(--text);padding:0.8rem 2rem;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:600;cursor:pointer;transition:all 0.2s;}
+.btn-home:hover{border-color:var(--gold);color:var(--gold);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 </style>
 </head>
 <body>
+<div class="main">
+<div class="intro-screen" id="introScreen">
+  <div class="intro-pill">📋 Mock Test · Free Access</div>
+  <div class="intro-title">IELTS Academic<br><em>Mock Test 1</em></div>
+  <div class="intro-sub">A full timed Reading test — 3 passages, 40 questions, 60 minutes. All question types from the real exam.</div>
+  <div class="intro-stats">
+    <div class="intro-stat"><div class="intro-stat-val">60</div><div class="intro-stat-lbl">Minutes</div></div>
+    <div class="intro-stat"><div class="intro-stat-val">3</div><div class="intro-stat-lbl">Passages</div></div>
+    <div class="intro-stat"><div class="intro-stat-val">40</div><div class="intro-stat-lbl">Questions</div></div>
+    <div class="intro-stat"><div class="intro-stat-val">Free</div><div class="intro-stat-lbl">This test</div></div>
+  </div>
+  <div class="intro-passages">
+    <div class="intro-passage"><div class="intro-pnum">01</div><div><div class="intro-pname">The Clipper Races</div><div class="intro-pmeta">True / False / Not Given · Note Completion</div></div><div class="intro-pqs">Q1–13</div></div>
+    <div class="intro-passage"><div class="intro-pnum">02</div><div><div class="intro-pname">Orientation of Birds</div><div class="intro-pmeta">Summary · Paragraph Matching · Bird Matching</div></div><div class="intro-pqs">Q14–26</div></div>
+    <div class="intro-passage"><div class="intro-pnum">03</div><div><div class="intro-pname">The Role of Accidents in Business</div><div class="intro-pmeta">Yes / No / NG · Sentence Endings · Multiple Choice</div></div><div class="intro-pqs">Q27–40</div></div>
+  </div>
+  <button class="btn-start" onclick="startTest()">Begin Test →</button>
+</div>
 
-<!-- LEFT PANEL -->
-<div class="left-panel">
-  <div class="logo"><a href="file:///C:/Users/Nodirbek/Downloads/index.html">Band<span>Up</span></a></div>
-
-  <div class="left-content">
-    <h2>Achieve your<br><em>target band</em><br>score today</h2>
-    <p>Join over 12,000 students who improved their IELTS score with BandUp's AI-powered platform.</p>
-    <div class="left-features">
-      <div class="left-feat"><div class="icon">📖</div> Full Reading &amp; Writing practice tests</div>
-      <div class="left-feat"><div class="icon">🤖</div> AI feedback on every essay you write</div>
-      <div class="left-feat"><div class="icon">🎧</div> 200+ Listening tracks with transcripts</div>
-      <div class="left-feat"><div class="icon">📊</div> Track your progress and band scores</div>
-      <div class="left-feat"><div class="icon">🎯</div> Personalized study plan for your goals</div>
+<div class="test-screen" id="testScreen">
+  <div class="topbar-test">
+    <div class="timer-wrap"><span>⏱</span><span class="timer-val" id="timerVal">60:00</span></div>
+    <div class="passage-switcher">
+      <button class="psw-btn active" id="psw0" onclick="goTo(0)">Passage 1</button>
+      <button class="psw-btn" id="psw1" onclick="goTo(1)">Passage 2</button>
+      <button class="psw-btn" id="psw2" onclick="goTo(2)">Passage 3</button>
+    </div>
+    <div class="topbar-right-test">
+      <div class="answered-pill"><strong id="answeredN">0</strong> / 40 answered</div>
+      <button class="btn-submit-test" onclick="confirmSubmit()">Submit ✓</button>
     </div>
   </div>
-
-  <div class="testimonial-mini">
-    <div class="stars">★★★★★</div>
-    <p>"I went from Band 6 to Band 7.5 in just 8 weeks. The AI writing feedback was the biggest difference for me."</p>
-    <div class="author">— Sara A., Pakistan · Got into University of Leeds</div>
+  <div class="split-body">
+    <div class="passage-pane" id="passagePane"></div>
+    <div class="questions-pane" id="questionsPane"></div>
   </div>
 </div>
 
-<!-- RIGHT PANEL -->
-<div class="right-panel">
-  <div class="auth-box">
-
-    <div class="auth-tabs">
-      <button class="auth-tab active" onclick="switchTab(&#39;login&#39;)">Log In</button>
-      <button class="auth-tab" onclick="switchTab(&#39;signup&#39;)">Sign Up</button>
-    </div>
-
-    <!-- SUCCESS STATE -->
-    <div class="success-state" id="successState">
-      <div class="success-icon">🎉</div>
-      <h3>You're all set!</h3>
-      <p>Welcome to BandUp. Let's start improving your band score.</p>
-      <button class="btn-submit" onclick="location.href=&#39;dashboard.html&#39;" style="margin-top:0.5rem">Go to Dashboard →</button>
-    </div>
-
-    <!-- LOGIN FORM -->
-    <div class="form-panel active" id="loginPanel">
-      <div class="auth-title">Welcome <em>back</em></div>
-      <div class="auth-subtitle">Continue your IELTS journey</div>
-
-      <div class="form-group">
-        <label class="form-label">Email</label>
-        <input type="email" class="form-input" id="loginEmail" placeholder="you@email.com">
-        <div class="form-error" id="loginEmailErr">Please enter a valid email address.</div>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Password</label>
-        <input type="password" class="form-input" id="loginPassword" placeholder="••••••••">
-        <div class="form-error" id="loginPassErr">Incorrect email or password.</div>
-      </div>
-
-      <div class="forgot-link"><a href="file:///C:/Users/Nodirbek/Downloads/login.html#">Forgot password?</a></div>
-
-      <button class="btn-submit" id="loginBtn" onclick="handleLogin()">Log In</button>
-
-      <div class="divider">or continue with</div>
-      <button class="btn-google" onclick="handleGoogle()">
-        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"></path><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"></path><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"></path><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"></path></svg>
-        Continue with Google
-      </button>
-
-      <div class="switch-text">Don't have an account? <a onclick="switchTab(&#39;signup&#39;)">Sign up free</a></div>
-    </div>
-
-    <!-- SIGNUP FORM -->
-    <div class="form-panel" id="signupPanel">
-      <div class="auth-title">Join <em>BandUp</em></div>
-      <div class="auth-subtitle">Free to start — no credit card needed</div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">First Name</label>
-          <input type="text" class="form-input" id="signupFirst" placeholder="Ahmed">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Last Name</label>
-          <input type="text" class="form-input" id="signupLast" placeholder="Khan">
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Email</label>
-        <input type="email" class="form-input" id="signupEmail" placeholder="you@email.com">
-        <div class="form-error" id="signupEmailErr">Please enter a valid email.</div>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Target Band Score</label>
-        <select class="form-input" id="signupBand" style="cursor:pointer">
-          <option value="">Select your goal...</option>
-          <option>6.0</option><option>6.5</option><option>7.0</option>
-          <option>7.5</option><option>8.0</option><option>8.5+</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Password</label>
-        <input type="password" class="form-input" id="signupPassword" placeholder="Create a strong password" oninput="checkStrength(this.value)">
-        <div class="password-strength">
-          <div class="strength-bar">
-            <div class="strength-seg" id="s1"></div>
-            <div class="strength-seg" id="s2"></div>
-            <div class="strength-seg" id="s3"></div>
-            <div class="strength-seg" id="s4"></div>
-          </div>
-          <div class="strength-label" id="strengthLabel">Enter a password</div>
-        </div>
-        <div class="form-error" id="signupPassErr">Password must be at least 8 characters.</div>
-      </div>
-
-      <div class="checkbox-row">
-        <input type="checkbox" id="agreeTerms">
-        <label for="agreeTerms">I agree to the <a href="file:///C:/Users/Nodirbek/Downloads/login.html#">Terms of Service</a> and <a href="file:///C:/Users/Nodirbek/Downloads/login.html#">Privacy Policy</a></label>
-      </div>
-
-      <button class="btn-submit" id="signupBtn" onclick="handleSignup()">Create Free Account</button>
-
-      <div class="divider">or continue with</div>
-      <button class="btn-google" onclick="handleGoogle()">
-        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"></path><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"></path><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"></path><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"></path></svg>
-        Continue with Google
-      </button>
-
-      <div class="switch-text">Already have an account? <a onclick="switchTab(&#39;login&#39;)">Log in</a></div>
-    </div>
-
-  </div>
+<div class="results-screen" id="resultsScreen"></div>
 </div>
 
 <script>
-  function switchTab(tab) {
-    document.querySelectorAll('.auth-tab').forEach((t,i) => t.classList.toggle('active', (tab==='login'&&i===0)||(tab==='signup'&&i===1)));
-    document.getElementById('loginPanel').classList.toggle('active', tab==='login');
-    document.getElementById('signupPanel').classList.toggle('active', tab==='signup');
-  }
+const SUPABASE_URL='https://xiyeuhchpllqlwmlkcma.supabase.co';
+const SUPABASE_KEY='sb_publishable_x3yErNcERzTk66ksbsBGEg_5AFfbeAz';
+window._sbClient=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
-  function checkStrength(val) {
-    const segs = [document.getElementById('s1'),document.getElementById('s2'),document.getElementById('s3'),document.getElementById('s4')];
-    const lbl = document.getElementById('strengthLabel');
-    segs.forEach(s => s.className = 'strength-seg');
-    if(!val) { lbl.textContent='Enter a password'; return; }
-    let score = 0;
-    if(val.length >= 8) score++;
-    if(/[A-Z]/.test(val)) score++;
-    if(/[0-9]/.test(val)) score++;
-    if(/[^A-Za-z0-9]/.test(val)) score++;
-    const cls = score<=1?'weak':score<=2?'medium':'strong';
-    const labels = {weak:'Weak',medium:'Medium',strong:'Strong'};
-    for(let i=0;i<score;i++) segs[i].classList.add(cls);
-    lbl.textContent = labels[cls] || '';
-    lbl.style.color = cls==='weak'?'var(--red)':cls==='medium'?'var(--gold)':'var(--green)';
-  }
+const ANS={1:'FALSE',2:'TRUE',3:'TRUE',4:'NOT GIVEN',5:'FALSE',6:'FALSE',7:'sails',8:'storms',9:'Challenger',10:'ports',11:'paperwork',12:'tugs',13:'money',14:'visual memory',15:'migration direction',16:'destination',17:'landmarks',18:'albatross',19:'C',20:'B',21:'C',22:'G',23:'C',24:'F',25:'A',26:'D',27:'YES',28:'NO',29:'NO',30:'YES',31:'NOT GIVEN',32:'E',33:'G',34:'C',35:'A',36:'B',37:'B',38:'A',39:'C',40:'B'};
 
-  function handleLogin() {
-    const email = document.getElementById('loginEmail').value;
-    const pass = document.getElementById('loginPassword').value;
-    let valid = true;
+let UA={},secs=3600,tick=null,cur=0;
 
-    document.getElementById('loginEmailErr').classList.remove('show');
-    document.getElementById('loginPassErr').classList.remove('show');
+const PASSAGES=[
+{ey:'Reading Passage 1',ti:'The Clipper Races',su:'An era of competition between cargo ships',no:'⏱ Spend about 20 minutes on Questions 1–13',bo:`<p>During the seventeenth and eighteenth centuries, the British East India Company had the monopoly on trade with China and India. This meant that because no rival could legally import tea or other goods from these countries at this time, the company was rarely in a hurry to transport its merchandise. Instead, its priority was to minimise costs by carrying as much as possible on each ship. This meant that its ships — known as East Indiamen — were enormous, strong and very slow.</p><p>By 1800, the average East Indiaman could carry 1,200 tons of merchandise. The trading pattern for China tea usually meant the East Indiamen set sail from Britain in January, sailed round the Cape of Good Hope at the southernmost tip of Africa, and arrived in China in September. There they would load up that year's tea harvest, set off again and, depending on the wind and weather, aim to arrive back by the following September — so even with favourable sailing conditions, the round trip lasted almost two years, and if anything went wrong it could take a lot longer.</p><p>However, by 1834 the company had lost its trading monopolies, and tea had become a freely traded item. Having no more use for its great ships, the company sold them off, and many were bought by merchants or their captains, who continued to plough the seas between Britain and China. But now that tea could be traded freely, a few smart sailors began to realise that whoever brought each new harvest of tea to Britain first stood to make the most money.</p><p>This was partly because if you were home first, you could sell your shipment of tea before your competitors even arrived, and partly because consumers in Britain in the nineteenth century believed that the fresher and earlier-picked the tea, the better the resulting drink. Tea traders now needed faster, sleeker ships to bring their precious cargo back. Nevertheless, in Britain this idea only caught on slowly, and while the 1840s saw a few faster ships launched, for the time being many merchants remained satisfied with the slow but reliable East Indiamen.</p><p>In fact it was the Americans who pioneered the first clipper ships. These vessels were fast and slender, with a narrow hull that was deeper at the back than at the front, and masses of sails on tall masts. They earned their name from the way that they 'clipped off' journey time. British merchants resolved to build their own clippers to rival the Americans, and the first British tea clipper, <em>Stornaway</em>, was built in Aberdeen in 1850. More tea clippers were designed and built in Britain throughout the 1850s and 1860s; they had a narrower beam than their American equivalents, making them less powerful during storms, but faster in calmer weather.</p><p>There was a great spirit of competition between the British and American ships plying the tea trade, but to begin with the Americans had the edge. Then in 1851 a British ship owner, Richard Green, built the aptly named clipper <em>Challenger</em> with the stated intention of beating the American ships. Loaded with tea, <em>Challenger</em> left China for London in 1852 at the same time as the American clipper <em>Challenge</em>, a much larger older ship, already greatly admired for its speed. Large sums were bet on which would complete the journey first. In the event, the British ship beat its rival to London by two days, amid much jubilation. From then on, such international races grew in popularity.</p><p>After 1855, American participation in the British tea trade gradually stopped. But even without the Anglo-American rivalry, the competitive spirit continued. It was really ignited when new ports were opened up for trade in China. These included Fouchow, which was much closer to the tea-producing areas than Canton, the port used previously. As a result, tea could be loaded on board earlier and fresher, and the clippers could set off in late May or early June — sometimes not even taking time to fill out the official paperwork — racing back to Britain whatever the difficulties.</p><p>They sped down through the South China Sea and into the Indian Ocean, then raced to get round the southernmost tip of Africa at the Cape of Good Hope. Then it was north across the vast Atlantic, past the Azores, through the English Channel and into the estuary of the River Thames. Once there, they would be towed by tugs, up the river and into the docks.</p><p>The cargo of the winning ship could earn a premium of up to sixpence per pound — and so the captain and crew were rewarded by the owners of the cargo. But the races were about more than just money: the crews, about 40 men on each clipper, were expert sailors, proud of their ships, and they delighted in competing against each other. Without their enthusiasm, the races would never have happened, since getting home as fast as possible required the crew to be totally dedicated and to sacrifice much of their rest for the duration of the race.</p>`},
+{ey:'Reading Passage 2',ti:'Orientation of Birds',su:'',no:'⏱ Spend about 20 minutes on Questions 14–26',bo:`<p><span class="para-lbl">A</span>For many of us, the way birds are able to orientate is both astounding and difficult to appreciate fully. For instance, the annual migration of the golden plover of the Pacific takes it from Alaska to Hawaii on a flight of well over 3000 kilometres, and if it were to deviate by only one degree, it would miss the island on which it nests.</p><p><span class="para-lbl">B</span>The first systematic studies on orientation in birds were made possible by the 'homing instinct' exhibited by so many species. Birds are caught at a time when they show an attachment to their territory, especially during the nesting season. They are taken to some spot, released, and the percentage of returns is recorded. The distance can be varied, and the direction, as well as the method of transporting them, and then the influence of climatic and other factors on their ability to find their way home can be studied. These experiments have shown a wide variation in ability to home, and three types of homing behaviour have been identified.</p><p><span class="para-lbl">C</span>In the first type, birds methodically explore the area in which they are released until they pick up some familiar feature, and then they quickly find their way back to the nest. Such birds possess a highly developed visual memory, as experiments with pigeons have shown. Domestic pigeons have been trained to peck at a certain point on an aerial photograph, with a system of rewards, and four years later the birds were still able to respond to this training when placed on the aerial photograph. Birds' eyes have a power of resolution two to three times greater than ours, enabling them to pick up very fine details. If a bird uses only this type of homing behaviour, however, it can only succeed if the point of release is not too far away. If the birds are transported 800 kilometres from their nest, it is only by good fortune that they find their way back as a result of long exploratory flights. Usually, the area known to a bird is its feeding territory. Released within this area, the birds soon make their return; release them outside it and far fewer return. However, if a bird is released for a second time in the same place, its visual memory comes into play, and the bird, no longer requiring tedious exploratory flights, will return much more quickly.</p><p><span class="para-lbl">D</span>The second type of homing behaviour is shown by birds that are capable of choosing their flight direction and holding to it for the rest of their journey. How do they decide what direction to take? They appear to choose their normal migration direction even if they are released in a different place from their usual starting point. If, for example, birds which normally fly to the north-east to reach latitude 45 degrees north are released at that latitude, they will immediately start flying north-east anyway. So if they are released further to the west, they maintain the correct direction, but fly west of their destination, and so fail to arrive.</p><p><span class="para-lbl">E</span>The third type of homing behaviour shows the highest degree of orientation. Released at one point, the birds immediately take stock of it, compare its position with that of the nest, decide on the direction and fly off. This happens even if the birds are in a country right off their migration routes, where they have never been before. In one example, a laysan albatross returned to its nesting area on Midway Island in the middle of the Pacific, having flown over 5000 kilometres from the west coast of the USA in just over ten days. This is a perfect example of the third type of homing, for the albatross clearly could not rely on any landmarks over the vast expanse of the Pacific Ocean.</p><p><span class="para-lbl">F</span>The percentage of successful birds varies greatly, being highest in those species with a strong migratory behaviour. Thus the lesser black-backed gull is more migratory than the herring gull and more often reaches home. Great migrants such as the swift have the highest percentage of returns. In one case, seven out of nine alpine swifts were recaptured at their nests after being displaced some 1400 kilometres — one made the journey in three days.</p><p><span class="para-lbl">G</span>What part does heredity play in all this? Two research studies suggest that instinctive, genetically inherited, behaviour patterns play a part in navigation. The first was carried out by Ernst Schuez and it is highly significant. Schuez caught first-year European storks and released them later, after the departure of the adult storks at a time when they normally make their south-west autumn migration to Africa. The recaptures showed that, in spite of the fact that there were no adults to guide them, the birds unanimously headed south-west. This was a most striking finding, for it showed that the birds had an innate and unlearned attraction for the African wintering area that they have occupied for thousands of years.</p><p><span class="para-lbl">H</span>The case of starlings is a little different. These birds have a great aptitude for homing, but this behaviour differs in the different age groups. Birds that were shifted to the south-east of their normal migration route split into two lots. The adults, in full possession of their gift for orientation, found their wintering area by modifying their direction by 90 degrees, whereas the juveniles sought their winter quarters to the south-east of their real position.</p>`},
+{ey:'Reading Passage 3',ti:'The Role of Accidents in Business',su:'',no:'⏱ Spend about 20 minutes on Questions 27–40',bo:`<p>In 1894 Dr John Kellogg and his brother, Will, were supervising a hospital and health spa in Michigan. The patients were on a restricted diet. One day, the brothers left cooked wheat untended for more than 24 hours. When they returned, they saw what they had done. It was no good to eat, but they decided to run the stale wheat through rollers, just to see how it would turn out. Normally, the process produced long sheets, but they were surprised to discover that this time the rollers created flat flakes. They baked them, and then tried the same thing with corn. From this accidental discovery came the cornflakes that generations have now been eating for breakfast.</p><p>Accidents happen; there is nothing predictable and orderly about innovation. Nobel laureate Sir Alan Hodgkin, who discovered how nerve cells transmit electrical impulses between the skin and the brain, commented: 'I believe that the record of my published papers conveys an impression of directedness and planning which does not at all coincide with the actual sequence of events.'</p><p>The same rule applies in business. The mistake that gave us cornflakes keeps repeating itself in the history of disruptive innovation, the kind that transforms markets. Louis Daguerre, for instance, discovered the technique that gave us photography in the 1830s, when drops of mercury from a shattered thermometer produced a photographic image. The microwave was discovered when Percy Spender, a scientist with Raytheon, was testing a new vacuum tube and discovered that the sweet in his pocket had melted. The artificial sweetener, saccharin, was the unintentional result of a medical scientist's work on a chemical treatment for gastric ulcers. While working for the firm 3M, researcher Art Fry had no idea he was taking the first steps towards Post-It Notes when he used bits of adhesive office paper that could be easily lifted off the page to replace the scrap paper bookmarks that kept falling out of his hymn book.</p><p>Breakthrough and disruptive innovation are rarely driven by orderly process. Usually they come out of a chaotic, haphazard mess, which is why big companies, full of managers schooled in business programmes designed to eliminate random variation and mistakes, struggle with them. In these sorts of environments, accidents are called failures and are discouraged.</p><p>It is no surprise then that research from the late British economist Paul Geroski and London Business School's Constantinos Markides found that companies that were skilled at innovation were usually not that skilled when it came to commercialisation, and vice versa. Their book, <em>Fast Second</em>, divides businesses into colonists and consolidators. Small and nimble, colonists are adept at creating market niches but are terrible institution builders. Consolidators, with their strong cultures of discipline and cost control, know how to take clever ideas from other firms and turn them into mass-market items. Microsoft is a prime instance of this.</p><p>With companies spending hundreds of billions of dollars on research and development, US academics Robert Austin and Lee Devin examined how managers can encourage productive slip-ups. In their article <em>Accident, Intention and Expectation in the Innovation Process</em>, they argue that business processes actually prevent helpful mis-steps from occurring. According to their catalogue of accidents, not all false steps and mishaps are equal. Accidents, they say, come from unlikely mental associations such as memories and vague connections, looking for something and finding it in an unexpected way, looking for one thing and finding something else, and not looking for anything but finding something valuable.</p><p>Accident-prone innovation, they say, requires companies to get outside the cone of expectation. It means throwing together groups from diverse backgrounds, and combining ideas in unpredictable ways. Other strategies also include having systems that watch out for accidents and examine them for value, generating them when they do not happen often enough, seizing on the useful ones, capturing their valuable features, and building on them to add value and give potential for useful accidents.</p><p>All this, however, requires thinking that is often counter-intuitive to the way businesses operate. It runs counter to the notion frequently pushed by consultants that you can harness creativity and direct it to line up with intention. In business, people tend to call such efforts failure.</p><p>There are tentative signs that more companies are starting to realise that failure can lead to commercial gain. Australia's largest brewing company, for example, made a bad error when it launched a new beer called Empire Lager, pitched at younger consumers. Having spent a fortune creating a beer with a sweeter taste, designing a great-looking bottle and a television campaign, Foster's was left with a drink that no-one wanted to buy. The target market was more interested in brands built up by word of mouth.</p><p>Instead of wiping the unsuccessful product launch, Foster's used this lesson learned to go on and develop other brands instead. One of them, Pure Blonde, is now ranked as Australia's fifth-largest beer brand. Unlike Empire Lager, there has been almost no promotion and its sales are generated more by word of mouth.</p><p>Other companies are taking similar steps to study their own slip-ups. Intuit, the company behind financial tools such as Quicken, holds regular 'When Learning Hurts' sessions. But this sort of transformation is never easy. In a market that focuses on the short-term, convincing employees and shareholders to tolerate failure and not play it safe is a big thing to ask.</p>`}
+];
 
-    if(!email || !email.includes('@')) {
-      document.getElementById('loginEmailErr').classList.add('show');
-      document.getElementById('loginEmail').classList.add('error');
-      valid = false;
-    }
-    if(!pass) {
-      document.getElementById('loginPassErr').classList.add('show');
-      valid = false;
-    }
-    if(!valid) return;
+const QS=[
+{g:'Questions 1–6',i:'<strong>Do the following statements agree with the information in Passage 1?</strong><br>TRUE if it agrees · FALSE if it contradicts · NOT GIVEN if no information',qs:[
+{n:1,t:'tfng',q:'In the seventeenth and eighteenth centuries, the British East India Company faced a lot of competition.'},
+{n:2,t:'tfng',q:'Before 1800, cargo size was the most important consideration for the East India Company.'},
+{n:3,t:'tfng',q:'At best, voyages of the East Indiamen to China and back took nearly two years to complete.'},
+{n:4,t:'tfng',q:'Before 1834, voyages to and from China were considered to be highly dangerous.'},
+{n:5,t:'tfng',q:'After 1834, the ships which had served the East India Company stopped being used for commercial purposes.'},
+{n:6,t:'tfng',q:'In the nineteenth century, British drinkers preferred tea made from mature leaves to that made from younger leaves.'},
+]},
+{g:'Questions 7–13',i:'<strong>Complete the notes.</strong> Choose <strong>ONE WORD ONLY</strong> from the passage.',qs:[
+{n:7,t:'inp',q:'The ships were remarkable for the number of ________ they had.',ph:'one word only'},
+{n:8,t:'inp',q:'The performance of British tea clippers was particularly affected when there were ________ at sea.',ph:'one word only'},
+{n:9,t:'inp',q:'It was in a ship called ________ that the British first competed successfully against the Americans.',ph:'one word only'},
+{n:10,t:'inp',q:'Competition increased when additional Chinese trading ________ were established.',ph:'one word only'},
+{n:11,t:'inp',q:'Merchants were occasionally in such a hurry that they failed to complete the ________ before leaving China.',ph:'one word only'},
+{n:12,t:'inp',q:'At the end of their journey, the ships needed the help of ________ .',ph:'one word only'},
+{n:13,t:'inp',q:'The crews were motivated by both ________ and their enthusiasm for the competition.',ph:'one word only'},
+]},
+{g:'Questions 14–18',i:'<strong>Complete the summary.</strong> Choose <strong>NO MORE THAN TWO WORDS</strong> from the passage.',qs:[
+{n:14,t:'inp',q:'First type: Birds rely on their sophisticated ________ . They are generally most successful within their feeding territory.',ph:'max two words'},
+{n:15,t:'inp',q:'Second type: Birds select their accustomed ________ , no matter where they are released.',ph:'max two words'},
+{n:16,t:'inp',q:'As a result, they may miss their ________ .',ph:'max two words'},
+{n:17,t:'inp',q:'Third type: Birds orientate correctly even when released in an unfamiliar place and have no ________ to use.',ph:'max two words'},
+{n:18,t:'inp',q:'One bird with this type of skill is the ________ .',ph:'max two words'},
+]},
+{g:'Questions 19–22',i:'<strong>Which paragraph (A–H) contains the following information?</strong> You may use any letter more than once.',qs:[
+{n:19,t:'sel',q:"The effects of distance on some birds' ability to find their nests.",op:['A','B','C','D','E','F','G','H']},
+{n:20,t:'sel',q:'A methodology for testing the general ability of birds to find their nests.',op:['A','B','C','D','E','F','G','H']},
+{n:21,t:'sel',q:'One aspect of physical ability in humans and birds.',op:['A','B','C','D','E','F','G','H']},
+{n:22,t:'sel',q:"How some birds' migration was delayed for experimental purposes.",op:['A','B','C','D','E','F','G','H']},
+]},
+{g:'Questions 23–26',i:'<strong>Match each bird with the point it illustrates (A–G).</strong><br>A — orientate without prior training · B — speed of flight · C — remember things seen previously<br>D — effect of age on homing · E — strength for great distances · F — high success rate · G — seasonal cues',qs:[
+{n:23,t:'sel',q:'domestic pigeon',op:['A','B','C','D','E','F','G']},
+{n:24,t:'sel',q:'alpine swift',op:['A','B','C','D','E','F','G']},
+{n:25,t:'sel',q:'European stork',op:['A','B','C','D','E','F','G']},
+{n:26,t:'sel',q:'starling',op:['A','B','C','D','E','F','G']},
+]},
+{g:'Questions 27–31',i:"<strong>Do the following statements agree with the writer's claims?</strong><br>YES if it agrees · NO if it contradicts · NOT GIVEN if impossible to say",qs:[
+{n:27,t:'ynng',q:'The delay in the process used by the Kellogg brothers affected the final product.'},
+{n:28,t:'ynng',q:'Sir Alan Hodgkin is an example of someone whose work proceeded in a logical and systematic way.'},
+{n:29,t:'ynng',q:'Daguerre is an exception to the general rule of innovation.'},
+{n:30,t:'ynng',q:'The discovery of saccharin occurred by accident during drug research.'},
+{n:31,t:'ynng',q:'The company 3M should have supported Art Fry by funding his idea of Post-It Notes.'},
+]},
+{g:'Questions 32–35',i:"<strong>Complete each sentence with the correct ending, A–H.</strong><br>A — unusual thoughts and chance events · B — taught in business schools · C — success from someone else's invention<br>D — designed to nurture differences · E — unlikely to lead to creative innovation · F — all mistakes are the same<br>G — good at either inventing or selling · H — increasing the number of mistakes",qs:[
+{n:32,t:'sel',q:'The usual business environment…',op:['A','B','C','D','E','F','G','H']},
+{n:33,t:'sel',q:"Geroski and Markides's book…",op:['A','B','C','D','E','F','G','H']},
+{n:34,t:'sel',q:'Microsoft is an example of a company which…',op:['A','B','C','D','E','F','G','H']},
+{n:35,t:'sel',q:'The origin of useful accidents…',op:['A','B','C','D','E','F','G','H']},
+]},
+{g:'Questions 36–40',i:'<strong>Choose the correct letter, A, B, C or D.</strong>',qs:[
+{n:36,t:'mcq',q:"How do Austin and Devin advise companies to get out of the 'cone of expectation'?",op:['A — by decreasing the number of company systems','B — by forming teams of different types of people','C — by hiring new and creative people','D — by holding regular brainstorming meetings']},
+{n:37,t:'mcq',q:"In recommending 'counter-intuitive' thinking, what do Austin and Devin imply?",op:['A — that failing at business is bad for staff morale','B — that innovation cannot be planned for','C — that most businesses should be devoted to avoiding mistakes','D — that the cost of mistakes is an important consideration']},
+{n:38,t:'mcq',q:'The writer describes the Empire Lager disaster in order to show that…',op:['A — success can come out of a business failure','B — the majority of companies now value risk-taking','C — TV advertising works better on older people','D — young beer drinkers do not like a sweet taste']},
+{n:39,t:'mcq',q:'Pure Blonde has been more successful than Empire Lager because…',op:['A — digital media other than TV were used','B — it was advertised under a different brand name','C — it was launched with very little advertising','D — the advertising budget was larger']},
+{n:40,t:'mcq',q:'The writer concludes that creating a culture that learns from mistakes…',op:['A — brings short-term financial gains','B — can be very difficult for some companies','C — holds no risk for workers','D — is a popular move with shareholders']},
+]},
+];
 
-    const btn = document.getElementById('loginBtn');
-    btn.textContent = 'Logging in';
-    btn.classList.add('loading');
-    setTimeout(() => {
-      btn.classList.remove('loading');
-      document.getElementById('loginPanel').style.display = 'none';
-      document.querySelector('.auth-tabs').style.display = 'none';
-      document.getElementById('successState').classList.add('show');
-    }, 1500);
-  }
+const PG=[[0,1],[2,3,4],[5,6,7]];
 
-  function handleSignup() {
-    const email = document.getElementById('signupEmail').value;
-    const pass = document.getElementById('signupPassword').value;
-    const agreed = document.getElementById('agreeTerms').checked;
-    let valid = true;
+function saveA(n,v){UA[n]=v.trim();const el=document.getElementById('qc-'+n);if(el)el.classList.toggle('answered',v.trim()!=='');document.getElementById('answeredN').textContent=Object.values(UA).filter(v=>v&&v.trim()!=='').length;}
 
-    document.getElementById('signupEmailErr').classList.remove('show');
-    document.getElementById('signupPassErr').classList.remove('show');
+function renderP(i){const p=PASSAGES[i];document.getElementById('passagePane').innerHTML=`<div class="pane-eyebrow">${p.ey}</div><div class="pane-title">${p.ti}</div>${p.su?`<div class="pane-subtitle">${p.su}</div>`:''}<div class="time-note">${p.no}</div><div class="passage-divider"></div><div class="passage-text">${p.bo}</div>`;}
 
-    if(!email || !email.includes('@')) {
-      document.getElementById('signupEmailErr').classList.add('show');
-      valid = false;
-    }
-    if(!pass || pass.length < 8) {
-      document.getElementById('signupPassErr').classList.add('show');
-      valid = false;
-    }
-    if(!agreed) { alert('Please agree to the Terms of Service to continue.'); valid = false; }
-    if(!valid) return;
+function renderQ(pi){
+  const gs=PG[pi]; let html='';
+  gs.forEach(gi=>{
+    const g=QS[gi];
+    html+=`<div class="qgroup"><div class="qgroup-header"><span class="qgroup-num">${g.g}</span><div class="qgroup-line"></div></div><div class="qgroup-instr">${g.i}</div>`;
+    g.qs.forEach(q=>{
+      let inner='';
+      if(q.t==='tfng'){inner=`<div class="pill-group">${['TRUE','FALSE','NOT GIVEN'].map(o=>`<label class="pill-opt" id="pill-${q.n}-${o}"><input type="radio" name="q${q.n}" value="${o}" onchange="saveA(${q.n},'${o}')"> ${o}</label>`).join('')}</div>`;}
+      else if(q.t==='ynng'){inner=`<div class="pill-group">${['YES','NO','NOT GIVEN'].map(o=>`<label class="pill-opt" id="pill-${q.n}-${o}"><input type="radio" name="q${q.n}" value="${o}" onchange="saveA(${q.n},'${o}')"> ${o}</label>`).join('')}</div>`;}
+      else if(q.t==='mcq'){inner=`<div class="mcq-group">${q.op.map(o=>`<label class="mcq-opt" id="mcq-${q.n}-${o[0]}"><input type="radio" name="q${q.n}" value="${o[0]}" onchange="saveA(${q.n},'${o[0]}')"><span class="mcq-letter">${o[0]}</span> ${o.slice(4)}</label>`).join('')}</div>`;}
+      else if(q.t==='inp'){inner=`<input class="q-input" type="text" placeholder="${q.ph}" id="inp-${q.n}" oninput="saveA(${q.n},this.value)">`;}
+      else if(q.t==='sel'){inner=`<select class="q-select" id="sel-${q.n}" onchange="saveA(${q.n},this.value)"><option value="">— Select —</option>${q.op.map(o=>`<option value="${o}">${o}</option>`).join('')}</select>`;}
+      html+=`<div class="qcard" id="qc-${q.n}"><div class="qcard-num">Q${q.n}</div><div class="qcard-text">${q.q}</div>${inner}</div>`;
+    });
+    html+=`</div>`;
+  });
+  html+=`<div class="pane-nav">${pi>0?`<button class="btn-pnav" onclick="goTo(${pi-1})">← Passage ${pi}</button>`:''}${pi<2?`<button class="btn-pnav gold" onclick="goTo(${pi+1})">Passage ${pi+2} →</button>`:`<button class="btn-pnav red-outline" onclick="confirmSubmit()">Submit Test ✓</button>`}</div>`;
+  document.getElementById('questionsPane').innerHTML=html;
+  restore(pi);
+}
 
-    const btn = document.getElementById('signupBtn');
-    btn.textContent = 'Creating account';
-    btn.classList.add('loading');
-    setTimeout(() => {
-      btn.classList.remove('loading');
-      document.getElementById('signupPanel').style.display = 'none';
-      document.querySelector('.auth-tabs').style.display = 'none';
-      document.getElementById('successState').classList.add('show');
-    }, 1600);
-  }
+function restore(pi){PG[pi].forEach(gi=>{QS[gi].qs.forEach(q=>{const v=UA[q.n];if(!v)return;if(q.t==='tfng'||q.t==='ynng'){const r=document.querySelector(`input[name="q${q.n}"][value="${v}"]`);if(r){r.checked=true;r.closest('.pill-opt').classList.add('selected');}}else if(q.t==='mcq'){const r=document.querySelector(`input[name="q${q.n}"][value="${v}"]`);if(r){r.checked=true;r.closest('.mcq-opt').classList.add('selected');}}else if(q.t==='inp'){const el=document.getElementById('inp-'+q.n);if(el)el.value=v;}else if(q.t==='sel'){const el=document.getElementById('sel-'+q.n);if(el)el.value=v;}const qc=document.getElementById('qc-'+q.n);if(qc)qc.classList.add('answered');});})}
 
-  function handleGoogle() {
-    alert('Google login requires Firebase setup.\n\nConnect Firebase Auth to enable this — takes about 20 minutes!');
-  }
+function goTo(i){cur=i;document.querySelectorAll('.psw-btn').forEach((b,idx)=>b.classList.toggle('active',idx===i));renderP(i);renderQ(i);document.getElementById('passagePane').scrollTop=0;document.getElementById('questionsPane').scrollTop=0;}
+
+function startTest(){document.getElementById('introScreen').style.display='none';const ts=document.getElementById('testScreen');ts.style.display='flex';ts.style.flexDirection='column';goTo(0);tick=setInterval(()=>{secs--;const m=Math.floor(secs/60),s=secs%60;const el=document.getElementById('timerVal');el.textContent=`${m}:${s.toString().padStart(2,'0')}`;if(secs<=300)el.classList.add('warning');if(secs<=0){clearInterval(tick);submit();}},1000);}
+
+function confirmSubmit(){const done=Object.values(UA).filter(v=>v&&v.trim()!=='').length;const left=40-done;if(left>0&&!confirm(`You have ${left} unanswered question${left!==1?'s':''}. Submit anyway?`))return;submit();}
+
+function submit(){
+  clearInterval(tick);let correct=0;const results=[];
+  for(let i=1;i<=40;i++){const given=(UA[i]||'').trim().toLowerCase();const exp=(ANS[i]||'').toLowerCase();const ok=given===exp||given.replace(/\s+/g,' ')===exp.replace(/\s+/g,' ');if(ok)correct++;results.push({n:i,given:UA[i]||'—',exp:ANS[i],ok});}
+  const bMap=[[39,9],[37,8.5],[35,8],[33,7.5],[30,7],[27,6.5],[23,6],[19,5.5],[15,5],[13,4.5],[10,4],[0,3]];
+  let band=3;for(const[min,b]of bMap){if(correct>=min){band=b;break;}}
+  const p1=results.slice(0,13).filter(r=>r.ok).length;
+  const p2=results.slice(13,26).filter(r=>r.ok).length;
+  const p3=results.slice(26,40).filter(r=>r.ok).length;
+  try{const acts=JSON.parse(localStorage.getItem('bandup_activities')||'[]');acts.unshift({type:'mock',mins:60,date:new Date().toISOString().slice(0,10),ts:Date.now(),score:band});localStorage.setItem('bandup_activities',JSON.stringify(acts));localStorage.setItem('bandup_mock_used',String(parseInt(localStorage.getItem('bandup_mock_used')||'0')+1));}catch{}
+  showResults(correct,band,p1,p2,p3,results);
+}
+
+function showResults(correct,band,p1,p2,p3,results){
+  document.getElementById('testScreen').style.display='none';
+  const rs=document.getElementById('resultsScreen');rs.style.display='block';
+  const pct=Math.round((correct/40)*100);
+  const bc=band>=7?'var(--green)':band>=6?'var(--gold)':'var(--red)';
+  rs.innerHTML=`<div class="results-hero"><div style="font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted2);margin-bottom:0.5rem">📋 Mock Test 1 — Complete</div><div class="results-band" style="color:${bc}">${band}</div><div class="results-band-lbl">Estimated Band Score</div><div class="results-score-row"><div class="rscore-item"><div class="rscore-val">${correct}/40</div><div class="rscore-lbl">Correct</div></div><div style="width:1px;height:32px;background:var(--border)"></div><div class="rscore-item"><div class="rscore-val">${pct}%</div><div class="rscore-lbl">Accuracy</div></div><div style="width:1px;height:32px;background:var(--border)"></div><div class="rscore-item"><div class="rscore-val">${40-correct}</div><div class="rscore-lbl">Missed</div></div></div></div><div class="results-cards"><div class="rcard"><div class="rcard-label">📖 Passage 1 · Clipper Races</div><div><span class="rcard-score">${p1}</span><span class="rcard-denom">/13</span></div><div class="rcard-bar"><div class="rcard-fill" style="width:${Math.round((p1/13)*100)}%"></div></div></div><div class="rcard"><div class="rcard-label">🐦 Passage 2 · Birds</div><div><span class="rcard-score">${p2}</span><span class="rcard-denom">/13</span></div><div class="rcard-bar"><div class="rcard-fill" style="width:${Math.round((p2/13)*100)}%"></div></div></div><div class="rcard"><div class="rcard-label">💡 Passage 3 · Business</div><div><span class="rcard-score">${p3}</span><span class="rcard-denom">/14</span></div><div class="rcard-bar"><div class="rcard-fill" style="width:${Math.round((p3/14)*100)}%"></div></div></div></div><div class="review-section"><div class="review-title">Answer Review</div><div class="review-grid">${results.map(r=>`<div class="review-row ${r.ok?'ok':'bad'}"><div class="review-n">${r.n}</div><div class="review-given">${r.ok?`<span class="review-correct">${r.given}</span>`:`<span class="review-wrong">${r.given}</span><span style="color:var(--muted2);margin:0 0.3rem">→</span><span class="review-expected">${r.exp}</span>`}</div><div class="review-icon">${r.ok?'✅':'❌'}</div></div>`).join('')}</div></div><div class="results-actions"><button class="btn-retake" onclick="location.reload()">↩ Retake Test</button><button class="btn-home" onclick="location.href='dashboard.html'">← Dashboard</button></div>`;
+}
+
+document.addEventListener('change',e=>{if(e.target.type!=='radio')return;const nm=e.target.name;document.querySelectorAll(`input[name="${nm}"]`).forEach(r=>{const p=r.closest('.pill-opt,.mcq-opt');if(p)p.classList.remove('selected');});const p=e.target.closest('.pill-opt,.mcq-opt');if(p)p.classList.add('selected');});
 </script>
-
-
-</body></html>
+<script src="sidebar.js"></script>
+</body>
+</html>

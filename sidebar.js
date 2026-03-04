@@ -124,7 +124,7 @@
 
     try {
       const { data: { session } } = await sb.auth.getSession();
-      if (!session) { location.href = 'login.html'; return; }
+      if (!session) { return; } // Let individual pages handle auth
       const user = session.user;
       const meta = user.user_metadata || {};
       const firstName = meta.first_name || meta.full_name?.split(' ')[0] || user.email.split('@')[0];
