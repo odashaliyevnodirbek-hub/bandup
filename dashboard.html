@@ -50,8 +50,8 @@
   .quick-btn .qtitle { font-size:0.85rem; font-weight:600; margin-bottom:0.2rem; }
   .quick-btn .qdesc { font-size:0.75rem; color:var(--muted2); }
 
-  .dashboard-grid { display:grid; grid-template-columns:1fr 340px; gap:1.5rem; }
-  @media(max-width:1000px){ .dashboard-grid{grid-template-columns:1fr;} }
+  .dashboard-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+  @media(max-width:800px){ .dashboard-grid{grid-template-columns:1fr;} }
 
   .card { background:var(--surface); border:1px solid var(--border); border-radius:14px; overflow:hidden; transition:background 0.3s; }
   .card-header { display:flex; align-items:center; justify-content:space-between; padding:1.2rem 1.5rem; border-bottom:1px solid var(--border); }
@@ -83,17 +83,7 @@
   .activity-meta { font-size:0.72rem; color:var(--muted2); margin-top:1px; }
   .activity-score { font-size:0.82rem; font-weight:700; color:var(--gold); background:rgba(212,168,67,0.1); border:1px solid rgba(212,168,67,0.2); padding:0.2rem 0.6rem; border-radius:8px; white-space:nowrap; }
 
-  .task-list { display:flex; flex-direction:column; gap:0.6rem; }
-  .task-item { display:flex; align-items:center; gap:0.8rem; padding:0.75rem; border-radius:9px; cursor:pointer; transition:background 0.15s; border:1px solid var(--border); }
-  .task-item:hover { background:var(--surface2); }
-  .task-item.done { opacity:0.5; }
-  .task-check { width:20px; height:20px; border-radius:50%; border:2px solid var(--border); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:0.65rem; transition:all 0.2s; }
-  .task-item.done .task-check { background:var(--green); border-color:var(--green); color:#fff; }
-  .task-text { font-size:0.83rem; flex:1; }
-  .task-item.done .task-text { text-decoration:line-through; color:var(--muted); }
-  .task-points { font-size:0.72rem; color:var(--gold); font-weight:600; }
-
-  /* Notification bell */
+  .toast { position:fixed; bottom:1.5rem; right:1.5rem; background:var(--surface); border:1px solid rgba(52,211,153,0.3); color:var(--green); padding:0.8rem 1.2rem; border-radius:10px; font-size:0.82rem; font-weight:600; z-index:400; display:none; box-shadow:0 8px 24px var(--shadow); }
   .notif-wrap { position:relative; }
   .notif-bell { width:36px; height:36px; border-radius:9px; background:var(--surface); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1rem; transition:all 0.15s; position:relative; }
   .notif-bell:hover { border-color:var(--gold); background:rgba(212,168,67,0.08); }
@@ -253,81 +243,62 @@
     </div>
 
     <div class="dashboard-grid">
-      <div style="display:flex;flex-direction:column;gap:1.5rem">
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title">Section Scores</div>
-            <div class="card-badge">Last 5 tests avg</div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Section Scores</div>
+          <div class="card-badge">Last 5 tests avg</div>
+        </div>
+        <div class="card-body">
+          <div class="section-scores">
+            <div class="score-row"><span class="section-name">Reading</span><div class="track"><div class="fill fill-reading" style="width:75%"></div></div><span class="score-val">7.0</span><span class="trend up">↑ +0.5</span></div>
+            <div class="score-row"><span class="section-name">Writing</span><div class="track"><div class="fill fill-writing" style="width:60%"></div></div><span class="score-val">6.0</span><span class="trend up">↑ +0.5</span></div>
+            <div class="score-row"><span class="section-name">Listening</span><div class="track"><div class="fill fill-listening" style="width:70%"></div></div><span class="score-val">6.5</span><span class="trend down">↓ -0.5</span></div>
+            <div class="score-row"><span class="section-name">Speaking</span><div class="track"><div class="fill fill-speaking" style="width:65%"></div></div><span class="score-val">6.5</span><span class="trend up">↑ +1.0</span></div>
           </div>
-          <div class="card-body">
-            <div class="section-scores">
-              <div class="score-row"><span class="section-name">Reading</span><div class="track"><div class="fill fill-reading" style="width:75%"></div></div><span class="score-val">7.0</span><span class="trend up">↑ +0.5</span></div>
-              <div class="score-row"><span class="section-name">Writing</span><div class="track"><div class="fill fill-writing" style="width:60%"></div></div><span class="score-val">6.0</span><span class="trend up">↑ +0.5</span></div>
-              <div class="score-row"><span class="section-name">Listening</span><div class="track"><div class="fill fill-listening" style="width:70%"></div></div><span class="score-val">6.5</span><span class="trend down">↓ -0.5</span></div>
-              <div class="score-row"><span class="section-name">Speaking</span><div class="track"><div class="fill fill-speaking" style="width:65%"></div></div><span class="score-val">6.5</span><span class="trend up">↑ +1.0</span></div>
-            </div>
-            <div style="margin-top:1.5rem;padding:1rem;background:rgba(212,168,67,0.06);border:1px solid rgba(212,168,67,0.15);border-radius:10px">
-              <div style="font-size:0.78rem;color:var(--gold);font-weight:600;margin-bottom:0.3rem">💡 AI Recommendation</div>
-              <div style="font-size:0.82rem;color:var(--muted2);line-height:1.5">Focus on <strong style="color:var(--text)">Writing</strong> this week — it's your weakest section and has the biggest gap to your target score.</div>
-            </div>
+          <div style="margin-top:1.5rem;padding:1rem;background:rgba(212,168,67,0.06);border:1px solid rgba(212,168,67,0.15);border-radius:10px">
+            <div style="font-size:0.78rem;color:var(--gold);font-weight:600;margin-bottom:0.3rem">💡 AI Recommendation</div>
+            <div style="font-size:0.82rem;color:var(--muted2);line-height:1.5">Focus on <strong style="color:var(--text)">Writing</strong> this week — it's your weakest section and has the biggest gap to your target score.</div>
           </div>
         </div>
+      </div>
 
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title">Recent Activity</div>
-            <div class="card-badge">Your sessions</div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Recent Activity</div>
+          <div class="card-badge">Your sessions</div>
+        </div>
+        <div class="card-body">
+          <div class="activity-list" id="activityList">
+            <div style="text-align:center;padding:2rem;color:var(--muted2);font-size:0.83rem">No sessions yet. Use <strong style="color:var(--text)">+ Log Session</strong> to track your practice.</div>
           </div>
-          <div class="card-body">
-            <div class="activity-list" id="activityList">
-              <div style="text-align:center;padding:2rem;color:var(--muted2);font-size:0.83rem">No sessions yet. Use <strong style="color:var(--text)">+ Log Session</strong> to track your practice.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><div class="card-title">Exam Countdown</div></div>
+        <div class="card-body" style="text-align:center">
+          <div style="font-family:'Playfair Display',serif;font-size:3.5rem;font-weight:900;color:var(--gold);line-height:1" id="daysLeft">—</div>
+          <div style="font-size:0.8rem;color:var(--muted2);margin-bottom:0.6rem">days until your exam</div>
+          <input type="date" id="examDate" style="background:var(--surface2);border:1px solid var(--border);color:var(--muted2);padding:0.4rem 0.7rem;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:0.75rem;margin-bottom:1rem;cursor:pointer;width:100%" onchange="saveExamDate()">
+          <div style="display:flex;gap:0.5rem">
+            <div style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:0.7rem;text-align:center">
+              <div style="font-size:1.1rem;font-weight:700">6.5</div>
+              <div style="font-size:0.68rem;color:var(--muted2)">Current</div>
+            </div>
+            <div style="display:flex;align-items:center;color:var(--gold);font-size:1.2rem">→</div>
+            <div style="flex:1;background:rgba(212,168,67,0.08);border:1px solid rgba(212,168,67,0.2);border-radius:8px;padding:0.7rem;text-align:center">
+              <div style="font-size:1.1rem;font-weight:700;color:var(--gold)" id="countdownTarget">7.0</div>
+              <div style="font-size:0.68rem;color:var(--muted2)">Target</div>
             </div>
           </div>
         </div>
       </div>
 
-      <div style="display:flex;flex-direction:column;gap:1.5rem">
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title">Today's Tasks</div>
-            <div class="card-badge" id="taskBadge">0 / 4 done</div>
-          </div>
-          <div class="card-body">
-            <div class="task-list">
-              <div class="task-item" onclick="toggleTask(this)" data-key="task_mock"><div class="task-check"></div><div class="task-text">Take a Mock Test</div><div class="task-points">+100 pts</div></div>
-              <div class="task-item" onclick="toggleTask(this)" data-key="task_reading"><div class="task-check"></div><div class="task-text">Complete 1 Reading test</div><div class="task-points">+50 pts</div></div>
-              <div class="task-item" onclick="toggleTask(this)" data-key="task_writing"><div class="task-check"></div><div class="task-text">Write a Task 2 essay (250+ words)</div><div class="task-points">+80 pts</div></div>
-              <div class="task-item" onclick="toggleTask(this)" data-key="task_vocab"><div class="task-check"></div><div class="task-text">Review 20 vocabulary words</div><div class="task-points">+20 pts</div></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-header"><div class="card-title">Exam Countdown</div></div>
-          <div class="card-body" style="text-align:center">
-            <div style="font-family:'Playfair Display',serif;font-size:3.5rem;font-weight:900;color:var(--gold);line-height:1" id="daysLeft">—</div>
-            <div style="font-size:0.8rem;color:var(--muted2);margin-bottom:0.6rem">days until your exam</div>
-            <input type="date" id="examDate" style="background:var(--surface2);border:1px solid var(--border);color:var(--muted2);padding:0.4rem 0.7rem;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:0.75rem;margin-bottom:1rem;cursor:pointer;width:100%" onchange="saveExamDate()">
-            <div style="display:flex;gap:0.5rem">
-              <div style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:0.7rem;text-align:center">
-                <div style="font-size:1.1rem;font-weight:700">6.5</div>
-                <div style="font-size:0.68rem;color:var(--muted2)">Current</div>
-              </div>
-              <div style="display:flex;align-items:center;color:var(--gold);font-size:1.2rem">→</div>
-              <div style="flex:1;background:rgba(212,168,67,0.08);border:1px solid rgba(212,168,67,0.2);border-radius:8px;padding:0.7rem;text-align:center">
-                <div style="font-size:1.1rem;font-weight:700;color:var(--gold)" id="countdownTarget">7.0</div>
-                <div style="font-size:0.68rem;color:var(--muted2)">Target</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div style="background:linear-gradient(135deg,#1a1c24,#161820);border:1px solid rgba(212,168,67,0.25);border-radius:14px;padding:1.5rem;text-align:center">
-          <div style="font-size:1.5rem;margin-bottom:0.5rem">⭐</div>
-          <div style="font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;margin-bottom:0.4rem">Unlock Full Platform</div>
-          <div style="font-size:0.78rem;color:var(--muted2);margin-bottom:1rem;line-height:1.5">Get AI feedback, Listening & Speaking tests, and unlimited practice.</div>
-          <button class="btn-upgrade" style="width:100%" onclick="location.href='pricing-page.html'">Start 7-Day Free Trial</button>
-        </div>
+      <div style="background:linear-gradient(135deg,#1a1c24,#161820);border:1px solid rgba(212,168,67,0.25);border-radius:14px;padding:1.5rem;text-align:center">
+        <div style="font-size:1.5rem;margin-bottom:0.5rem">⭐</div>
+        <div style="font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;margin-bottom:0.4rem">Unlock Full Platform</div>
+        <div style="font-size:0.78rem;color:var(--muted2);margin-bottom:1rem;line-height:1.5">Get AI feedback, Listening & Speaking tests, and unlimited practice.</div>
+        <button class="btn-upgrade" style="width:100%" onclick="location.href='pricing-page.html'">Start 7-Day Free Trial</button>
       </div>
     </div>
   </div>
@@ -432,18 +403,6 @@
   // ── TOAST ────────────────────────────────────────────────
   function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',3000);}
 
-  // ── TASKS ────────────────────────────────────────────────
-  function getTaskState(){const d=lsGet('bandup_tasks',{});return d.date===today?d:{date:today,keys:[]};}
-  function toggleTask(el){
-    el.classList.toggle('done');
-    el.querySelector('.task-check').textContent=el.classList.contains('done')?'✓':'';
-    const s=getTaskState();const k=el.dataset.key;
-    if(el.classList.contains('done')){if(!s.keys.includes(k))s.keys.push(k);}else{s.keys=s.keys.filter(x=>x!==k);}
-    lsSet('bandup_tasks',s);updateTaskBadge();
-  }
-  function loadTasks(){const s=getTaskState();document.querySelectorAll('.task-item[data-key]').forEach(el=>{if(s.keys.includes(el.dataset.key)){el.classList.add('done');el.querySelector('.task-check').textContent='✓';}});updateTaskBadge();}
-  function updateTaskBadge(){const d=document.querySelectorAll('.task-item.done').length;const t=document.querySelectorAll('.task-item[data-key]').length;document.getElementById('taskBadge').textContent=`${d} / ${t} done`;}
-
   // ── EXAM COUNTDOWN ───────────────────────────────────────
   function loadExamDate(){const s=lsGet('bandup_exam_date',null);if(s){document.getElementById('examDate').value=s;updateCountdown(s);}else{document.getElementById('daysLeft').textContent='—';}}
   function saveExamDate(){const v=document.getElementById('examDate').value;lsSet('bandup_exam_date',v);updateCountdown(v);}
@@ -469,7 +428,6 @@
   renderActivityList();
   renderWeekBar();
   renderNotifications();
-  loadTasks();
   loadExamDate();
 </script>
 <script src="sidebar.js"></script>
