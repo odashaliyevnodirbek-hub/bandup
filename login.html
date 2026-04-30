@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BandUp — Login</title>
+<title>BandWise — Login</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -208,7 +208,7 @@
 
   <div class="left-content">
     <h2>Achieve your<br><em>target band</em><br>score today</h2>
-    <p>Join over 12,000 students who improved their IELTS score with BandUp's AI-powered platform.</p>
+    <p>Join over 12,000 students who improved their IELTS score with BandWise's AI-powered platform.</p>
     <div class="left-features">
       <div class="left-feat"><div class="icon">📖</div> Full Reading & Writing practice tests</div>
       <div class="left-feat"><div class="icon">🤖</div> AI feedback on every essay you write</div>
@@ -238,7 +238,7 @@
     <div class="success-state" id="successState">
       <div class="success-icon">🎉</div>
       <h3>You're all set!</h3>
-      <p>Welcome to BandUp. Let's start improving your band score.</p>
+      <p>Welcome to BandWise. Let's start improving your band score.</p>
       <button class="btn-submit" onclick="location.href='dashboard.html'" style="margin-top:0.5rem">Go to Dashboard →</button>
     </div>
 
@@ -274,7 +274,7 @@
 
     <!-- SIGNUP FORM -->
     <div class="form-panel" id="signupPanel">
-      <div class="auth-title">Join <em>BandUp</em></div>
+      <div class="auth-title">Join <em>BandWise</em></div>
       <div class="auth-subtitle">Free to start — no credit card needed</div>
 
       <div class="form-row">
@@ -395,6 +395,7 @@
     const email = document.getElementById('signupEmail').value;
     const pass = document.getElementById('signupPassword').value;
     const agreed = document.getElementById('agreeTerms').checked;
+    const firstName = document.getElementById('signupFirst').value.trim();
     let valid = true;
 
     document.getElementById('signupEmailErr').classList.remove('show');
@@ -410,6 +411,8 @@
     }
     if(!agreed) { alert('Please agree to the Terms of Service to continue.'); valid = false; }
     if(!valid) return;
+
+    if(firstName) localStorage.setItem('bw_name', firstName);
 
     const btn = document.getElementById('signupBtn');
     btn.textContent = 'Creating account';

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BandUp — Ace Your IELTS</title>
+<title>BandWise — Ace Your IELTS</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -283,6 +283,16 @@
   footer { text-align:center; padding:2rem; color:var(--muted); font-size:0.78rem; border-top:1px solid var(--border); margin-top:5rem; }
   footer a { color:var(--gold); text-decoration:none; }
 
+  /* LIGHT MODE */
+  html.light { --bg:#f7f6f2; --surface:#ffffff; --surface2:#eeede8; --border:#dedad2; --text:#1c1c1a; --muted:#a0998e; --muted2:#6e6b63; }
+  html.light nav { background:rgba(247,246,242,0.95); }
+  html.light .how-section { background:var(--surface); }
+  html.light .testimonials-section { background:var(--surface); }
+
+  /* THEME TOGGLE */
+  .btn-theme { background:transparent; border:1px solid var(--border); color:var(--text); width:34px; height:34px; border-radius:8px; cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
+  .btn-theme:hover { border-color:var(--gold); }
+
   /* DROPDOWN NAV */
   .nav-link { color:var(--muted2); text-decoration:none; font-size:0.85rem; font-weight:500; padding:0.45rem 0.9rem; border-radius:7px; transition:all 0.2s; }
   .nav-link:hover { color:var(--text); background:var(--surface); }
@@ -320,6 +330,7 @@
     <a class="nav-link" href="#">Vocab</a>
   </div>
   <div class="nav-right">
+    <button class="btn-theme" id="themeToggle" onclick="toggleTheme()">🌙</button>
     <a class="btn-login" href="login.html">Log In</a>
     <button class="btn-premium-nav" onclick="location.href='pricing-page.html'">&#11088; Premium</button>
   </div>
@@ -386,7 +397,7 @@
   <div class="features-section">
     <div class="features-layout">
       <div>
-        <div class="section-tag">✦ Why BandUp</div>
+        <div class="section-tag">✦ Why BandWise</div>
         <h2 class="section-heading">Everything you need to <em>score higher</em></h2>
         <p class="section-desc">We combine real exam content with AI-powered feedback to give you the most effective IELTS prep available.</p>
         <div class="feature-list">
@@ -492,7 +503,7 @@
     <div class="testimonials-header">
       <div class="section-tag">✦ Student Stories</div>
       <h2 class="section-heading">Real students,<br><em>real results</em></h2>
-      <p class="section-desc">Join thousands of students who improved their band score with BandUp.</p>
+      <p class="section-desc">Join thousands of students who improved their band score with BandWise.</p>
     </div>
     <div class="testimonials-grid">
       <div class="testimonial-card">
@@ -506,7 +517,7 @@
       </div>
       <div class="testimonial-card">
         <div class="stars">★★★★★</div>
-        <div class="testimonial-text">"I tried other platforms but BandUp's reading passages felt most similar to the real exam. The timed mode really helped me manage my time on test day."</div>
+        <div class="testimonial-text">"I tried other platforms but BandWise's reading passages felt most similar to the real exam. The timed mode really helped me manage my time on test day."</div>
         <div class="testimonial-author">
           <div class="author-avatar">MK</div>
           <div><div class="author-name">Mohammed K.</div><div class="author-meta">Egypt · Engineer</div></div>
@@ -539,12 +550,16 @@
 </section>
 
 <footer>
-  © 2025 BandUp · IELTS Practice Platform &nbsp;·&nbsp;
+  © 2025 BandWise · IELTS Practice Platform &nbsp;·&nbsp;
   <a href="pricing-page.html">Pricing</a> &nbsp;·&nbsp;
   <a href="#">Privacy</a> &nbsp;·&nbsp;
   <a href="#">Terms</a> &nbsp;·&nbsp;
   <a href="#">Contact</a>
 </footer>
 
+<script>
+  (function(){ if(localStorage.getItem('bw_theme')==='light'){ document.documentElement.classList.add('light'); document.getElementById('themeToggle').textContent='☀️'; } })();
+  function toggleTheme(){ const l=document.documentElement.classList.toggle('light'); localStorage.setItem('bw_theme',l?'light':'dark'); document.getElementById('themeToggle').textContent=l?'☀️':'🌙'; }
+</script>
 </body>
 </html>

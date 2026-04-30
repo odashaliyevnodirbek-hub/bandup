@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BandUp — Dashboard</title>
+<title>BandWise — Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -214,6 +214,14 @@
   .quick-btn .qdesc { font-size:0.75rem; color:var(--muted2); }
 
   @media(max-width:768px){ .main{margin-left:0;} .sidebar{transform:translateX(-100%);} }
+
+  /* LIGHT MODE */
+  html.light { --bg:#f7f6f2; --surface:#ffffff; --surface2:#eeede8; --border:#dedad2; --text:#1c1c1a; --muted:#a0998e; --muted2:#6e6b63; }
+  html.light .topbar { background:rgba(247,246,242,0.95); }
+
+  /* THEME TOGGLE */
+  .btn-theme { background:transparent; border:1px solid var(--border); color:var(--text); width:32px; height:32px; border-radius:8px; cursor:pointer; font-size:0.95rem; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
+  .btn-theme:hover { border-color:var(--gold); }
 </style>
 </head>
 <body>
@@ -231,7 +239,7 @@
 
     <div class="nav-section-label" style="margin-top:0.5rem">Progress</div>
     <a class="nav-item" href="#"><span class="icon">📊</span> Analytics</a>
-    <a class="nav-item" href="#"><span class="icon">🗓</span> Study Plan</a>
+    <a class="nav-item" href="recent.html"><span class="icon">🕐</span> Recent</a>
     <a class="nav-item" href="#"><span class="icon">📚</span> Vocabulary</a>
 
     <div class="nav-section-label" style="margin-top:0.5rem">Account</div>
@@ -255,6 +263,7 @@
     <h1>Dashboard</h1>
     <div class="topbar-right">
       <div class="streak-badge">🔥 7 day streak</div>
+      <button class="btn-theme" id="themeToggle" onclick="toggleTheme()">🌙</button>
       <button class="btn-upgrade" onclick="location.href='pricing-page.html'">⭐ Upgrade to Premium</button>
     </div>
   </div>
@@ -263,7 +272,7 @@
 
     <!-- GREETING -->
     <div class="greeting">
-      <h2>Good morning, <em>Ahmed</em> 👋</h2>
+      <h2 id="greetingText">Good morning, <em>there</em> 👋</h2>
       <p>You're on a 7-day streak! Keep going — your exam is in 3 weeks.</p>
     </div>
 
@@ -485,6 +494,22 @@
     const total = document.querySelectorAll('.task-item').length;
     document.querySelector('.card-badge').textContent = `${done} / ${total} done`;
   }
+
+  // Theme
+  (function(){ if(localStorage.getItem('bw_theme')==='light'){ document.documentElement.classList.add('light'); document.getElementById('themeToggle').textContent='☀️'; } })();
+  function toggleTheme(){ const l=document.documentElement.classList.toggle('light'); localStorage.setItem('bw_theme',l?'light':'dark'); document.getElementById('themeToggle').textContent=l?'☀️':'🌙'; }
+
+  // Greeting
+  (function(){
+    const name = localStorage.getItem('bw_name') || 'there';
+    const h = new Date().getHours();
+    const time = h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
+    document.getElementById('greetingText').innerHTML = time + ', <em>' + name + '</em> 👋';
+    const av = document.querySelector('.avatar');
+    if(av && name !== 'there') av.textContent = name[0].toUpperCase();
+    const un = document.querySelector('.user-name');
+    if(un && name !== 'there') un.textContent = name;
+  })();
 </script>
 </body>
 </html>
