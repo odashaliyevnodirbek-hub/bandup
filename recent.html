@@ -3,8 +3,8 @@
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BandUp — Recent</title>
-<link href="./BandUp — Recent_files/css2" rel="stylesheet">
+<title>BandWise — Recent</title>
+<link href="./BandWise — Recent_files/css2" rel="stylesheet">
 <style>
   :root {
     --bg:#0a0c10; --surface:#13161d; --surface2:#1a1e28;
@@ -53,6 +53,12 @@
   .dropdown-item:hover { background:var(--surface2); color:var(--text); }
 
   .nav-right { display:flex; gap:0.7rem; align-items:center; }
+  .btn-back-dash { background:transparent; border:1px solid var(--border); color:var(--muted2); padding:0.45rem 0.9rem; border-radius:7px; font-size:0.82rem; font-weight:500; cursor:pointer; text-decoration:none; transition:all 0.2s; }
+  .btn-back-dash:hover { color:var(--text); border-color:var(--text); }
+  .btn-theme { background:transparent; border:1px solid var(--border); color:var(--text); width:34px; height:34px; border-radius:8px; cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
+  .btn-theme:hover { border-color:var(--gold); }
+  html.light { --bg:#f7f6f2; --surface:#ffffff; --surface2:#eeede8; --border:#dedad2; --text:#1c1c1a; --muted:#a0998e; --muted2:#6e6b63; }
+  html.light nav { background:rgba(247,246,242,0.97); }
   .btn-login { background:transparent; border:1px solid var(--border); color:var(--text); padding:0.45rem 1.1rem; border-radius:7px; font-family:'DM Sans',sans-serif; font-size:0.83rem; font-weight:500; cursor:pointer; transition:all 0.2s; text-decoration:none; }
   .btn-login:hover { border-color:var(--muted2); }
   .btn-premium { background:linear-gradient(135deg,var(--gold),var(--gold-light)); color:#0a0c10; border:none; padding:0.45rem 1.1rem; border-radius:7px; font-family:'DM Sans',sans-serif; font-size:0.83rem; font-weight:700; cursor:pointer; transition:all 0.2s; }
@@ -231,14 +237,16 @@
     <a class="nav-link" href="file:///C:/Users/Nodirbek/Downloads/recent.html#">Vocab</a>
   </div>
   <div class="nav-right">
-    <a class="btn-login" href="file:///C:/Users/Nodirbek/Downloads/login.html">Log In</a>
-    <button class="btn-premium" onclick="location.href=&#39;pricing-page.html&#39;">⭐ Premium</button>
+    <a class="btn-back-dash" href="dashboard.html">← Dashboard</a>
+    <button class="btn-theme" id="themeToggle" onclick="toggleTheme()">🌙</button>
+    <a class="btn-login" href="login.html">Log In</a>
+    <button class="btn-premium" onclick="location.href='pricing-page.html'">⭐ Premium</button>
   </div>
 </nav>
 
 <section class="hero">
   <div class="hero-tag">🆕 Latest Content</div>
-  <h1>What's <em>New</em> on BandUp</h1>
+  <h1>What's <em>New</em> on BandWise</h1>
   <p>Fresh reading passages, listening tests and writing prompts — added regularly so you always have new material to practice with.</p>
 
   <div class="filter-row">
@@ -386,4 +394,8 @@
 
 
 
+<script>
+  (function(){ if(localStorage.getItem("bw_theme")==="light"){ document.documentElement.classList.add("light"); document.getElementById("themeToggle").textContent="☀️"; } })();
+  function toggleTheme(){ const l=document.documentElement.classList.toggle("light"); localStorage.setItem("bw_theme",l?"light":"dark"); document.getElementById("themeToggle").textContent=l?"☀️":"🌙"; }
+</script>
 </body></html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BandUp — IELTS Practice Platform</title>
+<title>BandWise — IELTS Practice Platform</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -510,6 +510,12 @@
   .btn-premium-nav { background:linear-gradient(135deg,var(--gold),var(--gold-light)); color:#0a0c10; border:none; padding:0.45rem 1.1rem; border-radius:7px; font-family:'DM Sans',sans-serif; font-size:0.83rem; font-weight:700; cursor:pointer; transition:all 0.2s; }
   .btn-premium-nav:hover { opacity:0.9; }
   .nav-right { display:flex; gap:0.7rem; align-items:center; }
+  .btn-back-dash { background:transparent; border:1px solid var(--border); color:var(--muted2); padding:0.45rem 0.9rem; border-radius:7px; font-size:0.82rem; font-weight:500; cursor:pointer; text-decoration:none; transition:all 0.2s; }
+  .btn-back-dash:hover { color:var(--text); border-color:var(--text); }
+  .btn-theme { background:transparent; border:1px solid var(--border); color:var(--text); width:34px; height:34px; border-radius:8px; cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
+  .btn-theme:hover { border-color:var(--gold); }
+  html.light { --bg:#f7f6f2; --surface:#ffffff; --surface2:#eeede8; --border:#dedad2; --text:#1c1c1a; --muted:#a0998e; --muted2:#6e6b63; }
+  html.light nav { background:rgba(247,246,242,0.97); }
 
 </style>
 </head>
@@ -533,6 +539,8 @@
     <a class="nav-link" href="#">Vocab</a>
   </div>
   <div class="nav-right">
+    <a class="btn-back-dash" href="dashboard.html">← Dashboard</a>
+    <button class="btn-theme" id="themeToggle" onclick="toggleTheme()">🌙</button>
     <a class="btn-login" href="login.html">Log In</a>
     <button class="btn-premium-nav" onclick="location.href='pricing-page.html'">&#11088; Premium</button>
   </div>
@@ -871,7 +879,7 @@
 </main>
 
 <footer>
-  © 2025 BandUp · IELTS Practice Platform · <a href="#" style="color:var(--gold)">Privacy</a> · <a href="#" style="color:var(--gold)">Terms</a>
+  © 2025 BandWise · IELTS Practice Platform · <a href="#" style="color:var(--gold)">Privacy</a> · <a href="#" style="color:var(--gold)">Terms</a>
 </footer>
 
 <div class="toast" id="toast"></div>
@@ -1030,6 +1038,10 @@
     t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 3500);
   }
+</script>
+<script>
+  (function(){ if(localStorage.getItem("bw_theme")==="light"){ document.documentElement.classList.add("light"); document.getElementById("themeToggle").textContent="☀️"; } })();
+  function toggleTheme(){ const l=document.documentElement.classList.toggle("light"); localStorage.setItem("bw_theme",l?"light":"dark"); document.getElementById("themeToggle").textContent=l?"☀️":"🌙"; }
 </script>
 </body>
 </html>
