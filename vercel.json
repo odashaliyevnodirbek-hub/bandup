@@ -1,4 +1,1 @@
-{
-  "outputDirectory": ".",
-  "framework": null
-}
+{"outputDirectory":".","framework":null,"rewrites":[{"source":"/(.*)\\.html","destination":"/$1.html"}],"cleanUrls":false}
